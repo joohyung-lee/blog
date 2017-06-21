@@ -8,7 +8,7 @@ class Modal extends Component {
     handleClick= (e) => {
         if(e.target.className=='overlay'){
             const {modalView}=this.props;
-            modalView.closeModal;
+           modalView.closeModal();
         }
     }
     render() {
