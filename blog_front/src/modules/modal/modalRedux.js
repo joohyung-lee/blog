@@ -12,7 +12,7 @@ export const closeModal = createAction(MODAL_CLOSE);
 
 //초기화
 const initialState={
-    isOpen:true,
+    isOpen:false,
 }
 
 //리듀서

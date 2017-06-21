@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component, propTypes } from 'react';
 import * as modalActions from '../../modules/modal/modalRedux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

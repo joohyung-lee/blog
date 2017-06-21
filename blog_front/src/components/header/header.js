@@ -1,8 +1,10 @@
 import React from 'react';
 import './header.scss';
 import Modal from '../../common/modal/modalCommon';
-
-const Header = () => {
+import * as modalActions from '../../modules/modal/modalRedux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+const Header = ({modalView}) => {
     return (
         <div className="global-nav">
             <div className="logo">
@@ -15,11 +17,18 @@ const Header = () => {
                 </ul>
             </div>
             <div className="login-state">
-                <button>로그인</button>
+                <button onClick={modalView.openModal}>로그인</button>
             </div>
-            <Modal isOpen={true}/>
+            <Modal>
+                <h1>test</h1>
+            </Modal>    
         </div>
     );
 };
 
-export default Header;
+export default connect(
+    null,
+    (dispatch)=>({
+        modalView: bindActionCreators(modalActions, dispatch)
+    })
+)(Header);
