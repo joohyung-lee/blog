@@ -12,12 +12,15 @@ export const closeModal = createAction(MODAL_CLOSE);
 
 //초기화
 const initialState={
-    open:true,
+    login:{
+        open:true,
+    }
 }
 
 //리듀서
 export default handleActions({
     [MODAL_OPEN]: (state, action) => {
+        const { modalName} = action.payload;
         return{
             ...state,
             open:true
