@@ -26,7 +26,7 @@ class App extends Component {
     return (
       <div>
         <h1>{this.state.speed}</h1>
-        <Header/>
+          <Header/>
       </div>
     );
   }
