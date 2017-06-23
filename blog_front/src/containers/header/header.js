@@ -1,7 +1,7 @@
 import React from 'react';
-import './header.scss';
-import Modal from '../../common/modal/modalCommon';
-import * as modalActions from '../../modules/modal/modalRedux';
+import 'styles/header/header.scss';
+import Modal from 'components/common/modal/modalCommon';
+import * as modalActions from 'redux/modal/modalRedux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 const Header = ({modalView}) => {

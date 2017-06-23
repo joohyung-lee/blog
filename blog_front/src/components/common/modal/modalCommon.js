@@ -1,8 +1,8 @@
 import React, { Component, propTypes } from 'react';
-import * as modalActions from '../../modules/modal/modalRedux';
+import * as modalActions from 'redux/modal/modalRedux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import './modal.scss';
+import 'styles/common/modal/modal.scss';
 //modal wrapping
 class Modal extends Component {
     handleClick= (e) => {

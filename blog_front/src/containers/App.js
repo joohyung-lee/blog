@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import './common/style/common.scss';
-import Header from './components/header/header';
+import 'styles/common/common.scss';
+import Header from './header/header';
 
 //firebase data
-import database from './firebase/firebaseConfig'; 
+import database from 'firebase/firebaseConfig'; 
 class App extends Component {
   constructor(){
     super();
