@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import modalRedux from './modal/modalRedux';
+import modal from './modal/modalRedux';
 
 export default combineReducers({
-    modalRedux,
+    modal,
     
 });

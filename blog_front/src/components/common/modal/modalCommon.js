@@ -1,4 +1,4 @@
-import React, { Component, propTypes } from 'react';
+import React, { propTypes } from 'react';
 import 'styles/common/modal/modal.scss';
 
 //modal 컴포넌트

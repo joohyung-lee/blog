@@ -14,11 +14,13 @@ class Header extends Component {
      closeOver=(e)=>{
         if(e.target.className=='overlay'){
             const {modalView} =this.props;
-            modalView.closeModal();
+            modalView.closeModal({
+                modalName:'login'
+            });
         }
     }
     render(){
-        const {modalView,open} =this.props;
+        const {modalView,modal} =this.props;
         return (
             <div className="global-nav">
                 <div className="logo">
@@ -31,10 +33,10 @@ class Header extends Component {
                     </ul>
                 </div>
                 <div className="login-state">
-                    <button onClick={modalView.openModal}>로그인</button>
+                    <button onClick={()=>modalView.openModal({modalName:'login'})}>로그인</button>
                 </div>
-                <Overlay open={open} closeOver={this.closeOver}>
-                    <Modal open={open}>
+                <Overlay open={modal['login'].open} closeOver={this.closeOver}>
+                    <Modal open={modal['login'].open}>
                         <h1>test</h1>
                     </Modal>    
                 </Overlay> 
@@ -45,7 +47,7 @@ class Header extends Component {
 
 export default connect(
     (state)=>({
-        open:state.modalRedux.open
+        modal:state.modal
     }),
     (dispatch)=>({
         modalView: bindActionCreators(modalActions, dispatch)

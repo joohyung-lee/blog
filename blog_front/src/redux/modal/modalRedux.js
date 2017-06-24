@@ -13,23 +13,27 @@ export const closeModal = createAction(MODAL_CLOSE);
 //초기화
 const initialState={
     login:{
-        open:true,
+        open:false,
+    },
+    error:{
+        open:false,
     }
 }
 
 //리듀서
 export default handleActions({
     [MODAL_OPEN]: (state, action) => {
-        const { modalName} = action.payload;
-        return{
-            ...state,
-            open:true
-        };
+        //modalName으로 해당 모달 열기
+        const {modalName} = action.payload;
+        const modalState=state[modalName].open=true;
+      
+        return Object.assign({},state,modalState);
+
     },
     [MODAL_CLOSE]: (state, action) => {
-        return{
-            ...state,
-            open:false
-        };
+         //modalName으로 해당 모달 닫기
+        const {modalName} = action.payload;
+        const modalState=state[modalName].open=false;
+        return Object.assign({},state,modalState);
     }
 }, initialState);
