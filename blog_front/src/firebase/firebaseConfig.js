@@ -9,8 +9,5 @@ var config = {
     storageBucket: "joomation-blog.appspot.com",
     messagingSenderId: "96650630304"
 };
-firebase.initializeApp(config);
 
-const database = firebase.database();
-
-export default database;
+export default firebase.initializeApp(config);
