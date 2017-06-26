@@ -1,5 +1,4 @@
 import { handleActions, createAction } from 'redux-actions';
-
 //액션
 const PROFILE= 'AUTH/PROFILE';
 
@@ -10,17 +9,21 @@ export const profile = createAction(PROFILE);
 
 //초기화
 const initialState={
-    user:null
+    profile:{
+        uid:null
+    }
   
 }
 
 //리듀서
 export default handleActions({
     [PROFILE]: (state, action) => {
-      const user = action.payload;
+      const uid = action.payload;
        return{ 
                 ...state,
-                user:user
+                profile:{
+                    uid
+                }
             }
 
     }

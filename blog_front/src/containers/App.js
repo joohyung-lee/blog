@@ -18,27 +18,42 @@ class App extends Component {
 
   }
   componentDidMount(){
+    firebase.auth().getRedirectResult().then(function(result) {
+        if (result.credential) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+            // ...
+        }
+            // The signed-in user info.
+            var user = result.user;
+            console.log(user);
+            }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+        });
     const {userId,userInfo}=this.props;
     
     firebase.auth().onAuthStateChanged(function(user) {
+       var user = firebase.auth().currentUser;
+       var name, email, photoUrl, uid;   
       if (user) {
-        // User is signed in.
-        var user = firebase.auth().currentUser;
-        var name, email, photoUrl, uid;
-        if (user != null) {
-         
+        // User is signed in.        
           name = user.displayName;
           email = user.email;
           photoUrl = user.photoURL;
           uid = user.uid; 
-          userInfo.profile({user:uid});
-        }else{
-          console.log('사용자 없다');
-        }
+          userInfo.profile(uid);
+  
       } else {
-
-          
-
+        userInfo.profile(uid);
+        console.log('사용자가 없어짐');
       }
     });
  
@@ -55,7 +70,7 @@ class App extends Component {
   render() {
     return (
       <div>
-          
+        <h2>{this.props.userId}</h2>
         <h1>{this.state.speed}</h1>
           <Header/>
       </div>
@@ -65,7 +80,7 @@ class App extends Component {
 
 export default connect(
   (state)=>({
-        userId:state.auth.user
+        userId:state.auth.profile.uid
     }),
     (dispatch)=>({
         userInfo: bindActionCreators(authActions, dispatch)
