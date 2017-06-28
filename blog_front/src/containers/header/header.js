@@ -2,8 +2,7 @@ import React, { Component, propTypes } from 'react';
 //components
 import Modal from 'components/common/modal/modalCommon';
 import Overlay from 'components/common/overlay/overlay';
-//firebase
-import firebase from 'firebase';
+
 //redux
 import * as modalActions from 'redux/modal/modalRedux';
 import { connect } from 'react-redux';
@@ -17,19 +16,11 @@ class Header extends Component {
 
     authLogin=()=>{
         
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('https://www.googleapis.com/auth/plus.login');
-        provider.setCustomParameters({
-        'login_hint': 'user@example.com'
-        });
-        firebase.auth().signInWithRedirect(provider);
+
     
     }
     logOut=()=>{
-        firebase.auth().signOut().then(function() {
-        }, function(error) {
-        // An error happened.
-        });
+
     }
      closeOver=(e)=>{
         if(e.target.className=='overlay'){
