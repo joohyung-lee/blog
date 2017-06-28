@@ -23,7 +23,6 @@ class Header extends Component {
         'login_hint': 'user@example.com'
         });
         firebase.auth().signInWithRedirect(provider);
-        
     
     }
     logOut=()=>{
