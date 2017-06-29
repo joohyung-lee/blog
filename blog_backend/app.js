@@ -14,12 +14,17 @@ db.on('error',console.error);
 db.once('open',function(){
     console.log('connected to mongod server');
 });
+
+//connect to mongodb server
 var config =require('./config.js');
 mongoose.connect(config.mongoAuth);
 
+//define model
+var Book=require('./model/book');
+
 var port = process.env.PORT || 4000;
 
-var router = require('./routes')(app)
+var router = require('./routes')(app,Book)
 var server=app.listen(port,function(){
     console.log("Express server has started on port " + port)
 });
