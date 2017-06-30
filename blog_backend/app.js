@@ -9,22 +9,24 @@ app.get('/', function(req, res){
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json()); 
 
+//connect to mongodb server
+var config =require('./config.js');
+mongoose.connect(config.mongoAuth);
+
 var db=mongoose.connection;
 db.on('error',console.error);
 db.once('open',function(){
     console.log('connected to mongod server');
 });
 
-//connect to mongodb server
-var config =require('./config.js');
-mongoose.connect(config.mongoAuth);
+
 
 //define model
-var Book=require('./model/book');
+var Post=require('./model/post');
 
 var port = process.env.PORT || 4000;
 
-var router = require('./routes')(app,Book)
+var router = require('./routes')(app,Post)
 var server=app.listen(port,function(){
     console.log("Express server has started on port " + port)
 });
