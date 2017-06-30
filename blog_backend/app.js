@@ -19,14 +19,12 @@ db.once('open',function(){
     console.log('connected to mongod server');
 });
 
-
-
 //define model
-var Post=require('./model/post');
+
+var motionLab=require('./routes');
+app.use('/motionLab',motionLab);
 
 var port = process.env.PORT || 4000;
-
-var router = require('./routes')(app,Post)
 var server=app.listen(port,function(){
     console.log("Express server has started on port " + port)
 });

@@ -10,17 +10,22 @@ class App extends Component {
   constructor(){
     super();
     this.state={
-      speed:20
+      motionLab:[]
     }
 
   }
-  componentDidMount(){
+  componentDidMount() {
+    fetch('/motionLab')
+      .then(res => res.json())
+      .then(motionLab => this.setState({ motionLab }));
   }
   render() {
     return (
       <div>
+       {this.state.motionLab.map(user =>
+          <div key={user.id}>{user.title}</div>
+        )}
         <h2>{this.props.userId}</h2>
-        <h1>{this.state.speed}</h1>
           <Header/>
       </div>
     );
