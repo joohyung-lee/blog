@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom'
+
+//common style
 import 'styles/common/common.scss';
+//components
 import Header from './header/header';
+import Main from './main'
+import MotionLab from './motionLab'
 
 //redux
 import * as authActions from 'redux/auth/authRedux';
@@ -15,16 +23,17 @@ class App extends Component {
     }
 
   }
-  componentDidMount() {
-    axios.get('/motionLab')
-             .then(response => console.log(response.data));
-  }
+  
   render() {
     return (
-      <div>
-        <h2>{this.props.userId}</h2>
-          <Header/>
-      </div>
+      <Router>
+        <div>
+          <h2>{this.props.userId}</h2>
+            <Header/>        
+            <Route exact path="/" component={Main}/>
+            <Route path="/motionLab" component={MotionLab}/>       
+        </div>
+      </Router>
     );
   }
 }
