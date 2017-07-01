@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Route
-} from 'react-router-dom'
+import {Route} from 'react-router-dom'
 
 //common style
 import 'styles/common/common.scss';
@@ -26,14 +23,12 @@ class App extends Component {
   
   render() {
     return (
-      <Router>
         <div>
           <h2>{this.props.userId}</h2>
             <Header/>        
             <Route exact path="/" component={Main}/>
             <Route path="/motionLab" component={MotionLab}/>       
         </div>
-      </Router>
     );
   }
 }
