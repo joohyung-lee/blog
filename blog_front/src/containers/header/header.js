@@ -4,7 +4,7 @@ import Modal from 'components/common/modal/modalCommon';
 import Overlay from 'components/common/overlay/overlay';
 
 //redux
-import * as modalActions from 'redux/modal/modalRedux';
+import * as modalActions from 'redux/modal';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 //css

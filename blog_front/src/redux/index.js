@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import modal from './modal/modalRedux';
-import auth from './auth/authRedux';
-import motionLab from './motionLab/motionLabRedux';
+import modal from './modal';
+import auth from './auth';
+import motionLab from './motionLab';
 export default combineReducers({
     modal,
     auth,

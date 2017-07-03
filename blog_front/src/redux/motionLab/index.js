@@ -2,7 +2,7 @@ import { handleActions, createAction } from 'redux-actions';
 import axios from 'axios';
 
 function getPostAPI(postId) {
-    return axios.get(`/motionLab`);
+    return axios.get(`/api/motionlab`);
 }
 
 //액션

@@ -1,3 +1,4 @@
 # /로 끝나면 해당 디렉토리 전체를 무시
 config.js
 node_modules/
+build/
