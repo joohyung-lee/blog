@@ -28,7 +28,7 @@ class App extends Component {
             <Header/>        
             <Switch>
               <Route exact path="/" component={Main}/>
-              <Route path="/motionLab" component={MotionLab}/>     
+              <Route path="/motionlab" component={MotionLab}/>     
               <Route component={NoMatch}/>
             </Switch>
         </div>
