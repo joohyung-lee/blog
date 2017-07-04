@@ -6,6 +6,9 @@ var mongoose = require('mongoose');
 var path = require('path');
 var passport = require('passport'),
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 
 //passport session
 passport.serializeUser(function(user, done) {
@@ -33,7 +36,51 @@ passport.use(new GoogleStrategy({
 var app = express();
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json()); 
+app.use(logger('dev'));
+app.use(cookieParser());
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
+app.get('/', function(req, res) {
+  console.log(authConfig.google);
+  res.render('index', {
+    user: req.user
+  });
+});
+
+app.get('/login', function(req, res) {
+  res.render('login', {
+    user: req.user
+  });
+});
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['openid email profile'] }));
+app.get('/auth/google/callback',
+  passport.authenticate('google', {
+    failureRedirect: '/login'
+  }),
+app.get('/account', ensureAuthenticated, function(req, res) {
+  res.render('account', {
+    user: req.user
+  });
+});
+
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
+// Simple route middleware to ensure user is authenticated.
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
 //connect to mongodb server
 mongoose.connect(process.env.DB_URI);
 
