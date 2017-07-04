@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -7,8 +8,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json()); 
 
 //connect to mongodb server
-var config =require('./config.js');
-mongoose.connect(config.mongoAuth);
+mongoose.connect(process.env.DB_URI);
 
 var db=mongoose.connection;
 db.on('error',console.error);
