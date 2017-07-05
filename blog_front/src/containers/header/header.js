@@ -2,7 +2,7 @@ import React, { Component, propTypes } from 'react';
 //components
 import Modal from 'components/common/modal/modalCommon';
 import Overlay from 'components/common/overlay/overlay';
-
+import axios from 'axios';
 //redux
 import * as modalActions from 'redux/modal';
 import { connect } from 'react-redux';
@@ -15,9 +15,7 @@ class Header extends Component {
 
 
     authLogin=()=>{
-        
-
-    
+        window.location.href='http://localhost:4000/auth/google'
     }
     logOut=()=>{
 

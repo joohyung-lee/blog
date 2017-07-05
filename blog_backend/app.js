@@ -4,12 +4,12 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var path = require('path');
-var passport = require('passport'),
+var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-
+var http=require('http');
 //passport session
 passport.serializeUser(function(user, done) {
   // done(null, user.id);
@@ -21,14 +21,15 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://www.example.com/auth/google/callback"
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL
   },
   function(accessToken, refreshToken, profile, done) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return done(err, user);
-    });
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //   return done(err, user);
+    // });
+    return done(null, profile);
   }
 ));
 
@@ -46,12 +47,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', function(req, res) {
-  console.log(authConfig.google);
-  res.render('index', {
-    user: req.user
-  });
-});
 
 app.get('/login', function(req, res) {
   res.render('login', {
@@ -59,11 +54,15 @@ app.get('/login', function(req, res) {
   });
 });
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['openid email profile'] }));
+  passport.authenticate('google', { scope: ['profile'] }));
 app.get('/auth/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/login'
   }),
+  function(req,res){
+    res.redirect('http://localhost:3000/');
+  }
+  );
 app.get('/account', ensureAuthenticated, function(req, res) {
   res.render('account', {
     user: req.user
@@ -101,6 +100,7 @@ app.get('*', function (req, res) {
 });
 
 var port = process.env.PORT || 4000;
-var server=app.listen(port,function(){
+
+var server= http.createServer(app).listen(port,function(){
     console.log("Express server has started on port " + port)
 });

@@ -32,9 +32,6 @@ export const getPost = (postId) => dispatch => {
     )
 
 }
-
-
-
 //초기화
 const initialState = {
     pending: false,
