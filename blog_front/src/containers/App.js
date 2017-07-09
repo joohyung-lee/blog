@@ -4,7 +4,7 @@ import {Route,Switch} from 'react-router-dom'
 //common style
 import 'styles/common/common.scss';
 //components
-import Header from './header/header';
+import Header from './header/';
 import Main from './main'
 import MotionLab from './motionLab'
 
