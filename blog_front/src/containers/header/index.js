@@ -3,6 +3,8 @@ import React, { Component, propTypes } from 'react';
 import Modal from 'components/common/modal/modalCommon';
 import Overlay from 'components/common/overlay/overlay';
 import axios from 'axios';
+//url
+import urlConfig from 'config/urlConfig';
 //redux
 import * as modalActions from 'redux/modal';
 import { connect } from 'react-redux';
@@ -10,12 +12,12 @@ import { bindActionCreators } from 'redux';
 //css
 import 'styles/header/header.scss';
 
-
+const google_login_url = urlConfig[process.env.NODE_ENV].GOOGLE_LOGIN_URL;
 class Header extends Component {
 
 
     authLogin=()=>{
-        window.location.href='http://localhost:4000/auth/google'
+        window.location.href= google_login_url;
     }
     logOut=()=>{
 

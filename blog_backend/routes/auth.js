@@ -3,22 +3,23 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var Account = require('../model/account');
+var urlConfig = require('../config/urlConfig');
+var proxied_url = urlConfig[process.env.NODE_ENV].proxied_url;
 
 router.get('/', function(req, res) {
   res.json({
       user:req.user
   });
 });
-
 router.get('/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile', 'email'] }));
+  passport.authenticate('google', { scope: ['profile','email'] }));
 
 router.get('/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/'
   }),
   function(req,res){
-   res.redirect(process.env.PROXY_URL);
+   res.redirect(proxied_url);
   });
 
 
@@ -36,7 +37,7 @@ router.get('/account', ensureAuthenticated, function(req, res){
 
 router.get('/logout', function(req, res) {
   req.logout();
-  res.redirect(process.env.PROXY_URL);
+  res.redirect(proxied_url);
 });
 
 // Simple route middleware to ensure user is authenticated.

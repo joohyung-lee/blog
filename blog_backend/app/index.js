@@ -8,8 +8,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var http=require('http');
-var authCofig=require('./passport/authConfig');
-var Account = require('./model/account');
+var authCofig=require('../passport/authConfig');
+var Account = require('../model/account');
 
 //set express
 var app = express();
@@ -34,7 +34,7 @@ db.once('open',function(){
 });
 
 //import router
-var router=require('./routes');
+var router=require('../routes');
 app.use('/',router);
 //passport session
 passport.serializeUser(function(user, done) {
@@ -49,9 +49,9 @@ passport.deserializeUser(function(id, done) {
     });
 });
 // SERVE STATIC FILES
-app.use(express.static(path.join(__dirname, '../blog_front/build/')));
+app.use(express.static(path.join(__dirname, '../../blog_front/build/')));
 app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../blog_front/build/', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../blog_front/build/', 'index.html'));
 });
 
 var port = process.env.PORT || 4000;
