@@ -10,7 +10,7 @@ import * as modalActions from 'redux/modal';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 //css
-import 'styles/header/header.scss';
+import 'styles/header/index.scss';
 
 const google_login_url = urlConfig[process.env.NODE_ENV].GOOGLE_LOGIN_URL;
 class Header extends Component {
