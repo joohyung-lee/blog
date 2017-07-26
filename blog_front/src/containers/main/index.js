@@ -20,15 +20,14 @@ class Main extends Component {
                 {key:'i',title:'title'},
                 {key:'j',title:'title'}
             ],
-            scroll:{
-                isPressed:false,
-                min:0,
-                max:0,
-                offsetX:0,
-                posX:0,
-                relative:0,
-                velocity:0,
-            }
+            isPressed:false,
+            min:0,
+            max:0,
+            posX:0,
+            deltaX:0,
+            offsetX:0,
+            relative:0,
+            velocity:0,
         }
     }
     componentDidMount(){
@@ -40,14 +39,8 @@ class Main extends Component {
         const blockWidth=this.refs.cardFullWidth.clientWidth;
         
         const maxScrollWidth=blockWidth-windowWidth;
-        console.log(blockWidth);
         this.setState({
-            scroll:
-            {
-                ...this.state.scroll,
-                max:maxScrollWidth
-            }
-
+            max:maxScrollWidth
         });
     }
     touchStart=(e)=>{
@@ -57,30 +50,21 @@ class Main extends Component {
         this.handleMove(e.touches[0]);
         
     }
-    handleDown=(e)=>{
+    handleDown=(pos,e)=>{
+        console.log(pos);
         this.setState({
-            scroll:
-            {
-                ...this.state.scroll,
-                isPressed:true,
-                posX:e.clientX,
-            }
-
+            isPressed:true,
+            posX:e.clientX,
         });
     }
     handleMove=(e)=>{
-        const {posX,isPressed,offsetX} = this.state.scroll;
+        const {posX,isPressed,offsetX} = this.state;
         if(isPressed){
-            const newPosX=e.clientX;
-            const deltaX=posX-newPosX;
-            console.log(deltaX);
+            const deltaX=posX-e.clientX;
             this.setState({
-                scroll:
-                {
-                    ...this.state.scroll,  
-                    posX:newPosX,    
-                    offsetX:offsetX+deltaX
-                }
+                posX:e.clientX,    
+                deltaX:deltaX,
+                offsetX:offsetX+deltaX
             });
         }
         e.preventDefault();
@@ -88,33 +72,32 @@ class Main extends Component {
         return false;
     }
     handleUp=(e)=>{
-        const {posX,isPressed} = this.state.scroll;
+        const {min,max,offsetX} = this.state;
+        const mouseX = (offsetX > max) ? max : (offsetX < min) ? min : offsetX;
         this.setState({
-            scroll:
-            {
-                ...this.state.scroll,
-                isPressed:false,
-            }
-
+            isPressed:false,
+            deltaX:0,
+            offsetX:mouseX
         });
     }
     handleClick=(e)=>{
     }
     render() { 
-        const {posX,isPressed,offsetX} = this.state.scroll;
+        const {isPressed,min,max,deltaX,offsetX} = this.state;
         const style=isPressed?
             {
-                scale:spring(1)    
+                x:offsetX   
             }:{
-                scale:spring(1)
+                x:spring(offsetX)
             }
+ 
         return (
-            <div className="main-container"onTouchStart={this.touchStart} onMouseDown={this.handleDown}>
+            <div className="main-container">
                 <div ref="cardFullWidth" className="main-wrapper">
                     <Motion style={style}>
                         {
-                            ({scale})=>
-                            <div className="card-item-wrap" style={{transform:`translate3d(${-offsetX}px,0,0)`}}>
+                            ({x})=>
+                            <div className="card-item-wrap" onTouchStart={this.touchStart} onMouseDown={this.handleDown.bind(null,x)} style={{transform:`translate3d(${-x}px,0,0)`}}>
                                 {
                                     this.state.items.map((item,i)=>{                        
                                         return (
