@@ -36,25 +36,27 @@ class Main extends Component {
         window.addEventListener('touchmove',this.touchMove);
         window.addEventListener('touchend',this.handleUp);
         const windowWidth=window.innerWidth;
-        const blockWidth=this.refs.cardFullWidth.clientWidth;
+        const blockWidth=this.fullWidth.clientWidth;
         
         const maxScrollWidth=blockWidth-windowWidth;
         this.setState({
             max:maxScrollWidth
         });
     }
-    touchStart=(e)=>{
-        this.handleMove(e.touches[0]);
+    touchStart=(pos,e)=>{
+        this.handleDown(pos,e.touches[0]);
     }
     touchMove=(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
         this.handleMove(e.touches[0]);
         
     }
     handleDown=(pos,e)=>{
-        console.log(pos);
         this.setState({
             isPressed:true,
             posX:e.clientX,
+            offsetX:pos
         });
     }
     handleMove=(e)=>{
@@ -67,9 +69,7 @@ class Main extends Component {
                 offsetX:offsetX+deltaX
             });
         }
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
+        
     }
     handleUp=(e)=>{
         const {min,max,offsetX} = this.state;
@@ -83,7 +83,7 @@ class Main extends Component {
     handleClick=(e)=>{
     }
     render() { 
-        const {isPressed,min,max,deltaX,offsetX} = this.state;
+        const {isPressed,offsetX} = this.state;
         const style=isPressed?
             {
                 x:offsetX   
@@ -93,11 +93,11 @@ class Main extends Component {
  
         return (
             <div className="main-container">
-                <div ref="cardFullWidth" className="main-wrapper">
-                    <Motion style={style}>
-                        {
-                            ({x})=>
-                            <div className="card-item-wrap" onTouchStart={this.touchStart} onMouseDown={this.handleDown.bind(null,x)} style={{transform:`translate3d(${-x}px,0,0)`}}>
+                <Motion style={style}>
+                    {
+                        ({x})=>
+                        <div className="main-wrapper" onTouchStart={this.touchStart.bind(null,x)} onMouseDown={this.handleDown.bind(null,x)} >
+                            <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" style={{transform:`translate3d(${-x}px,0,0)`}}>
                                 {
                                     this.state.items.map((item,i)=>{                        
                                         return (
@@ -110,9 +110,9 @@ class Main extends Component {
                                     })
                                 }
                             </div>
-                        }
-                    </Motion>
-                </div>
+                        </div>
+                    }
+                </Motion>
             </div>
 
         )

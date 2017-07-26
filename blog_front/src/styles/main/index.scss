@@ -4,6 +4,9 @@ html,body{
     height:100%;
 }
 .main-container{
+    
+}
+.main-wrapper{
     position: absolute;
     top:90px;
     right:0;
@@ -11,13 +14,11 @@ html,body{
     left:0;
     background:#ddd;
     overflow: hidden;
-}
-.main-wrapper{
-    position: absolute;
-    top: 30%;
-    white-space: nowrap;
     .card-item-wrap{
-
+        position: absolute;
+        top:30%;
+        min-width:100%;
+        white-space: nowrap;
         .card-item{
             display: inline-block;
             width:300px;
