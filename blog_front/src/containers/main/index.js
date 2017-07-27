@@ -49,25 +49,25 @@ class Main extends Component {
             isPressed:true,
             posX:event.clientX,
             offsetX:pos,
-            deltaX:event.clientX-pos,
         });
     }
     handleMove=(e)=>{
         e.preventDefault();
         e.stopPropagation();
         let event=(e.type=='mousemove')?e:(e.type=='touchmove')?e.touches[0]:e;    
-        const {deltaX,isPressed} = this.state;
+        const {posX,isPressed,offsetX} = this.state;
         if(isPressed){
-            const offsetX=event.clientX-deltaX;
+            const deltaX=posX-event.clientX;
             this.setState({
                 posX:event.clientX,    
-                offsetX:offsetX
+                deltaX:deltaX,
+                offsetX:offsetX+deltaX
             });
         }     
     }
     handleUp=(e)=>{
         const {min,max,offsetX} = this.state;
-        const mouseX = (offsetX < -max) ? -max : (offsetX > min) ? min : offsetX;
+        const mouseX = (offsetX > max) ? max : (offsetX < min) ? min : offsetX;
         this.setState({
             isPressed:false,
             deltaX:0,
@@ -91,7 +91,7 @@ class Main extends Component {
                     {
                     ({x})=>
                     <div className="main-wrapper" onTouchStart={this.handleDown.bind(null,x)} onMouseDown={this.handleDown.bind(null,x)} >
-                        <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" style={{transform:`translate3d(${x}px,0,0)`}}>
+                        <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" style={{transform:`translate3d(${-x}px,0,0)`}}>
                             {
                                 this.state.items.map((item,i)=>{                        
                                     return (
