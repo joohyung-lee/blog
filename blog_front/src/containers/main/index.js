@@ -33,7 +33,7 @@ class Main extends Component {
     componentDidMount(){
         window.addEventListener('mousemove',this.handleMove);
         window.addEventListener('mouseup',this.handleUp);
-        window.addEventListener('touchmove',this.touchMove);
+        window.addEventListener('touchmove',this.handleMove);
         window.addEventListener('touchend',this.handleUp);
         const windowWidth=window.innerWidth;
         const blockWidth=this.fullWidth.clientWidth;
@@ -43,37 +43,31 @@ class Main extends Component {
             max:maxScrollWidth
         });
     }
-    touchStart=(pos,e)=>{
-        this.handleDown(pos,e.touches[0]);
-    }
-    touchMove=(e)=>{
-        e.preventDefault();
-        e.stopPropagation();
-        this.handleMove(e.touches[0]);
-        
-    }
     handleDown=(pos,e)=>{
+        let event=(e.type=='mousedown')?e:(e.type=='touchstart')?e.touches[0]:e;
         this.setState({
             isPressed:true,
-            posX:e.clientX,
-            offsetX:pos
+            posX:event.clientX,
+            offsetX:pos,
+            deltaX:event.clientX-pos,
         });
     }
     handleMove=(e)=>{
-        const {posX,isPressed,offsetX} = this.state;
+        e.preventDefault();
+        e.stopPropagation();
+        let event=(e.type=='mousemove')?e:(e.type=='touchmove')?e.touches[0]:e;    
+        const {deltaX,isPressed} = this.state;
         if(isPressed){
-            const deltaX=posX-e.clientX;
+            const offsetX=event.clientX-deltaX;
             this.setState({
-                posX:e.clientX,    
-                deltaX:deltaX,
-                offsetX:offsetX+deltaX
+                posX:event.clientX,    
+                offsetX:offsetX
             });
-        }
-        
+        }     
     }
     handleUp=(e)=>{
         const {min,max,offsetX} = this.state;
-        const mouseX = (offsetX > max) ? max : (offsetX < min) ? min : offsetX;
+        const mouseX = (offsetX < -max) ? -max : (offsetX > min) ? min : offsetX;
         this.setState({
             isPressed:false,
             deltaX:0,
@@ -95,22 +89,22 @@ class Main extends Component {
             <div className="main-container">
                 <Motion style={style}>
                     {
-                        ({x})=>
-                        <div className="main-wrapper" onTouchStart={this.touchStart.bind(null,x)} onMouseDown={this.handleDown.bind(null,x)} >
-                            <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" style={{transform:`translate3d(${-x}px,0,0)`}}>
-                                {
-                                    this.state.items.map((item,i)=>{                        
-                                        return (
-                                            <CardItem key={i} author={item.key} title={item.title} onClick={this.handleClick}
-                                                style={{
-                                                    
-                                                }}
-                                            />
-                                        )
-                                    })
-                                }
-                            </div>
+                    ({x})=>
+                    <div className="main-wrapper" onTouchStart={this.handleDown.bind(null,x)} onMouseDown={this.handleDown.bind(null,x)} >
+                        <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" style={{transform:`translate3d(${x}px,0,0)`}}>
+                            {
+                                this.state.items.map((item,i)=>{                        
+                                    return (
+                                        <CardItem key={i} author={item.key} title={item.title} onClick={this.handleClick}
+                                            style={{
+                                                
+                                            }}
+                                        />
+                                    )
+                                })
+                            }
                         </div>
+                    </div>
                     }
                 </Motion>
             </div>
