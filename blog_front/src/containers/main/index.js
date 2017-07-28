@@ -66,11 +66,20 @@ class Main extends Component {
         }     
     }
     handleUp=(e)=>{
-        const {min,max,offsetX} = this.state;
-        const mouseX = (offsetX > max) ? max : (offsetX < min) ? min : offsetX;
+        const {min,max,offsetX,deltaX} = this.state;
+        const accel=offsetX+(deltaX*Math.abs(deltaX));
+        let mouseX;
+        if(accel > max){
+            mouseX=max;
+        }else if(accel < min){
+            mouseX=min;
+        }else{
+            mouseX=accel;
+            mouseX=Math.round(mouseX/300)*300;
+        }
         this.setState({
             isPressed:false,
-            deltaX:0,
+            deltaX:deltaX,
             offsetX:mouseX
         });
     }
@@ -80,16 +89,18 @@ class Main extends Component {
         const {isPressed,offsetX} = this.state;
         const style=isPressed?
             {
-                x:offsetX   
+                x:offsetX,
+                active:spring(1.1)
             }:{
-                x:spring(offsetX)
+                x:spring(offsetX),
+                active:spring(1)
             }
  
         return (
             <div className="main-container">
                 <Motion style={style}>
                     {
-                    ({x})=>
+                    ({x,active})=>
                     <div className="main-wrapper" onTouchStart={this.handleDown.bind(null,x)} onMouseDown={this.handleDown.bind(null,x)} >
                         <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" style={{transform:`translate3d(${-x}px,0,0)`}}>
                             {
@@ -97,7 +108,7 @@ class Main extends Component {
                                     return (
                                         <CardItem key={i} author={item.key} title={item.title} onClick={this.handleClick}
                                             style={{
-                                                
+                                                transform:`scale(${i==3?active:active})`
                                             }}
                                         />
                                     )
