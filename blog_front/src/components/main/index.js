@@ -1,8 +1,8 @@
 import React from 'react';
 
-const CardItem = ({author,title,style,onClick}) => {
+const CardItem = ({author,title,style,onClick,onMouseOver,onMouseOut,className}) => {
     return (
-        <div className="card-item" style={style} onClick={onClick}>
+        <div className={className} style={style} onMouseOver={onMouseOver} onMouseOut={onMouseOut} onClick={onClick} >
             <p>{author}</p>
             <p>{title}</p>
         </div>

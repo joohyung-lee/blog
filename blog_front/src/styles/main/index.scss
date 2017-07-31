@@ -25,7 +25,9 @@ html,body{
             height:300px;
             background-color:#fff;
             border:1px solid #ddd;
-
+        }
+        .card-item.hover{
+            border:1px solid red;
         }
     }
 }

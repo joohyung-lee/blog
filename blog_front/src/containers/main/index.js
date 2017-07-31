@@ -23,11 +23,12 @@ class Main extends Component {
             isPressed:false,
             min:0,
             max:0,
+            eleWidth:0,
             posX:0,
             deltaX:0,
             offsetX:0,
             relative:0,
-            velocity:0,
+            active:0
         }
     }
     componentDidMount(){
@@ -35,12 +36,17 @@ class Main extends Component {
         window.addEventListener('mouseup',this.handleUp);
         window.addEventListener('touchmove',this.handleMove);
         window.addEventListener('touchend',this.handleUp);
-        const windowWidth=window.innerWidth;
-        const blockWidth=this.fullWidth.clientWidth;
+        this.dimensions();
+        window.addEventListener('resize',this.dimensions);
         
-        const maxScrollWidth=blockWidth-windowWidth;
+    }
+    dimensions=()=>{
+        let windowWidth=window.innerWidth;
+        let blockWidth=this.fullWidth.clientWidth;  
+        let maxScrollWidth=blockWidth-windowWidth;
         this.setState({
-            max:maxScrollWidth
+            max:maxScrollWidth,
+            eleWidth:this.fullWidth.childNodes[0].offsetWidth,
         });
     }
     handleDown=(pos,e)=>{
@@ -55,18 +61,19 @@ class Main extends Component {
         e.preventDefault();
         e.stopPropagation();
         let event=(e.type=='mousemove')?e:(e.type=='touchmove')?e.touches[0]:e;    
-        const {posX,isPressed,offsetX} = this.state;
+        const {posX,isPressed,eleWidth,offsetX} = this.state;
         if(isPressed){
             const deltaX=posX-event.clientX;
             this.setState({
                 posX:event.clientX,    
                 deltaX:deltaX,
-                offsetX:offsetX+deltaX
+                offsetX:offsetX+deltaX,
+                active:Math.round(offsetX/eleWidth)
             });
         }     
     }
     handleUp=(e)=>{
-        const {min,max,offsetX,deltaX} = this.state;
+        const {min,max,eleWidth,offsetX,deltaX} = this.state;
         const accel=offsetX+(deltaX*Math.abs(deltaX));
         let mouseX;
         if(accel > max){
@@ -75,7 +82,7 @@ class Main extends Component {
             mouseX=min;
         }else{
             mouseX=accel;
-            mouseX=Math.round(mouseX/300)*300;
+            mouseX=Math.round(mouseX/eleWidth)*eleWidth;
         }
         this.setState({
             isPressed:false,
@@ -83,34 +90,53 @@ class Main extends Component {
             offsetX:mouseX
         });
     }
+    handleMouseOver=(i)=>{
+        this.setState({
+            active:i
+        })
+
+    }
+    handleMouseOut=()=>{
+        const {eleWidth,offsetX} = this.state;
+        this.setState({
+            active:Math.round(offsetX/eleWidth)
+        })
+
+    }
     handleClick=(e)=>{
+
     }
     render() { 
         const {isPressed,offsetX} = this.state;
         const style=isPressed?
             {
                 x:offsetX,
-                active:spring(1.1)
             }:{
                 x:spring(offsetX),
-                active:spring(1)
             }
- 
         return (
             <div className="main-container">
                 <Motion style={style}>
-                    {
-                    ({x,active})=>
+                    {({x})=>
                     <div className="main-wrapper" onTouchStart={this.handleDown.bind(null,x)} onMouseDown={this.handleDown.bind(null,x)} >
                         <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" style={{transform:`translate3d(${-x}px,0,0)`}}>
                             {
-                                this.state.items.map((item,i)=>{                        
+                                this.state.items.map((item,i)=>{       
+                                    const cardStyle={
+                                        active:spring(1.1)
+                                    }                 
                                     return (
-                                        <CardItem key={i} author={item.key} title={item.title} onClick={this.handleClick}
-                                            style={{
-                                                transform:`scale(${i==3?active:active})`
-                                            }}
-                                        />
+                                        <Motion key={i}style={cardStyle}>
+                                            {({active})=>
+                                                <CardItem key={i} author={item.key} title={item.title} 
+                                                    onClick={this.handleClick} onMouseOver={this.handleMouseOver.bind(null,i)} onMouseOut={this.handleMouseOut}
+                                                    className={this.state.active==i?"card-item hover":"card-item"}
+                                                    style={{
+                                                        
+                                                    }}
+                                                />
+                                            }
+                                        </Motion>
                                     )
                                 })
                             }
