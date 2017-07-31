@@ -41,9 +41,9 @@ class Main extends Component {
         
     }
     dimensions=()=>{
-        let windowWidth=window.innerWidth;
+        let wrapperWidth=this.wrapperWidth.offsetWidth;
         let blockWidth=this.fullWidth.clientWidth;  
-        let maxScrollWidth=blockWidth-windowWidth;
+        let maxScrollWidth=blockWidth-wrapperWidth;
         this.setState({
             max:maxScrollWidth,
             eleWidth:this.fullWidth.childNodes[0].offsetWidth,
@@ -118,7 +118,7 @@ class Main extends Component {
             <div className="main-container">
                 <Motion style={style}>
                     {({x})=>
-                    <div className="main-wrapper" onTouchStart={this.handleDown.bind(null,x)} onMouseDown={this.handleDown.bind(null,x)} >
+                    <div ref={(ref)=>{this.wrapperWidth=ref}} className="main-wrapper" onTouchStart={this.handleDown.bind(null,x)} onMouseDown={this.handleDown.bind(null,x)} >
                         <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" style={{transform:`translate3d(${-x}px,0,0)`}}>
                             {
                                 this.state.items.map((item,i)=>{       
