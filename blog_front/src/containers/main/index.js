@@ -41,7 +41,7 @@ class Main extends Component {
         
     }
     dimensions=()=>{
-        let wrapperWidth=this.wrapperWidth.offsetWidth;
+        let wrapperWidth=this.wrapperWidth.clientWidth;
         let blockWidth=this.fullWidth.clientWidth;  
         let maxScrollWidth=blockWidth-wrapperWidth;
         this.setState({
