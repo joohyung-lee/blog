@@ -31,3 +31,20 @@ html,body{
         }
     }
 }
+.scale-enter {
+  width:0;
+}
+
+.scale-enter.scale-enter-active {
+  width:1200px;
+  transition: all 300ms ease-in;
+}
+
+.scale-leave {
+  width:1200px;
+}
+
+.scale-leave.scale-leave-active {
+  width:0px;
+  transition: all 300ms ease-in;
+}

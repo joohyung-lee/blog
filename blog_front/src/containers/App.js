@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import {Route,Switch} from 'react-router-dom'
+import {withRouter,Route,Switch} from 'react-router-dom'
 
 //common style
 import 'styles/common/common.scss';
 //components
 import Header from './header/';
 import Main from './main'
-import MotionLab from './motionLab'
+
 
 //redux
 import * as authActions from 'redux/auth';
@@ -28,7 +28,7 @@ class App extends Component {
             <Header/>        
             <Switch>
               <Route exact path="/" component={Main}/>
-              <Route path="/motionlab" component={MotionLab}/>     
+              <Route path="/motionlab" component={Main}/>   
               <Route component={NoMatch}/>
             </Switch>
         </div>
@@ -40,7 +40,7 @@ const NoMatch = ({ location }) => (
     <h3>No match for <code>{location.pathname}</code></h3>
   </div>
 )
-export default connect(
+export default withRouter(connect(
   (state)=>({
         userId:state.auth.profile.uid
     }),
@@ -48,4 +48,4 @@ export default connect(
         userInfo: bindActionCreators(authActions, dispatch)
     })
 )
-(App);
+(App));

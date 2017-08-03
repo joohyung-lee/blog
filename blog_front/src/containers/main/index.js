@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {Motion,spring} from 'react-motion';
+import {Motion,TransitionMotion,spring} from 'react-motion';
+import {withRouter,Route} from 'react-router-dom';
+import { RouteTransition } from 'react-router-transition';
 
 //import components
 import CardItem from 'components/main'
@@ -28,7 +30,8 @@ class Main extends Component {
             deltaX:0,
             offsetX:0,
             relative:0,
-            active:0
+            active:0,
+            moved:false
         }
     }
     componentDidMount(){
@@ -38,6 +41,7 @@ class Main extends Component {
         window.addEventListener('touchend',this.handleUp);
         this.dimensions();
         window.addEventListener('resize',this.dimensions);
+
         
     }
     dimensions=()=>{
@@ -55,11 +59,13 @@ class Main extends Component {
             isPressed:true,
             posX:event.clientX,
             offsetX:pos,
+            moved:false,
         });
     }
     handleMove=(e)=>{
         e.preventDefault();
         e.stopPropagation();
+        
         let event=(e.type=='mousemove')?e:(e.type=='touchmove')?e.touches[0]:e;    
         const {posX,isPressed,eleWidth,offsetX} = this.state;
         if(isPressed){
@@ -68,12 +74,13 @@ class Main extends Component {
                 posX:event.clientX,    
                 deltaX:deltaX,
                 offsetX:offsetX+deltaX,
-                active:Math.round(offsetX/eleWidth)
+                active:Math.round(offsetX/eleWidth),
+                moved:true
             });
         }     
     }
     handleUp=(e)=>{
-        const {min,max,eleWidth,offsetX,deltaX} = this.state;
+        const {min,max,eleWidth,offsetX,deltaX,isPressed} = this.state;
         const accel=offsetX+(deltaX*Math.abs(deltaX));
         let mouseX;
         if(accel > max){
@@ -87,7 +94,8 @@ class Main extends Component {
         this.setState({
             isPressed:false,
             deltaX:deltaX,
-            offsetX:mouseX
+            offsetX:mouseX,
+            
         });
     }
     handleMouseOver=(i)=>{
@@ -103,8 +111,16 @@ class Main extends Component {
         })
 
     }
-    handleClick=(e)=>{
-
+    handleClick=(i,e)=>{
+        const {moved}=this.state;
+        if(moved){
+            return false;
+        }else{
+            this.props.history.push(`/motionlab/${i}`);
+            this.setState({
+                detailWidth:e.target.clientWidth
+            })
+        }   
     }
     render() { 
         const {isPressed,offsetX} = this.state;
@@ -129,7 +145,7 @@ class Main extends Component {
                                         <Motion key={i}style={cardStyle}>
                                             {({active})=>
                                                 <CardItem key={i} author={item.key} title={item.title} 
-                                                    onClick={this.handleClick} onMouseOver={this.handleMouseOver.bind(null,i)} onMouseOut={this.handleMouseOut}
+                                                    onClick={this.handleClick.bind(null,i)} onMouseOver={this.handleMouseOver.bind(null,i)} onMouseOut={this.handleMouseOut}
                                                     className={this.state.active==i?"card-item hover":"card-item"}
                                                     style={{
                                                         
@@ -144,10 +160,33 @@ class Main extends Component {
                     </div>
                     }
                 </Motion>
+                <DetailPage path="/motionlab/:id" number='200'/> 
             </div>
 
         )
     }
 }
 
-export default Main;
+
+const DetailPage = ({number,...rest}) => {
+    const test=200
+    return (      
+            <Route {...rest} render={props=>(
+                    <RouteTransition 
+                        pathname={props.location.pathname}
+                        atEnter={{ width: 10 }}
+                        atLeave={{ width: 10 }}
+                        atActive={{ width: 1200 }}
+                    >
+                    <div className="detail-page-wrap">
+                        <h1>Detail</h1>
+                        <h2>number</h2>
+                    </div>
+                    </RouteTransition>
+                )}/> 
+                
+    );
+};
+
+
+export default withRouter(Main);
