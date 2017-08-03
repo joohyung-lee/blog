@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Motion,TransitionMotion,spring} from 'react-motion';
-import {withRouter,Route} from 'react-router-dom';
+import {withRouter,Route,Switch} from 'react-router-dom';
 import { RouteTransition } from 'react-router-transition';
 
 //import components
@@ -31,7 +31,8 @@ class Main extends Component {
             offsetX:0,
             relative:0,
             active:0,
-            moved:false
+            moved:false,
+            detailWidth:0
         }
     }
     componentDidMount(){
@@ -95,7 +96,7 @@ class Main extends Component {
             isPressed:false,
             deltaX:deltaX,
             offsetX:mouseX,
-            
+            moved:false
         });
     }
     handleMouseOver=(i)=>{
@@ -118,7 +119,7 @@ class Main extends Component {
         }else{
             this.props.history.push(`/motionlab/${i}`);
             this.setState({
-                detailWidth:e.target.clientWidth
+                detailWidth:e.target.clientX
             })
         }   
     }
@@ -160,33 +161,32 @@ class Main extends Component {
                     </div>
                     }
                 </Motion>
-                <DetailPage path="/motionlab/:id" number='200'/> 
+                <Route render={({location, history, match}) => {
+                    return (
+                    <RouteTransition 
+                        pathname={location.pathname}
+                        atEnter={{ width: 300,left:300}}
+                        atLeave={{ width: 300,left:300 }}
+                        atActive={{ width: 1200 ,left:0}}
+                        
+                    >
+                        <Switch key={location.key} location={location}>
+                            <Route exact path="/motionlab/:id" component={test}/>
+                        </Switch>
+                    </RouteTransition>
+                    );
+                }} />
             </div>
 
         )
     }
 }
+const test=()=>{
+    return (
+            <h1 className="detail">DETAIL</h1>
+    )
+}
 
-
-const DetailPage = ({number,...rest}) => {
-    const test=200
-    return (      
-            <Route {...rest} render={props=>(
-                    <RouteTransition 
-                        pathname={props.location.pathname}
-                        atEnter={{ width: 10 }}
-                        atLeave={{ width: 10 }}
-                        atActive={{ width: 1200 }}
-                    >
-                    <div className="detail-page-wrap">
-                        <h1>Detail</h1>
-                        <h2>number</h2>
-                    </div>
-                    </RouteTransition>
-                )}/> 
-                
-    );
-};
 
 
 export default withRouter(Main);
