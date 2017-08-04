@@ -42,9 +42,10 @@ class Main extends Component {
         window.addEventListener('touchend',this.handleUp);
         this.dimensions();
         window.addEventListener('resize',this.dimensions);
-
+        
         
     }
+ 
     dimensions=()=>{
         let wrapperWidth=this.wrapperWidth.clientWidth;
         let blockWidth=this.fullWidth.clientWidth;  
@@ -162,13 +163,27 @@ class Main extends Component {
                     }
                 </Motion>
                 <Route render={({location, history, match}) => {
+                    const popStateStyles={
+                        atEnter:{translateX: 100 },
+                        atLeave:{ translateX: -100 },
+                        atActive:{ translateX: 0 },
+                        mapStyles:styles => ({transform: 'translateX('+styles.translateX+'%)'})
+                     } 
+                     const pushStateStyles={
+                        atEnter:{translateX: 100 },
+                        atLeave:{ translateX: -100 },
+                        atActive:{ translateX: 0 },
+                        mapStyles:styles => ({transform: 'translateX('+styles.translateX+'%)'})
+                     }
+                    const styles = this.props.history.action === 'POP'
+                        ? popStateStyles
+                        : pushStateStyles;
+                       
+                     console.log(this.props.history.action);
                     return (
                     <RouteTransition 
                         pathname={location.pathname}
-                        atEnter={{ width: 300,left:300}}
-                        atLeave={{ width: 300,left:300 }}
-                        atActive={{ width: 1200 ,left:0}}
-                        
+                        {...styles}      
                     >
                         <Switch key={location.key} location={location}>
                             <Route exact path="/motionlab/:id" component={test}/>
