@@ -1,10 +1,6 @@
 import { handleActions, createAction } from 'redux-actions';
 import axios from 'axios';
 
-function getPostAPI(postId) {
-    return axios.get(`/api/motionlab`);
-}
-
 //액션
 const GET_POST_PENDING = 'GET_POST_PENDING';
 const GET_POST_SUCCESS = 'GET_POST_SUCCESS';
@@ -14,6 +10,10 @@ const GET_POST_FAILURE = 'GET_POST_FAILURE';
 export const postPending = createAction(GET_POST_PENDING);
 export const postSuccess = createAction(GET_POST_SUCCESS);
 export const postFailure = createAction(GET_POST_FAILURE);
+
+function getPostAPI(postId) {
+    return axios.get(`/api/motionlab`);
+}
 
 export const getPost = (postId) => dispatch => {
     // 먼저, 요청이 시작했다는것을 알립니다

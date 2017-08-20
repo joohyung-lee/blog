@@ -1,0 +1,19 @@
+@import "./code.scss";
+
+.mirror-wrap{
+    display: flex;
+    height:500px;
+    .mirror{
+        border:1px solid #ccc;
+    }
+    .edit{
+        flex:1;
+        textarea{
+            width:100%;
+            height:100%;
+        }
+    }
+    .markdown{
+        flex:1.5;
+    }
+}

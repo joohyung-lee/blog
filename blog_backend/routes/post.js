@@ -19,10 +19,8 @@ router.get('/', function (req, res) {
 });
 
 // GET SINGLE POST
-router.get('/:post_id', function (req, res) {
-    Post.findOne({
-        _id: req.params.post_id
-    }, function (err, post) {
+router.get('/:id', function (req, res) {
+    Post.find({_id:req.params.id},function (err, post) {
         if (err) return res.status(500).json({
             error: err
         });
@@ -45,8 +43,6 @@ router.get('/:post_id', function (req, res) {
 // CREATE POST
 router.post('/', function (req, res) {
     var post = new Post();
-    req.body.name = 'firstproject';
-    req.body.author = 'joomation';
     post.title = req.body.name;
     post.author = req.body.author;
     //post.post_date = new Date(req.body.post_date);
@@ -67,8 +63,8 @@ router.post('/', function (req, res) {
 });
 
 // UPDATE THE POST
-router.put('/:post_id', function (req, res) {
-    Post.findById(req.params.post_id, function (err, post) {
+router.put('/:id', function (req, res) {
+    Post.findById(req.params.id, function (err, post) {
         if (err) return res.status(500).json({
             error: 'database fail'
         });
@@ -93,9 +89,9 @@ router.put('/:post_id', function (req, res) {
 });
 
 // DELETE POST
-router.delete('/:book_id', function (req, res) {
+router.delete('/:id', function (req, res) {
     Post.remove({
-        _id: req.params.post_id
+        _id: req.params.id
     }, function (err, ouput) {
         if (err) return res.status(500).json({
             error: "database fail"

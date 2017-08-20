@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
 import propTypes from 'prop-types';
 import * as PostActions from 'redux/motionLab';
 
 const PostWrap=({title,index})=>{
     return (
+        
         <li>{title}, {index}</li>
     );
 }

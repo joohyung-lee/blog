@@ -1,0 +1,28 @@
+@import "../common/color.scss";
+.global-nav{
+    position: relative;
+    height:60px;
+    padding:0 50px;
+    line-height: 60px;
+    background: $c-black-8;
+    z-index: 9999;
+    .logo{
+        position: absolute;
+        left:50px;
+        h1{
+            font-size: 1rem;
+        }
+    }
+    .nav-contents{
+        position: absolute;
+        right:50px;
+        padding-right:60px;
+    }
+    .login-state{
+        position: absolute;
+        right:50px;
+        .btn-login{
+
+        }
+    }
+}

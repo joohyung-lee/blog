@@ -39,12 +39,11 @@ class Header extends Component {
                 </div>    
                 <div className="nav-contents">
                     <ul>
-                        <li>Motion Lab</li>
                         <li>About</li>
                     </ul>
                 </div>
                 <div className="login-state">
-                    <button onClick={()=>modalView.openModal({modalName:'login'})}>로그인</button>
+                    <span className="btn-login" onClick={()=>modalView.openModal({modalName:'login'})}>Login</span>
                 </div>
                 <Overlay open={modal['login'].open} closeOver={this.closeOver}>
                     <Modal open={modal['login'].open}>

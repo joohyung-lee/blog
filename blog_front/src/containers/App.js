@@ -3,11 +3,11 @@ import {withRouter,Route,Switch} from 'react-router-dom'
 
 //common style
 import 'styles/common/common.scss';
-//components
+//containers
 import Header from './header/';
-import Main from './main'
-
-
+import Main from './main';
+import AdminMain from './admin/';
+import Posts from './admin/posts';
 //redux
 import * as authActions from 'redux/auth';
 import { connect } from 'react-redux';
@@ -28,7 +28,10 @@ class App extends Component {
             <Header/>        
             <Switch>
               <Route exact path="/" component={Main}/>
-              <Route path="/motionlab" component={Main}/>   
+              <Route path="/motionlab" component={Main}/>
+
+              <Route exact path="/admin/posts" component={AdminMain}/>
+              <Route path="/admin/posts/:id" component={Posts}/>
               <Route component={NoMatch}/>
             </Switch>
         </div>
