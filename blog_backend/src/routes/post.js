@@ -1,7 +1,8 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express';
+let router = express.Router();
 //DATA MODEL
-var Post = require('../model/post');
+import Post from '../model/post';
+
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {

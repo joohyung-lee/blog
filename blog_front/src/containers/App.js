@@ -5,8 +5,9 @@ import {withRouter,Route,Switch} from 'react-router-dom'
 import 'styles/common/common.scss';
 //containers
 import Header from './header/';
-import Main from './main';
+import Main from './main/';
 import AdminMain from './admin/';
+import Write from './admin/write';
 import Posts from './admin/posts';
 //redux
 import * as authActions from 'redux/auth';
@@ -29,8 +30,9 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Main}/>
               <Route path="/motionlab" component={Main}/>
-
+              
               <Route exact path="/admin/posts" component={AdminMain}/>
+              <Route exact path="/admin/write" component={Write}/>
               <Route path="/admin/posts/:id" component={Posts}/>
               <Route component={NoMatch}/>
             </Switch>

@@ -1,15 +1,16 @@
 require('dotenv').config();
-var express = require('express');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var path = require('path');
-var passport = require('passport');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var http=require('http');
-var authCofig=require('../passport/authConfig');
-var Account = require('../model/account');
+import express from 'express';
+
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import path from 'path';
+import passport from 'passport';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import http from 'http';
+import authCofig from '../passport/authConfig';
+import Account from '../model/account';
 
 //set express
 var app = express();
@@ -54,8 +55,8 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, '../../blog_front/build/', 'index.html'));
 });
 
-var port = process.env.PORT || 4000;
 
+var port = process.env.PORT || 4000;
 var server= http.createServer(app).listen(port,function(){
     console.log("Express server has started on port " + port)
 });

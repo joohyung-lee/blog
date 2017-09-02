@@ -1,0 +1,37 @@
+.admin-wrapper{
+    .file-preview{
+        ul{
+            display: flex;
+            flex-wrap: wrap;
+            li{
+                position: relative;
+                flex-basis: 150px;
+                width: 150px;
+                padding: 5px;
+                margin: 5px;
+                word-break: break-all;
+                border: 1px solid #ccc;
+                p{
+                    line-height: 20px;
+                }
+                img{
+                    width: 100%;
+                }
+                .btn-delete{
+                    position: absolute;
+                    display: inline-block;
+                    right:-5px;
+                    top:-5px;
+                    width:20px;
+                    height:20px;
+                    text-align: center;
+                    line-height: 20px;
+                    border-radius: 50%;
+                    background:#fff;
+                    border:1px solid #ccc;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

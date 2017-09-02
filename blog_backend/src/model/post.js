@@ -5,6 +5,7 @@ var postSchema = new Schema({
    // _id:String,
     title:String,
     author:String,
+    photoUrl:String,
     pageView:Number,
     post_date: { type: Date, default: Date.now  }
    

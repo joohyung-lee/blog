@@ -12,7 +12,7 @@ import { bindActionCreators } from 'redux';
 //css
 import 'styles/header/index.scss';
 
-const google_login_url = urlConfig[process.env.NODE_ENV].GOOGLE_LOGIN_URL;
+const google_login_url = urlConfig.GOOGLE_LOGIN_URL;
 class Header extends Component {
 
 

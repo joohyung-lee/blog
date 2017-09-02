@@ -42,9 +42,9 @@ AdminMain.propTypes = {
 
 export default withRouter(connect(
     (state)=>({
-        data:state.admin.data,
-        loading:state.admin.pending,
-        error:state.admin.error,
+        loading:state.admin.getIn(['listData','pending']),
+        error:state.admin.getIn(['listData','error']),
+        data:state.admin.getIn(['listData','data'])
     }),
     (dispatch)=>({
         get:bindActionCreators(httpRequest, dispatch),

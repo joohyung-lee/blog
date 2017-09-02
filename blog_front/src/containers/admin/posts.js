@@ -17,21 +17,25 @@ class Posts extends Component {
         get.getPost(ADMIN_SINGLE_GET,match.params.id);
     }
     handleChange=(e)=>{
-        const { contents ,input} = this.props;
-        let nextState = {};
-        nextState= e.target.value;
-        return input.postCreate({
-            source:nextState,
+        const {input} = this.props;
+        let contents = {};
+        contents= e.target.value;
+        return input.postModify({
+            source:[
+                {
+                    body:contents
+                }
+            ],
             index:0
         })
     }
     render() {
-        const {contents,input,match,error,loading}=this.props;
+        const {data,input,match,error,loading}=this.props;
         return (
             <div>
                 {loading?<h1>로딩중</h1>:
                     error?<h1>에러발생</h1>:
-                    <MarkdownEdit source={contents.title} handleChange={this.handleChange}/>
+                    <MarkdownEdit source={data.body} handleChange={this.handleChange}/>
                 }
             </div>
         );
@@ -44,10 +48,9 @@ Posts.propTypes = {
 
 export default withRouter(connect(
     (state)=>({
-        data:state.admin.data,
-        loading:state.admin.pending,
-        error:state.admin.error,
-        contents:state.admin.data[0]?state.admin.data[0]:''
+        loading:state.admin.getIn(['itemData','pending']),
+        error:state.admin.getIn(['itemData','error']),
+        data:state.admin.getIn(['itemData','data'])
     }),
     (dispatch)=>({
         input: bindActionCreators(adminAction, dispatch),

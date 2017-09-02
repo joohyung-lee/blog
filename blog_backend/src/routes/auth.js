@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var Account = require('../model/account');
-var urlConfig = require('../config/urlConfig');
+var urlConfig = require('../../config/urlConfig');
 var proxied_url = urlConfig[process.env.NODE_ENV].proxied_url;
 
 router.get('/', function(req, res) {

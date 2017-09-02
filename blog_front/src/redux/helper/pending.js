@@ -1,3 +1,4 @@
+import { Map,List } from 'immutable';
 //액션
 const actions=(type)=>{
     return {
@@ -6,34 +7,26 @@ const actions=(type)=>{
         FAILURE : `${type}_FAILURE`
     }
 }
-
-
-//리듀서
+//pending 리듀서
+//type:action_type,name:state_name,successResult:요청이 성공했을때 state설정
 export const pending= ({
-    type
+    type,
+    name,
+    successResult=(state)=>state
 }) => {
     const actionType=actions(type);
     return{
         [actionType.PENDING]: (state, action) => {
-            return {
-                ...state,
-                pending: true,
-                error: false
-            };
+            return state.setIn([...name,'pending'],true)
+                        .setIn([...name,'error'],false)
         },
         [actionType.SUCCESS]: (state, action) => {
-            return {
-                ...state,
-                pending: false,
-                data:action.payload.data
-            };
+            return successResult(state,action).setIn([...name,'pending'],false)
+           
         },
         [actionType.FAILURE]: (state, action) => {
-            return {
-                ...state,
-                pending: false,
-                error: true
-            }
+            return state.setIn([...name,'pending'],false)
+                        .setIn([...name,'error'],true)
         }
     }
 };
