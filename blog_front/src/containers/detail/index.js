@@ -57,7 +57,6 @@ class RouterAnimation extends Component {
         }
     }
     didLeave=()=>{
-        console.log('didleave')
     }
 
     render(){
@@ -66,8 +65,7 @@ class RouterAnimation extends Component {
                 styles={this.getStyles()}
                 willEnter={this.willEnter}
                 willLeave={this.willLeave}
-                didLeave={this.didLeave}
-                
+                didLeave={this.didLeave}              
             >
                 {interpolatedStyles=>
                     <div className="detail">

@@ -46,12 +46,12 @@ class Write extends Component {
                 tags:tags
             });
             e.target.value='';
+            return false;
             
         }
     }
     handleTagDelete=(i)=>{
         const {input}=this.props;
-        console.log(i)
         return input.deleteTag({
             index:i
         });
@@ -98,26 +98,41 @@ class Write extends Component {
             type:'ADMIN/FILE_DELETE'
         })
     }
+    bytesToSize=(bytes)=>{
+        let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return '0 Byte';
+        let i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+     };
+    handleSubmit=(e)=>{      
+        const {writeupload,writePost}=this.props;
+        writeupload.savePost({
+            data:writePost,
+            type:'ADMIN/POST'
+        })
+    }
     render() {
         const {writePost,thumb,files}=this.props;
         return (
             <div className="admin-wrapper">
-                <div className="post-title">
-                    <input type="text" onChange={this.handleTitle} value={writePost.title} placeholder="제목을 입력해주세요"/>
-                </div>
-                <div className="iframe-url">
-                    <input type="text" onChange={this.handleIframeUrl} value={writePost.iframeUrl} placeholder="iframe주소를 입력해주세요"/>
-                </div>
-                <div className="post-category">
-                    <select onChange={this.handleCategory}>
-                        <option>motionlab</option>
-                        <option>release</option>
-                        <option>review</option>
-                    </select>
+                <div className="header">
+                    <div className="post-title">
+                        <input className="write-input" type="text" onChange={this.handleTitle} value={writePost.title} placeholder="제목을 입력해주세요"/>
+                    </div>
+                    <div className="iframe-url">
+                        <input className="write-input" type="text" onChange={this.handleIframeUrl} value={writePost.iframeUrl} placeholder="iframe주소를 입력해주세요"/>
+                    </div>
+                    <div className="post-category">
+                        <select onChange={this.handleCategory}>
+                            <option>motionlab</option>
+                            <option>release</option>
+                            <option>review</option>
+                        </select>
+                    </div>
+                    <button className="btn-save" onClick={this.handleSubmit}>저장</button>
                 </div>
                 <div className="post-tags">
-                    <p>태그 입력</p>
-                    <input type="text" onKeyUp={this.handleTag}/>
+                    <input className="write-input" type="text" onKeyDown={this.handleTag} placeholder="태그를 입력해주세요"/>
                     <ul>
                         {
                             writePost.tags.map((tag,i)=>{
@@ -129,34 +144,35 @@ class Write extends Component {
                         }
                     </ul>
                 </div>
-                <div className="thumbnail-image">
-                    <p>썸네일 이미지 등록</p>
-                    <input type="file" onChange={this.handleThumbUpload} />
-                </div>    
-                <div className="thumb-preview">
-                    {
-                        thumb.pending?<p>로딩중</p>:
-                            thumb.data.path?<img src={`${urlConfig.url}/api/${thumb.data.path}`} alt={thumb.data.path} width="100px"/>:''
-                    }
-                </div>
-                <div className="post-images">
-                    <p>이미지 첨부</p>
-                    <input type="file" onChange={this.handleFileUpload} multiple />
-                </div>
-                <div className="file-preview">
-                    <ul>
+
+                <div className="upload-wrap">
+                    <input type="file" id="thumbname" onChange={this.handleThumbUpload} />
+                    <label className="btn-upload" htmlFor="thumbname"><span>썸네일 업로드</span></label>
+                    <div className="thumb-preview">
                         {
-                            files.pending?<p>로딩중</p>:
-                            files.data.map((list,i)=>{
-                                return <ImageView key={i} 
-                                        size={list.size} 
-                                        link={`${urlConfig.url}/api/${list.path}`}
-                                        onClick={this.imageDelete.bind(null,i,list.filename)}
-                                        />
-                            })
+                            thumb.pending?<p>로딩중</p>:
+                                thumb.data.path?<img src={`${urlConfig.url}/api/${thumb.data.path}`} alt={thumb.data.path}/>:''
                         }
-                    </ul>    
-                </div>    
+                    </div>
+                </div> 
+                <div className="upload-wrap post-images">
+                    <input type="file" id="filesname" onChange={this.handleFileUpload} multiple />
+                    <label className="btn-upload" htmlFor="filesname"><span>이미지 업로드</span></label>
+                    <div className="file-preview">
+                        <ul>
+                            {
+                                files.pending?<p>로딩중</p>:
+                                files.data.map((list,i)=>{
+                                    return <ImageView key={i} 
+                                            size={this.bytesToSize(list.size)} 
+                                            link={`${urlConfig.url}/api/${list.path}`}
+                                            onClick={this.imageDelete.bind(null,i,list.filename)}
+                                            />
+                                })
+                            }
+                        </ul>    
+                    </div>    
+                </div>
                 <MarkdownEdit source={writePost.body} handleChange={this.handleChange}/>
             </div>
         );

@@ -13,6 +13,7 @@ const ADMIN_TAGS_DELETE = 'ADMIN/ADMIN_TAGS_DELETE';
 
 const ADMIN_MODIFY = 'ADMIN/ADMIN_MODIFY';
 const ADMIN_DELETE = 'ADMIN/ADMIN_DELETE';
+const ADMIN_POST='ADMIN/POST';
 const ADMIN_GET='ADMIN/GET';
 const ADMIN_SINGLE_GET='ADMIN/SINGLE_GET';
 
@@ -101,6 +102,8 @@ export default handleActions({
         const {source,index} = action.payload;
         return state['itemData'].data[index].set('title', source)
     },
+    //포스트 저장
+    
     //포스트 리스트 불러오기
     ...pending({
         type:ADMIN_GET,

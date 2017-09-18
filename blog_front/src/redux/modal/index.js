@@ -1,5 +1,5 @@
 import { handleActions, createAction } from 'redux-actions';
-
+import { Map} from 'immutable';
 //액션
 const MODAL_OPEN = 'MODAL/MODAL_OPEN';
 const MODAL_CLOSE = 'MODAL/MODAL_CLOSE';
@@ -11,29 +11,26 @@ export const closeModal = createAction(MODAL_CLOSE);
 
 
 //초기화
-const initialState={
-    login:{
+const initialState=Map({
+    login:Map({
         open:false,
-    },
-    error:{
+    }),
+    alert:Map({
         open:false,
-    }
-}
+    }),
+})
 
 //리듀서
 export default handleActions({
     [MODAL_OPEN]: (state, action) => {
         //modalName으로 해당 모달 열기
-        const {modalName} = action.payload;
-        const modalState=state[modalName].open=true;
-      
-        return Object.assign({},state,modalState);
+        const {modalName} = action.payload;      
+        return state.setIn([modalName,'open'],true);
 
     },
     [MODAL_CLOSE]: (state, action) => {
          //modalName으로 해당 모달 닫기
         const {modalName} = action.payload;
-        const modalState=state[modalName].open=false;
-        return Object.assign({},state,modalState);
+        return state.setIn([modalName,'open'],false);
     }
 }, initialState);

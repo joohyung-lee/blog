@@ -44,8 +44,15 @@ router.get('/:id', function (req, res) {
 // CREATE POST
 router.post('/', function (req, res) {
     var post = new Post();
-    post.title = req.body.name;
     post.author = req.body.author;
+    post.title = req.body.title;
+    post.body = req.body.body;
+    post.iframeUrl = req.body.iframeUrl;
+    post.category = req.body.category;
+    post.tags = req.body.tags;
+    post.thumbnail = req.body.thumbnail.data;
+    post.files = req.body.files.data;
+    // post.comments = req.body.comments;
     //post.post_date = new Date(req.body.post_date);
     post.save(function (err) {
         if (err) {

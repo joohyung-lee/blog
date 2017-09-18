@@ -1,6 +1,16 @@
 import axios from 'axios';
+// 인증
+function getAuthAPI() {
+    return axios.get(`/auth/account`);
+}
+function getLogoutAPI() {
+    return axios.get(`/auth/logout`);
+}
 function getPostAPI() {
     return axios.get(`/api/post`);
+}
+function savePostAPI(data) {
+    return axios.post(`/api/post`,data);
 }
 function getPostSingleAPI(postId){
     return axios.get(`/api/post/${postId}`);
@@ -24,6 +34,53 @@ const actions=(type)=>{
         SUCCESS : `${type}_SUCCESS`,
         FAILURE : `${type}_FAILURE`
     }
+}
+//인증
+export const getAuth = ({type}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getAuthAPI().then(
+        (response) => {
+            if(response.data.user){
+                dispatch({
+                    type: actionType.SUCCESS,
+                    payload: response
+                })
+            }else{
+                dispatch({
+                    type: actionType.FAILURE,
+                    payload: response
+                })
+            }
+        }
+    )   
+}
+//로그아웃
+export const getAuthLogout = ({type}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getLogoutAPI().then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    )   
+}
+//포스트글 저장
+export const savePost = ({data,type}) => dispatch => {   
+    console.log(data) 
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return savePostAPI(data).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    )   
 }
 //포스트글 전부 불러오기
 export const getPost = (type) => dispatch => {    

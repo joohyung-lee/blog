@@ -45,15 +45,10 @@ class Main extends Component {
         }
         
     }
-    componentDidMount(){  
-        
-        
+    componentDidMount(){     
         this.dimensions();
-        window.addEventListener('resize',this.dimensions);
-        
-        
+        window.addEventListener('resize',this.dimensions);  
     }
- 
     dimensions=()=>{
         let path = window.location.href;
         let active = path.substr(path.lastIndexOf('/') + 1);          

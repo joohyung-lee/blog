@@ -13,7 +13,6 @@ const PostWrap=({title,index})=>{
 class MotionLab extends Component {
     componentDidMount() {
         const {postReducer}=this.props;
-        postReducer.getPost();
     }
     render() {
         const{error,loading,post,number}=this.props;
@@ -24,11 +23,11 @@ class MotionLab extends Component {
                     <h1>에러발생</h1>
                     :(
                         <ul>
-                            {
+                            {/* {
                                 this.props.post.map((postItem,number)=>{
                                     return (<PostWrap key={number} index={number} title={postItem.title}/>)                              
                                 })
-                            }
+                            } */}
                            
                         </ul>
                     )}
@@ -44,11 +43,8 @@ MotionLab.propTypes = {
 
 export default connect(
     (state)=>({
-        loading:state.motionLab.pending,
-        post:state.motionLab.data,
-        error:state.motionLab.error,
+        
     }),
     (dispatch)=>({ 
-        postReducer:bindActionCreators(PostActions,dispatch)
     })
 )(MotionLab);

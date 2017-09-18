@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
-
+import gm from 'gm';
 let router = express.Router();
 
 //date format
@@ -34,9 +34,28 @@ const upload = multer({ storage : storage })
 
 router.post('/thumb', thumbUpload.single('thumb'), (req, res) => {
     const file = req.file;
-    console.log('filedata '+file) 
     const meta = req.body; 
-    res.json(file)
+    // gm(file.path)
+    // .gravity('Center')
+    // .resize(350, 350, file.path, function (err) {
+    //     if (err){
+    //         console.error(err)
+    //     }else{
+    //         console.log('done - thumb');
+    //         res.json(file);
+    //     }
+    //   });
+      gm(file.path)
+      .resize(700, 700)
+      .write(file.path, function (err) {
+        if (err){
+        console.error(err)
+        }else{
+            console.log('done - thumb');
+            res.json(file);
+        }
+      });
+    
 });
 
 router.post('/', upload.any(), (req, res) => {

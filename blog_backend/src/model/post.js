@@ -3,10 +3,21 @@ var Schema = mongoose.Schema;
 
 var postSchema = new Schema({
    // _id:String,
-    title:String,
     author:String,
-    photoUrl:String,
-    pageView:Number,
+    title:String,
+    body:String,
+    iframeUrl:String,
+    category:String,
+    tags:[],
+    thumbnail:{},
+    files:[],
+    comments:[
+        {
+            postId:String,
+            name:String,
+            body:String,
+        }
+    ],
     post_date: { type: Date, default: Date.now  }
    
 });

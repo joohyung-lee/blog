@@ -1,4 +1,104 @@
+@import '../common/color.scss';
 .admin-wrapper{
+    padding:20px;
+    .write-input{
+        width:100%;
+        height:35px;
+        border:none;
+        border-bottom:1px solid $c-black-0;
+        font-size:16px;
+        outline:none;
+    }
+    
+    input[type=file]{
+        display: none;
+    }
+    .btn-upload{
+        display: inline-block;
+        padding:10px 20px;
+        background: $c-black-0;
+        color:#fff;
+        text-align: center;
+        cursor: pointer;
+    }
+    .header{
+        display: flex;
+        .post-title{
+            flex:2;
+        }
+        .iframe-url{
+            flex:1;
+            margin-left:10px;
+        }
+        .post-category{
+            width:100px;
+            select{
+                width:100%;
+                height:35px;
+            }
+        }
+        .btn-save{
+            background-color: $c-black-0;
+            color:#fff;
+            margin-left:30px;
+        }
+    }
+    .post-tags{
+        display: flex;
+        flex-wrap: wrap;
+        margin-top:10px;
+      
+        input{
+            flex-basis:200px;
+        }
+        ul{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        ul li{
+            position:relative;
+            margin:5px;
+            padding:0 20px 0 5px;
+            height: 25px;
+            line-height: 25px;
+            border: 1px solid $c-black-6;
+            border-radius: 3px;
+            background:$c-black-9;
+            .btn-delete{
+                position: absolute;
+                display: inline-block;
+                width:15px;
+                line-height: 25px;
+                right:0;
+                top:0;
+                bottom:0;
+                text-align: center;
+                cursor: pointer;
+            }
+            
+        }
+    }
+    .upload-wrap{
+        display: flex;
+        margin-top:5px;
+        .btn-upload{
+            display: flex;
+        }
+        span{
+            align-self: center;
+        }
+        .thumb-preview{
+            display: flex;
+            margin-left:5px;
+            img{
+                align-self: center;
+                width:100px;
+            }
+        }
+    }
+    .post-images{
+        margin-top:10px;
+    }
     .file-preview{
         ul{
             display: flex;
@@ -8,11 +108,17 @@
                 flex-basis: 150px;
                 width: 150px;
                 padding: 5px;
-                margin: 5px;
+                margin-left: 5px;
                 word-break: break-all;
                 border: 1px solid #ccc;
                 p{
-                    line-height: 20px;
+                    font-size: 12px;
+                }
+                .size{
+                    padding:4px;
+                    margin-top:5px;
+                    color:$c-black-2;
+                    background:$c-black-7;
                 }
                 img{
                     width: 100%;
@@ -27,9 +133,37 @@
                     text-align: center;
                     line-height: 20px;
                     border-radius: 50%;
-                    background:#fff;
-                    border:1px solid #ccc;
+                    background:$c-black-0;
+                    color:#fff;
                     cursor: pointer;
+                    z-index: 10;
+                }
+                &:hover .url-content{
+                    display: block;
+                }
+                .url-content{
+                    position: absolute;
+                    display: none;
+                    top:0;
+                    right:0;
+                    bottom:0;
+                    left:0;
+                    background:rgba(0,0,0,0.5);
+                    input{
+                        position: absolute;
+                        top: 40px;
+                        left: 5px;
+                        width: 138px;
+                    }
+                    button{
+                        position: absolute;
+                        top: 80px;
+                        left: 0px;
+                        right:0;
+                        width: 80px;
+                        margin:0 auto;
+                        background-color:$c-black-8;
+                    }
                 }
             }
         }

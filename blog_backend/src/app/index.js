@@ -9,8 +9,8 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import http from 'http';
-import authCofig from '../passport/authConfig';
-import Account from '../model/account';
+
+
 
 //set express
 var app = express();
@@ -20,8 +20,8 @@ app.use(logger('dev'));
 app.use(cookieParser());
 app.use(session({
   secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false
+  resave: true,
+  saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -33,26 +33,14 @@ db.on('error',console.error);
 db.once('open',function(){
     console.log('connected to mongod server');
 });
-
 //import router
 var router=require('../routes');
 app.use('/',router);
-//passport session
-passport.serializeUser(function(user, done) {
-  // done(null, user.id);
-  done(null, user);
-});
 
-passport.deserializeUser(function(id, done) {
-  Account.findById(id, function(err, user){
-      if(!err) done(null, user);
-      else done(err, null);
-    });
-});
 // SERVE STATIC FILES
-app.use(express.static(path.join(__dirname, '../../blog_front/build/')));
+app.use(express.static(path.join(__dirname, '../../../blog_front/build/')));
 app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../../blog_front/build/', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../../blog_front/build/', 'index.html'));
 });
 
 

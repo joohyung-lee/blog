@@ -1,4 +1,5 @@
 /* roboto-300 - latin */
+@import './color.scss';
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
@@ -27,18 +28,28 @@
 *{
     margin:0;
     padding:0;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    line-height: 1.5;
     list-style: none;
     text-decoration: none;
     box-sizing: border-box;
-}
-body{
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
-    color:#000;
+    font-weight: 300;
+    color:$c-black-0;
 }
-$c-black-0:#333;
-$c-black-1:#555;
-$c-black-2:#888;
-$c-black-3:#aaa;
-$c-black-4:#ccc;
-$c-black-5:#ddd;
+body{
+    color: $c-black-0; 
+}
+button{
+    padding:4px 10px;
+    text-align: center;
+    border-radius: 3px;
+    background-color:transparent;
+    border:1px solid $c-black-2;
+    color:$c-black-0;
+    cursor: pointer;
+    outline: none;
+}
+@import './commonAnimation.scss';

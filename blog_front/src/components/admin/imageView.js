@@ -2,14 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class ImageView extends Component {
+    handleClick=(e)=>{
+        this.refs.urlLink.select();
+        document.execCommand('copy');
+    }
     render() {
         const {size,name,link,onClick}=this.props;
         return (
             <li className="file-list">
                 <img src={link} alt={name}/>
-                <p>{size}</p>
-                <p>{link}</p>
-                <span className="btn-delete" onClick={onClick}>X</span>
+                <p className="size">{size}</p>
+                <span className="btn-delete" onClick={onClick}>x</span>
+                <div className="url-content">
+                    <input type="text" ref="urlLink" className="url"value={link} readOnly/>
+                    <button onClick={this.handleClick}>copy</button>
+                </div>
             </li>
         );
     }
