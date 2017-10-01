@@ -1,5 +1,5 @@
 import axios from 'axios';
-// 인증
+
 function getAuthAPI() {
     return axios.get(`/auth/account`);
 }
@@ -8,6 +8,10 @@ function getLogoutAPI() {
 }
 function getPostAPI() {
     return axios.get(`/api/post`);
+}
+// load old posts
+function getOldPostAPI(listType,id) {
+    return axios.get(`/api/post/${listType}/${id}`);
 }
 function savePostAPI(data) {
     return axios.post(`/api/post`,data);
@@ -87,6 +91,19 @@ export const getPost = (type) => dispatch => {
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
     return getPostAPI().then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    )   
+}
+//old posts
+export const getOldPost = (type,listType,id) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getOldPostAPI(listType,id).then(
         (response) => {
             dispatch({
                 type: actionType.SUCCESS,

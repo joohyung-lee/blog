@@ -1,3 +1,4 @@
+@import '../color.scss';
 .overlay{
     position:fixed;
     top:0;
@@ -16,4 +17,31 @@
     left:0;
     margin:auto;
     background-color:#fff;
+}
+.login-toast{
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: $t-black-8;
+    padding: 10px;
+    width: 200px;
+    .avatar{
+        width:40px;
+        height:40px;
+    }
+    .user-info{
+        position: absolute;
+        top:10px;
+        left:60px;
+        p{
+            color:$t-white-8;
+        }
+        span{
+            color:$t-white-10;
+        }   
+        .username{
+            color:$t-white-10;
+            font-weight: 400;
+        }
+    }
 }

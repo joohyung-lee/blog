@@ -19,9 +19,11 @@ app.use(bodyParser.json());
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(session({
+  key:'user',
   secret: 'keyboard cat',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -39,7 +41,7 @@ app.use('/',router);
 
 // SERVE STATIC FILES
 app.use(express.static(path.join(__dirname, '../../../blog_front/build/')));
-app.get('*', function (req, res) {
+app.get('*', function (req, res) { 
   res.sendFile(path.join(__dirname, '../../../blog_front/build/', 'index.html'));
 });
 

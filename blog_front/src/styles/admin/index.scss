@@ -43,6 +43,15 @@
             margin-left:30px;
         }
     }
+    .summary{
+        margin-top:10px;
+        textarea{
+            padding:10px;
+            width:100%;
+            border:1px solid $c-black-0;
+            outline: none;
+        }
+    }
     .post-tags{
         display: flex;
         flex-wrap: wrap;
@@ -86,6 +95,7 @@
         }
         span{
             align-self: center;
+            color:#fff;
         }
         .thumb-preview{
             display: flex;

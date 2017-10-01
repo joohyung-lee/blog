@@ -5,6 +5,7 @@ var postSchema = new Schema({
    // _id:String,
     author:String,
     title:String,
+    summary:String,
     body:String,
     iframeUrl:String,
     category:String,
@@ -18,7 +19,7 @@ var postSchema = new Schema({
             body:String,
         }
     ],
-    post_date: { type: Date, default: Date.now  }
+    postDate: String
    
 });
 

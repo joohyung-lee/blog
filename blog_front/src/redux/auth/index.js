@@ -16,6 +16,7 @@ const initialState=Map({
         pending: false,
         error: false,
         isLogin:false,
+        cookie:false,
         user:Map({})
     })
   
@@ -27,6 +28,7 @@ export default handleActions({
         const {userInfo}=action.payload;
         return state.setIn(['profile','user'],userInfo)
                     .setIn(['profile','isLogin'],true)
+                    .setIn(['profile','cookie'],true)
     },
     //인증하기
     ...pending({
@@ -34,7 +36,7 @@ export default handleActions({
         name:['profile'],
         successResult:(state,action)=>{
             const {data}=action.payload;
-            document.cookie = 'user=' + btoa(JSON.stringify(data.user))+'; path=/';
+            //document.cookie = 'user=' + btoa(JSON.stringify(data.user))+'; path=/';
             return state.setIn(['profile','user'],data.user)
                         .setIn(['profile','isLogin'],true)
         }
@@ -47,6 +49,7 @@ export default handleActions({
             const {data}=action.payload;
             return state.setIn(['profile','user'],data.user)
                         .setIn(['profile','isLogin'],false)
+                        .setIn(['profile','cookie'],false)
         }
     }),
 }, initialState);

@@ -45,16 +45,16 @@ router.post('/thumb', thumbUpload.single('thumb'), (req, res) => {
     //         res.json(file);
     //     }
     //   });
-      gm(file.path)
-      .resize(700, 700)
-      .write(file.path, function (err) {
-        if (err){
-        console.error(err)
-        }else{
-            console.log('done - thumb');
-            res.json(file);
-        }
-      });
+    gm(file.path)
+    .write(file.path, function (err) {
+    if (err){
+    console.error(err)
+    }else{
+        console.log('done - thumb');
+        
+        res.json(file);
+    }
+    });
     
 });
 

@@ -1,10 +1,8 @@
 @import "../common/color.scss";
-html,body{
-    width:100%;
-    height:100%;
-}
+
 .main-container{
-    
+    width:100vw;
+    height:100vh;
 }
 .main-wrapper{
     position: absolute;
@@ -14,10 +12,11 @@ html,body{
     left:0;
     background:$c-black-8;
     overflow: hidden;
-    padding:0 50px;
+    padding:0 70px;
     .title-wrap{
         position: relative;
         top:10vh;
+        padding:0 20px;
         .menu-title{
             float: left;
             
@@ -49,28 +48,145 @@ html,body{
     .card-item-wrap{
         position: absolute;
         top:20vh;
-        min-width:100%;
         white-space: nowrap;
-        
-        .card-item{
+        .old-posts-loading{
+            position: relative;
             display: inline-block;
-            padding:10px;
+            width: 50px;
+            height: 430px;
+        }
+        .card-item{
+            position: relative;
+            display: inline-block;
+            width:400px;
+            height:430px;
+            padding:22px;
             transition:all .3s ease;
             &:first-child{
             }
+            
+            .fav-wrap{
+                position: absolute;
+                top:20px;
+                right:-20px;
+                .icon-fav{
+                    position: relative;
+                    width:40px;
+                    height:40px;
+                    display: inline-block;           
+                    background-color:#000;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    svg{
+                        position: absolute;
+                        top:0;
+                        right:0;
+                        bottom:0;
+                        left:0;
+                        margin:auto;
+                    }
+                    path{
+                        fill:none;
+                        stroke: $t-white-10;
+                    }
+                }
+                .icon-fav.active{
+                    path{
+                        fill:$t-white-10;
+                        
+                    }
+                }
+                .fav-info{
+                    position: absolute;
+                    top:10px;
+                    right:50px;
+                    .count{
+                        font-weight: bold;
+                        margin-right:6px;
+                    }
+                    span{
+                        color:$t-white-10
+                    }
+                }
+            }
             .card-item-box{
-                width:330px;
-                height:340px;
+                position: absolute;
+                padding:10px;
                 border-radius:10px;
                 background-color:#fff;
-                transition:all .5s ease;
+                background-repeat: no-repeat;
+                background-size:cover;
+                background-position: center;
+                transition:all .3s ease;
+                cursor: pointer;
+                &:hover{
+                    
+                }
+                
+            }
+            .card-item-bottom{
+                position: absolute;
+                width: 100%;
+                bottom:0;
+                left:0;
+                padding:0 20px 55px 20px;
+                .post-meta{
+                    span{
+                        font-size: 0.9rem;
+                        color:$t-white-9;
+                    }
+                    .category{
+                        font-weight: bold;
+                        margin-right:10px;
+                    }
+                }
+                h3{
+                    margin-top:4px;
+                    font-size: 1.3rem;
+                    font-weight: 300;
+                    color:$t-white-10;
+                    white-space: normal;
+                    word-break: keep-all;
+                }
+                .avatar-wrap{
+                    position: absolute;
+                    left:0;
+                    bottom:20px;
+                    padding:0 0 0 20px;
+                    span{
+                        display: inline-block;
+                        margin-left:6px;
+                        font-size:0.9rem;
+                        color:$t-white-9;
+                    }
+                    .avatar{
+                        display: inline-block;
+                        width:20px;
+                        height: 20px;
+                        vertical-align: middle;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                    }
+                }
+            }
+            .summary-wrap{
+                position: absolute;
+                width: 100%;
+                top: 100%;
+                left: 0;
+                padding:0 22px;
+                white-space: normal;
+                word-break: keep-all;
+                p{
+                    color:$c-black-1;
+                }
             }
         }
         .card-item.hover{
             transform: translate3d(0,0px,0);
             
             .card-item-box{
-                box-shadow: 0 0 20px 0 rgba(0,0,0,0.25);
+                box-shadow: 0 0 20px 0 rgba(0,0,0,0.6);
             }
         }
     }

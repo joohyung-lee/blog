@@ -18,6 +18,12 @@ const initialState=Map({
     alert:Map({
         open:false,
     }),
+    toast:Map({
+        open:false,
+    }),
+    mymenu:Map({
+        open:false,
+    }),
 })
 
 //리듀서

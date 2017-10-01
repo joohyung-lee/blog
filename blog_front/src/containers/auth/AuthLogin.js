@@ -1,49 +1,74 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 //components
-import {LoginState} from 'components/auth'
-import Modal from 'components/common/modal/modalCommon';
-import Overlay from 'components/common/overlay/overlay';
+import {LoginState} from 'components/auth';
+import LoginToast from 'components/common/modal/loginToast';
 import * as httpRequest from 'redux/helper/httpRequest';
 //redux
 import * as modalActions from 'redux/modal';
 import * as authActions from 'redux/auth';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
+import defaultAvatar from 'images/defaultAvatar.svg';
 class AuthLogin extends Component {
+    componentWillMount(){
+        const {request} =this.props;
+        request.getAuth({
+            type:'AUTH/PROFILE'
+        })
+    }
     componentDidMount(){         
-        let loginData = this.getCookie('user');
-        if(typeof loginData === "undefined"){
-            return;
-        }else{
-            loginData = JSON.parse(atob(loginData));
-            const {auth}=this.props;
-            auth.profileCookie({
-                userInfo:loginData
-            });
-        }
+        const{modal}=this.props;
+        window.addEventListener('click',this.outHide);
     }
-    // 쿠키가져오기
-    getCookie=(name)=>{
-        let value = "; " + document.cookie;
-        let parts = value.split("; " + name + "=");
-        if (parts.length == 2) return parts.pop().split(";").shift();
+    componentDidUpdate(prevProps, prevState){
+        if(prevProps.authUser.isLogin !== this.props.authUser.isLogin) {
+            const {authUser,modalView} =this.props;      
+            if(authUser.isLogin){
+                if(authUser.cookie){
+                    return;
+                }else{
+                    setTimeout(function(){ 
+                        modalView.closeModal({
+                            modalName:'toast'
+                        }); 
+                    }, 2500);
+                }
+            }else{
+                modalView.openModal({
+                    modalName:'toast'
+                });
+                setTimeout(function(){ 
+                    modalView.closeModal({
+                        modalName:'toast'
+                    }); 
+                }, 2500);
+            }
+        } 
     }
-    closeOver=(e)=>{
-        if(e.target.className=='overlay'){
-            const {modalView} =this.props;
+    //메뉴 드랍다운
+    dropdown=(e)=>{
+        e.stopPropagation();
+        const {modal,modalView}=this.props;
+        if(modal.mymenu.open){
             modalView.closeModal({
-                modalName:'alert'
+                modalName:'mymenu'
+            }); 
+        }else{
+            modalView.openModal({
+                modalName:'mymenu'
+            }); 
+        }      
+    }
+    //바깥 클릭 시 메뉴드랍 접기
+    outHide=(e)=>{
+        const {modalView,modal}=this.props;
+        if(modal.mymenu.open){
+            modalView.closeModal({
+                modalName:'mymenu'
             });
         }
-    }
-    // 쿠키 생성
-    setCookie=(cName, cValue, cDay)=>{
-        let expire = new Date();
-        expire.setDate(expire.getDate() + cDay);
-        let cookies = cName + '=' + escape(cValue) + '; path=/ '; 
-        if(typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + ';';
-        document.cookie = cookies;
     }
     //logout
     logOut=()=>{
@@ -51,24 +76,43 @@ class AuthLogin extends Component {
         request.getAuthLogout({
             type:'AUTH/PROFILE_LOGOUT'
         });
-        this.setCookie('user', '', -1);
     }
-    render() {
-        const {authUser,modal} =this.props;        
+
+    render() {    
+        const {authUser,modal} =this.props;  
         return (
             <div>
+                {
+                (authUser.pending)?
+                <div className="login-state">
+                    
+                </div>:              
                 <LoginState 
                     view={(authUser.isLogin)?'mypage':'login'}
+                    open={modal['mymenu'].open}
+                    dropdown={this.dropdown}
+                    userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg} 
                     logOut={this.logOut}
-                    authLoading={authUser.user.pending}
+                    authLoading={authUser.pending}
                     username={authUser.user.userName}
-                />         
-                <Overlay open={modal['alert'].open} closeOver={this.closeOver}>
-                    <Modal open={modal['alert'].open}>
-                        <h1>{authUser.user.userName}</h1>
-                        <button>OK</button>
-                    </Modal>    
-                </Overlay>
+                />   
+                }    
+                <LoginToast 
+                    open={modal['toast'].open}
+                    userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg} 
+                    type={authUser.user.type}>
+                    {(authUser.pending)?
+                    <p>
+                        로딩중..
+                    </p>:
+                    <p>
+                        {
+                            (authUser.isLogin)?'Login Success':
+                            'Logout Success'
+                        }
+                    </p>
+                    }
+                </LoginToast>    
             </div>
         );
     }

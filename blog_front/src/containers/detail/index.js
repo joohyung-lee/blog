@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import {TransitionMotion,spring} from 'react-motion';
 
 //import containers
-import Motionlab from 'containers/detail/motionlab';
-const springSetting = {stiffness: 300, damping: 30};
+const bounceSpring = {stiffness: 250, damping: 26};
+const speedSpring = {stiffness: 170, damping: 26};
+const slowSpring={stiffness: 100, damping: 30};
 class RouterAnimation extends Component {
     componentDidMount() {
     }
@@ -15,24 +16,30 @@ class RouterAnimation extends Component {
             return [];
             
         }
-        if(this.props.pathname=='/'){
+        let re = /(motionlab|project|review)/;
+        let isCategory = re.test(this.props.pathname);
+        if(isCategory){     
+            const key=this.props.pathname;
+            const children=this.props.children;
+            return [
+                {
+                    key: key,
+                    data: children,
+                    style: {
+                        width:spring(window.innerWidth,bounceSpring),
+                        height:spring(window.innerHeight*0.7,bounceSpring),
+                        x:spring(0,bounceSpring),
+                        y:spring(0,bounceSpring),
+                        opacity:1,
+                        padding:spring(25),
+                        borderRaidus:spring(0)
+                    },
+                },
+            ];
+            
+        }else{
             return [];
         }
-        return [
-            {
-                key: this.props.pathname,
-                data: this.props.children,
-                style: {
-                    width:spring(window.innerWidth,springSetting),
-                    height:spring(window.innerHeight*0.7,springSetting),
-                    x:spring(0,springSetting),
-                    y:spring(0,springSetting),
-                    opacity:spring(1),
-                    padding:spring(25),
-                    borderRaidus:spring(0)
-                },
-            },
-        ];
     }
     willEnter=()=>{
         return {
@@ -47,16 +54,17 @@ class RouterAnimation extends Component {
     }
     willLeave=()=>{
         return{
-            width:spring(this.props.eleW,springSetting),
-            height:spring(this.props.eleH,springSetting),
-            x:spring(this.props.eleX,springSetting),
-            y:spring(this.props.eleY,springSetting),
-            opacity:spring(0),
+            width:spring(this.props.eleW,speedSpring),
+            height:spring(this.props.eleH,speedSpring),
+            x:spring(this.props.eleX,speedSpring),
+            y:spring(this.props.eleY,speedSpring),
+            opacity:spring(0,slowSpring),
             padding:spring(0),
             borderRaidus:spring(10)
         }
     }
     didLeave=()=>{
+        
     }
 
     render(){
@@ -78,23 +86,23 @@ class RouterAnimation extends Component {
                                 <div style={{
                                     width:`${config.style.width}px`,
                                     height:`${config.style.height}px`,
-                                    background:`#fff`,
-                                    padding:`${config.style.padding}px`,
                                     borderRadius:`${config.style.borderRaidus}px`,
-                                    overflow:`hidden`
+                                    opacity:config.style.opacity,
+                                    overflow:`hidden`,
+                                    margin:`0 auto`
                                 }}>
                                     <div className="iframe-wrap" style={{
                                         width:`100%`,
-                                        height:`100%`
-                                    }}>
-                                        <iframe className="iframe-content" src="https://codepen.io/bennettfeely/full/BdWQoP/" 
-                                            width={`100%`} height={`100%`} marginWidth="0" marginHeight="0" frameBorder="0"></iframe>
+                                        height:`100%`,
+                                        backgroundColor:'#ccc'
+                                    }}>                                 
+                                        {/* <iframe src="http://lab.cmiscm.com/wiper-android/" width="100%" height="100%" frameBorder="0"></iframe> */}
                                     </div>
                                 </div>
                                 <div style={{
                                     opacity:config.style.opacity
                                 }}>
-                                    <Motionlab/>
+                                    motionlab
                                 </div>    
                             </div>
                             )

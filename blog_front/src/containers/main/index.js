@@ -1,99 +1,138 @@
 import React, { Component } from 'react';
+import { AnimatedSwitch,AnimatedRoute } from 'react-router-transition/lib/react-router-transition';
+
 import {Motion,TransitionMotion,spring} from 'react-motion';
 import {withRouter,Route,Switch} from 'react-router-dom';
-import { RouteTransition } from 'react-router-transition';
-import MobileDetect from 'mobile-detect'
-//import components
-import CardItem from 'components/main';
-import RouterAnimation from 'containers/detail';
 
+import MobileDetect from 'mobile-detect'
+//config
+import urlConfig from 'config/urlConfig'
+//import components
+import {StaticLoading} from 'components/common/loading';
+import {CardItem} from 'components/main';
+//redux
+import * as httpRequest from 'redux/helper/httpRequest';
+import * as motionActions from 'redux/main';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import defaultAvatar from 'images/defaultAvatar.svg';
 import 'styles/main/index.scss';
 const springSetting = {stiffness: 300, damping: 30};
 
 class Main extends Component {
-    constructor(props) {
+    constructor(props){
         super(props);
-        
         this.state = {
-            items:[
-                {key:'a',title:'title'},
-                {key:'b',title:'title'},
-                {key:'c',title:'title'},
-                {key:'d',title:'title'},
-                {key:'e',title:'title'},
-                {key:'f',title:'title'},
-                {key:'g',title:'title'},
-                {key:'h',title:'title'},
-                {key:'i',title:'title'},
-                {key:'j',title:'title'}
-            ],
-            isPressed:false,
-            min:0,
-            max:0,
-            posX:0,
-            deltaX:0,
-            offsetX:0,
-            relative:0,
-            active:0,
-            moved:false,
-            eleX:0,
-            eleY:0,
-            eleWidth:0,
-            eleHeight:0,
-            wrapperPd:0,
-            itemPd:0
-        }
-        
+            loadingState: false
+        };
     }
     componentDidMount(){     
-        this.dimensions();
-        window.addEventListener('resize',this.dimensions);  
+        const{get,data}=this.props;
+        //if data is exist it will load previous data
+        if(data.length===0){
+            get.getPost('POSTS/GET');
+                
+        }else{
+            this.dimensions();
+            window.addEventListener('resize',this.dimensions);
+        }
+        
     }
+    componentWillUnmount(){
+        window.removeEventListener("resize", this.dimensions);
+        
+    }
+    componentWillReceiveProps(nextProps) {
+        // will be true
+        const locationChanged = nextProps.location !== this.props.location
+        if(locationChanged){
+          
+        }
+      }
+      componentDidUpdate(prevProps){
+        const dataChanged=prevProps.data!==this.props.data;
+        if(dataChanged){
+            this.dimensions();
+            window.addEventListener('resize',this.dimensions);
+            
+        }
+    }
+    //setting response size
     dimensions=()=>{
         let path = window.location.href;
-        let active = path.substr(path.lastIndexOf('/') + 1);          
+        const {motion}=this.props;
+        let active = motion.active;          
         let md = new MobileDetect(window.navigator.userAgent);
         if(md.mobile()){
-            window.addEventListener('touchmove',this.handleMove);
-            window.addEventListener('touchend',this.handleTouchUp);
+            this.wrapperWidth.addEventListener('touchmove',this.handleMove);
+            this.wrapperWidth.addEventListener('touchend',this.handleTouchUp);
         }else{
-            window.addEventListener('mousemove',this.handleMove);
-            window.addEventListener('mouseup',this.handleUp);
+            this.wrapperWidth.addEventListener('mousemove',this.handleMove);
+            this.wrapperWidth.addEventListener('mouseup',this.handleUp);
         }
+               
+        //full width padding
         let wrapperWidthStyle=window.getComputedStyle(this.wrapperWidth,null);
-        let itemStyle=window.getComputedStyle(this.fullWidth.childNodes[0],null);
-
         const wrapperPd=parseInt(wrapperWidthStyle.getPropertyValue("padding-left"));
-        const itemPd=parseInt(itemStyle.getPropertyValue("padding-left"));
-
-        const wrapperWidth=this.wrapperWidth.clientWidth-wrapperPd*2;
+        //full width
+        let wrapperWidth=this.wrapperWidth.clientWidth-wrapperPd*2;
+        //contents width
         const blockWidth=this.fullWidth.clientWidth;  
-        const maxScrollWidth=blockWidth-wrapperWidth;
-
-        const eleWidth=this.fullWidth.childNodes[0].offsetWidth;
-        const eleHeight=this.fullWidth.childNodes[0].offsetHeight;
-
-        let offsetX=active*eleWidth;
+        //const eleStyle=window.getComputedStyle(this.fullWidth.childNodes[0],null);
+        
+        const itemPd=22;//card item padding
+        const eleWidth=400;//card item width
+        const eleHeight=430;//card item height 
+        //contents's width = window's width 
+        //possible width to scroll
+        const maxScrollWidth=blockWidth-wrapperWidth;   
+        //moved scroll
+        let offsetX=motion.offsetX;
         offsetX=offsetX>maxScrollWidth?maxScrollWidth:offsetX<0?0:offsetX;
-        this.setState({
-            max:maxScrollWidth,
-            eleWidth:eleWidth,
-            eleHeight:eleHeight,
-            relative:(this.scrollWidth.clientWidth)/maxScrollWidth,
-            wrapperPd:wrapperPd,
-            itemPd:itemPd,
-            offsetX:offsetX,
-            eleX:active*eleWidth-offsetX+wrapperPd+itemPd,
-            eleY:this.fullWidth.offsetTop+itemPd,
-            active:active
+        
+        //dispatch motions to redux
+        const {motionDispatch}=this.props;
+        const indicator=(maxScrollWidth<this.scrollWidth.clientWidth)?this.scrollWidth.clientWidth-maxScrollWidth:0
+        motionDispatch.motionActions({
+            motions:{     
+                max:maxScrollWidth,//possible width to scroll
+                eleWidth:eleWidth,//card item's width
+                eleHeight:eleHeight,//card item's height
+                scrollWidth:this.scrollWidth.clientWidth,//scroll indicator's width
+                indicator:indicator,//scroll indicator's filled width 
+                relative:this.scrollWidth.clientWidth/(maxScrollWidth+indicator),
+                wrapperPd:wrapperPd,//full width padding
+                itemPd:itemPd,//card item padding
+                offsetX:offsetX,//moved scroll
+                eleX:motion.eleX,//card position x
+                eleY:this.fullWidth.offsetTop+itemPd,//card position y
+                active:active//card index
+            }
         });
     }
     handleWheel=(pos,e)=>{
         e.preventDefault();
         e.stopPropagation();
-        const {min,max,eleWidth,offsetX,active} = this.state;
+        const{motion}=this.props;
+        const {min,max,eleWidth,offsetX,active} = motion;
         e.deltaX=e.deltaY;
         let mouseX=offsetX+e.deltaX;
+        //when scrolling less than elewidth, data load old posts
+        if(max-offsetX<eleWidth){
+            if(!this.state.loadingState){
+                this.loadOldPosts();
+                this.setState({
+                    loadingState: true
+                });
+            }
+        }else{
+            if(this.state.loadingState){
+                this.setState({
+                    loadingState: false
+                });
+            }
+        }
         if(mouseX > max){
             mouseX=max;
         }else if(mouseX < min){
@@ -101,112 +140,152 @@ class Main extends Component {
         }else{
             mouseX=offsetX+e.deltaX;
         }
-        this.setState({
-            offsetX:mouseX,
-            active:Math.round(mouseX/eleWidth)
-        })
+        const {motionDispatch}=this.props;
+        motionDispatch.motionActions({
+            motions:{
+                offsetX:mouseX,
+                active:Math.round(mouseX/eleWidth)
+            }
+        });
+
     }
     handleDown=(pos,e)=>{
         let event=(e.type=='mousedown')?e:(e.type=='touchstart')?e.touches[0]:e;
-        const {max}=this.state;
-        this.setState({
-            isPressed:true,
-            posX:event.pageX,
-            offsetX:pos,
-            deltaX:0,
-            indicatorX:pos,
-            moved:false,
+        const{motion}=this.props;
+        const {max} = motion;
+
+        const {motionDispatch}=this.props;
+        motionDispatch.motionActions({
+            motions:{
+                isPressed:true,
+                posX:event.pageX,
+                offsetX:pos,
+                deltaX:0,
+                indicatorX:pos,
+                moved:false,
+            }
         });
     }
     
     handleMove=(e)=>{  
-        let event=(e.type=='mousemove')?e:(e.type=='touchmove')?e.touches[0]:e;           
-        const {min,max,posX,isPressed,eleWidth,offsetX} = this.state;
+        let event=(e.type=='mousemove')?e:(e.type=='touchmove')?e.touches[0]:e; 
+        const{motion,data}=this.props;   
+        const {min,max,posX,isPressed,eleWidth,offsetX} = motion;       
         if(isPressed){
+            //when scrolling less than elewidth, data load old posts
+            if(max-offsetX<eleWidth){
+                if(!this.state.loadingState){
+                    this.loadOldPosts();
+                    this.setState({
+                        loadingState: true
+                    });
+                }
+            }else{
+                if(this.state.loadingState){
+                    this.setState({
+                        loadingState: false
+                    });
+                }
+            }
             const deltaX=posX-event.pageX;
-            this.setState({
-                posX:event.pageX,    
-                deltaX:deltaX,
-                offsetX:offsetX+deltaX,
-                active:Math.round(offsetX/eleWidth),
-                moved:true
-            });     
+            const {motionDispatch}=this.props;
+            motionDispatch.motionActions({
+                motions:{
+                    posX:event.pageX,    
+                    deltaX:deltaX,
+                    offsetX:offsetX+deltaX,
+                    active:Math.round(offsetX/eleWidth),
+                    moved:true
+                }
+            });   
         }
-        
+    }
+    loadOldPosts=()=>{
+        const {isLast,get,data,dataState}=this.props;
+        if(dataState==='success'){
+            if(isLast) {
+                return new Promise(
+                    (resolve, reject)=> {
+                        resolve();
+                    }
+                );
+            }
+            // get load posts
+            let lastId = data[data.length - 1]._id;
+            // start request
+            return get.getOldPost('POSTS/OLD_GET','old', lastId);
+        }
     }
     handleUp=(e)=>{
-        const {min,max,eleWidth,offsetX,deltaX} = this.state;
-        const accel=offsetX+(deltaX*Math.abs(deltaX));
+        const{motion,data}=this.props;   
+        const {min,max,eleWidth,offsetX,deltaX,active} = motion;   
+        const accel=offsetX+(deltaX*4.2);
         let mouseX;
-        if(accel > max || Math.round(accel/eleWidth)*eleWidth > max){
+        let index;
+        if(accel>max){
+            index=data.length-1;
             mouseX=max;
-        }else if(accel < min){
+        }else if(accel<min){
+            index=0;
             mouseX=min;
         }else{
-            mouseX=Math.round(accel/eleWidth)*eleWidth;
+            mouseX=accel;
         }
-        this.setState({
-            isPressed:false,
-            offsetX:mouseX,
-            active:Math.round(mouseX/eleWidth),
+        const {motionDispatch}=this.props;
+        motionDispatch.motionActions({
+            motions:{
+                isPressed:false,
+                offsetX:mouseX,
+                active:Math.round(mouseX/eleWidth),
+            }
         });
     }
     handleTouchUp=(e)=>{
-        const {min,max,eleWidth,offsetX,deltaX,items,active} = this.state;
-        let mouseX;
-        let index;
-        if(deltaX>10){
-            index=active+1
-            mouseX=index*eleWidth;
-        }else if(deltaX<-10){
-            index=active-1
-            mouseX=index*eleWidth;
-        }else{
-            mouseX=Math.round(offsetX/eleWidth)*eleWidth;
-        }
-
-        if(mouseX>max){
-            index=items.length-1;
-            mouseX=max;
-        }else if(mouseX<min){
-            index=0;
-            mouseX=min;
-        }
-        this.setState({
-            isPressed:false,
-            offsetX:mouseX,
-            active:Math.round(mouseX/eleWidth)
-        });
+        this.handleUp();
     }
     handleMouseOver=(i)=>{
-        this.setState({
-            active:i
-        })
+        const {motionDispatch}=this.props;
+        motionDispatch.motionActions({
+            motions:{
+                active:i
+            }
+        });
 
     }
     handleMouseOut=()=>{
-        const {eleWidth,offsetX} = this.state;
+        const {motion}=this.props;
+        const {eleWidth,offsetX} = motion;
         
 
     }
-    handleClick=(i,e)=>{
-        const {moved,offsetX,eleWidth,wrapperPd,itemPd}=this.state;
+    handleClick=(id,i,e)=>{
+        console.log('card')
+        const {motion}=this.props;
+        const {moved,offsetX,eleWidth,wrapperPd,itemPd}=motion
         if(moved){
             return false;
         }else{
-            this.props.history.push(`/motionlab/${i}`);
-            const positionX=i*eleWidth-offsetX+wrapperPd+itemPd;
-            this.setState({
-                active:i,
-                moved:false,
-                eleX:positionX,
-            })
+            this.props.history.push(`/motionlab/${id}`);
+            const positionX=(i*eleWidth-offsetX)+(itemPd)+wrapperPd;
+            const {motionDispatch}=this.props;
+            motionDispatch.motionActions({
+                motions:{
+                    active:i,
+                    moved:false,
+                    eleX:positionX,
+                }
+            });
         }   
+    }
+    favClick=(i,e)=>{
+        e.stopPropagation();
+        console.log('fav')  
     }
     
     
     render() { 
-        const {isPressed,offsetX} = this.state;
+        const {motion,authUser,data,loading,dataState,oldLoading}=this.props;
+        const {isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,max,scrollWidth,indicator} = motion;
         let style;
             if(isPressed){
                 style={
@@ -219,7 +298,8 @@ class Main extends Component {
                 
             }
         return (
-            <div className="main-container">
+            
+            <div className="main-container">   
                 <Motion style={style}>
                     {({x,barX})=>
                     <div ref={(ref)=>{this.wrapperWidth=ref}} className="main-wrapper" 
@@ -237,50 +317,64 @@ class Main extends Component {
                             <div ref={(ref)=>{this.scrollWidth=ref}} className="scroll-bar">
                                 <div className="indicator"
                                     style={{
-                                        width:`${x*this.state.relative}px`,
-                                        minWidth:`${100*this.state.relative}px`
+                                        width:`${(indicator+x)*relative}px`,
+                                        minWidth:`${30}px`
                                     }}
                                 ></div>
                             </div>
                         </div>
-                        <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" style={{transform:`translate3d(${-x}px,0,0)`}}>
-                            {
-                                this.state.items.map((item,i)=>{       
+                        <div ref={(ref)=>{this.fullWidth=ref}} className="card-item-wrap" 
+                            style={{
+                                transform:`translate3d(${-x}px,0,0)`,
+                                minWidth:`calc(100% - ${wrapperPd*2}px)`
+                                }}>
+                                {
+                                data.map((item,i)=>{       
+                                    //console.log(item[item.length]._id)
                                     const cardStyle={
                                         active:spring(1.1)
                                     }                 
                                     return (
+                                        
                                         <Motion key={i}style={cardStyle}>
                                             {({active})=>
-                                                <CardItem key={i} author={item.key} title={item.title} 
-                                                    onClick={this.handleClick.bind(null,i)} onMouseOver={this.handleMouseOver.bind(null,i)} onMouseOut={this.handleMouseOut}
-                                                    className={this.state.active==i?"card-item hover":"card-item"}
+                                                <CardItem key={i} 
+                                                    onClick={this.handleClick.bind(null,item._id,i)} 
+                                                    favClick={this.favClick.bind(null,i)}
+                                                    fav={false}
+                                                    favCount={25}
+                                                    onMouseOver={this.handleMouseOver.bind(null,i)} 
+                                                    onMouseOut={this.handleMouseOut}
+                                                    category={item.category}
+                                                    postDate={item.postDate}
+                                                    title={item.title}
+                                                    author={item.author}
+                                                    userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}
+                                                    summary={item.summary}
+                                                    className={motion.active===i?"card-item hover":"card-item"}
                                                     style={{
-                                                        
+                                                        width:`calc(100% - ${itemPd*2}px)`,
+                                                        height:`calc(100% - ${itemPd*2}px)`,
+                                                        backgroundImage:(item.thumbnail)?`url(${urlConfig.url}/api/${item.thumbnail.path})`:''
                                                     }}
+                                                        
+                                                    
                                                 />
                                             }
                                         </Motion>
                                     )
                                 })
                             }
+                            {oldLoading?
+                                <div className="old-posts-loading">
+                                    <StaticLoading/>
+                                </div>:''
+                            }
                         </div>
                     </div>
                     }
                 </Motion>
-                <Route render={({location,params,history, match}) => {
-                    
-                    const {itemPd}=this.state;
-                    return (
-                        <RouterAnimation pathname={location.pathname} 
-                            eleX={this.state.eleX} 
-                            eleY={this.state.eleY} 
-                            eleW={this.state.eleWidth-itemPd*2} 
-                            eleH={this.state.eleHeight-itemPd*2}>
-                                <Route path="/motionlab/:id"/>
-                        </RouterAnimation>
-                    );
-                }} /> 
+
                 
                  
             </div>
@@ -289,6 +383,19 @@ class Main extends Component {
     }
 }
 
-
-
-export default withRouter(Main);
+export default connect(
+    (state)=>({
+        authUser:state.auth.toJS().profile,
+        motion:state.main.toJS().motions,
+        dataState:state.posts.toJS().listData.state,
+        loading:state.posts.toJS().listData.pending,
+        oldLoading:state.posts.toJS().listData.oldPosts.pending,
+        isLast:state.posts.toJS().listData.lastPosts,
+        error:state.posts.toJS().listData.error,
+        data:state.posts.toJS().listData.data
+    }),
+    (dispatch)=>({
+        motionDispatch:bindActionCreators(motionActions,dispatch),
+        get:bindActionCreators(httpRequest,dispatch),
+    })
+)(Main);

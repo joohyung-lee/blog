@@ -1,5 +1,5 @@
-import Redirect from './redirect';
+import RedirectLogin from './redirect';
 
 export{
-    Redirect,
+    RedirectLogin,
 }

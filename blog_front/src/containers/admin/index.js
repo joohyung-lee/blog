@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter,Router,
-  Route,
-  Link } from 'react-router-dom';
+import { withRouter,Link } from 'react-router-dom';
 import * as httpRequest from 'redux/helper/httpRequest';
 //redux
 import * as adminAction from 'redux/admin';
@@ -12,8 +10,7 @@ import { bindActionCreators } from 'redux';
 class AdminMain extends Component { 
     componentDidMount(){
        const{get}=this.props;
-       const ADMIN_GET='ADMIN/GET'; 
-        get.getPost(ADMIN_GET);
+       get.getPost('POSTS/GET');
     }
     render() {
         const {data,loading,error}=this.props;
@@ -40,13 +37,13 @@ AdminMain.propTypes = {
 
 };
 
-export default withRouter(connect(
+export default connect(
     (state)=>({
-        loading:state.admin.getIn(['listData','pending']),
-        error:state.admin.getIn(['listData','error']),
-        data:state.admin.getIn(['listData','data'])
+        loading:state.posts.toJS().listData.pending,
+        error:state.posts.toJS().listData.error,
+        data:state.posts.toJS().listData.data
     }),
     (dispatch)=>({
         get:bindActionCreators(httpRequest, dispatch),
     })
-)(AdminMain));
+)(AdminMain);

@@ -23,7 +23,28 @@ class LoginState extends Component {
         }
     }
     componentDidMount(){
-        window.addEventListener('click',this.outHide);
+    }
+    componentDidUpdate(prevProps, prevState){
+        if(prevProps.open !== this.props.open) {
+            if(!this.props.open) {
+                this.setState({
+                    item:[]
+                })
+            }else{
+                this.setState({
+                    item:[
+                        {
+                            key: 'dropdown',
+                            style:{
+                                opacity:spring(1,springOption.enter),
+                                size:spring(1,springOption.enter)
+                            }
+                        },
+        
+                    ]
+                });
+            }
+          }    
     }
     willEnter=()=>{
         return {
@@ -37,37 +58,11 @@ class LoginState extends Component {
             size:spring(0.5,springOption.leave)
         }
     }
-    didLeave=()=>{
-    }
-    outHide=(e)=>{
-        const {item} = this.state;
-        this.setState({
-            item:[]
-        });
-    }
+
     deArea=(e)=>{
         e.stopPropagation();
     }
-    dropdown=(e)=>{
-        e.stopPropagation();
-        const {item} = this.state;
-        (item.length===0)?
-        this.setState({
-            item:[
-                {
-                    key: 'dropdown',
-                    style:{
-                        opacity:spring(1,springOption.enter),
-                        size:spring(1,springOption.enter)
-                    }
-                },
-
-            ]
-        }):
-        this.setState({
-            item:[]
-        });
-    }
+    
     //구글 로그인
     googleLogin=()=>{
         window.open('/auth/loginPopup/goolge','google','_blank'); 
@@ -95,11 +90,11 @@ class LoginState extends Component {
                 {interpolatedStyles=>
                     <div className="login-state">
                     {(this.props.view==='login')?
-                        <button className="btn-login" onClick={this.dropdown}>Login</button>:
-                        <div className="avatar-wrap" onClick={this.dropdown}>
-                            <div className="avatar">
+                        <button className="btn-login" onClick={this.props.dropdown}>Login</button>:
+                        <div className="avatar-wrap" onClick={this.props.dropdown}>
+                            <span>{this.props.username}</span>
+                            <div className="avatar" style={{backgroundImage:`url(${this.props.userImg})`}}>
                             </div>
-                            <p>{this.props.username}</p>
                         </div>
                     }
                         {interpolatedStyles.map(config => {
@@ -129,7 +124,7 @@ class LoginState extends Component {
                                 :
                                 <ul className="my-state">
                                     <li>
-                                        <Link to="">Profile</Link>
+                                        <Link to="/mypage/profile">Profile</Link>
                                     </li>
                                     <li>
                                         <Link to="">Collections</Link>

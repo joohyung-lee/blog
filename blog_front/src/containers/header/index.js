@@ -20,6 +20,7 @@ class Header extends Component {
                 <div className="global-nav">
                     <div className="logo">
                         <Link to='/'><h1>JOOMATION</h1></Link>
+                        
                     </div>    
                     <div className="nav-contents">
                         <ul>

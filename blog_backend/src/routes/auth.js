@@ -9,6 +9,7 @@ let proxied_url = urlConfig[process.env.NODE_ENV].proxied_url;
 let passportGoogle = require('../passport/google');
 let passportFacebook = require('../passport/facebook');
 let passportGithub=require('../passport/github');
+
 router.get('/google',
   passportGoogle.authenticate('google', { scope:
   	[ 'https://www.googleapis.com/auth/plus.login',

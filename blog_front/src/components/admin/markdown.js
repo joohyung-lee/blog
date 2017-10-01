@@ -21,6 +21,10 @@ class MarkdownEdit extends Component {
         this.refs.contents.style.height=`${window.innerHeight-40}px`;
         this.refs.textBox.style.width=`${window.innerWidth/2.5-40}px`;
     }
+    componentWillUnmount(){
+        window.removeEventListener('mousemove',this.handleMove);
+        window.removeEventListener('mouseup',this.handleUp);
+    }
     rawMarkup=()=>{
        const { source } = this.props;
         var md = new Remarkable('full', {

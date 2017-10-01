@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 let router = express.Router();
 //DATA MODEL
 import Post from '../model/post';
@@ -11,14 +12,56 @@ router.use(function timeLog(req, res, next) {
 });
 // GET ALL posts
 router.get('/', function (req, res) {
-    Post.find(function (err, posts) {
-        if (err) return res.status(500).send({
-            error: 'database fail'
-        });
+    Post.find()
+    .sort({"_id": -1})
+    .limit(6)
+    .exec((err, posts) => {
+        if(err) throw err;
         res.json(posts);
-    })
+    });
 });
+router.get('/:listType/:id', (req, res) => {
+    let listType = req.params.listType;
+    let id = req.params.id;
 
+    // check list load type
+    if(listType !== 'old' && listType !== 'new') {
+        return res.status(400).json({
+            error: "INVALID LISTTYPE",
+            code: 1
+        });
+    }
+    
+    // check post id
+    if(!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            error: "INVALID ID",
+            code: 2
+        });
+    }
+    
+    let objId = new mongoose.Types.ObjectId(req.params.id);
+    
+    if(listType === 'new') {
+        // get new posts
+        Post.find({ _id: { $gt: objId }})
+        .sort({_id: -1})
+        .limit(6)
+        .exec((err, posts) => {
+            if(err) throw err;
+            return res.json(posts);
+        });
+    } else {
+        // get old posts
+        Post.find({ _id: { $lt: objId }})
+        .sort({_id: -1})
+        .limit(6)
+        .exec((err, posts) => {
+            if(err) throw err;
+            return res.json(posts);
+        });
+    }
+});
 // GET SINGLE POST
 router.get('/:id', function (req, res) {
     Post.find({_id:req.params.id},function (err, post) {
@@ -44,16 +87,17 @@ router.get('/:id', function (req, res) {
 // CREATE POST
 router.post('/', function (req, res) {
     var post = new Post();
-    post.author = req.body.author;
+    
+    post.author = req.session.passport.user.userName;
     post.title = req.body.title;
+    post.summary = req.body.summary;
     post.body = req.body.body;
     post.iframeUrl = req.body.iframeUrl;
     post.category = req.body.category;
     post.tags = req.body.tags;
     post.thumbnail = req.body.thumbnail.data;
     post.files = req.body.files.data;
-    // post.comments = req.body.comments;
-    //post.post_date = new Date(req.body.post_date);
+    post.postDate=req.body.postDate;
     post.save(function (err) {
         if (err) {
             console.error(err);

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter} from 'react-router-dom';
 import * as httpRequest from 'redux/helper/httpRequest'
+import dateFormat from 'dateformat';
 //config
 import urlConfig from 'config/urlConfig'
 //redux
@@ -18,10 +19,19 @@ class Write extends Component {
 
     }
     handleTitle=(e)=>{
+        
         const {input}=this.props;
         const title= e.target.value;
         return input.titleWrite({
             title:title,
+        })
+    }
+    handleSummary=(e)=>{
+        
+        const {input}=this.props;
+        const summary= e.target.value;
+        return input.summaryWrite({
+            summary:summary,
         })
     }
     handleIframeUrl=(e)=>{
@@ -106,8 +116,12 @@ class Write extends Component {
      };
     handleSubmit=(e)=>{      
         const {writeupload,writePost}=this.props;
+        var now = new Date();
         writeupload.savePost({
-            data:writePost,
+            data:{
+                ...writePost,
+                postDate:dateFormat(now,"mmm d, yyyy")
+            },
             type:'ADMIN/POST'
         })
     }
@@ -124,12 +138,16 @@ class Write extends Component {
                     </div>
                     <div className="post-category">
                         <select onChange={this.handleCategory}>
+                            <option>전체</option>
                             <option>motionlab</option>
                             <option>release</option>
                             <option>review</option>
                         </select>
                     </div>
                     <button className="btn-save" onClick={this.handleSubmit}>저장</button>
+                </div>
+                <div className="summary">
+                    <textarea type="text" rows="3" cols="50" onChange={this.handleSummary} value={writePost.summary} placeholder="summary를 입력해주세요"/>
                 </div>
                 <div className="post-tags">
                     <input className="write-input" type="text" onKeyDown={this.handleTag} placeholder="태그를 입력해주세요"/>

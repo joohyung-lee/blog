@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {StaticLoading} from 'components/common/loading';
 import urlConfig from 'config/urlConfig';
-class Redirect extends Component {
+class RedirectLogin extends Component {
     componentDidMount(){
         
         switch (this.props.match.params.name) {
@@ -32,8 +32,8 @@ class Redirect extends Component {
     }
 }
 
-Redirect.propTypes = {
+RedirectLogin.propTypes = {
 
 };
 
-export default Redirect;
+export default RedirectLogin;

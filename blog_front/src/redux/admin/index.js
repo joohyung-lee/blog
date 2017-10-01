@@ -5,6 +5,7 @@ import { Map,List } from 'immutable';
 
 //액션
 const ADMIN_TITLE_WRITE = 'ADMIN/ADMIN_TITLE_WRITE';
+const ADMIN_SUMMARY_WRITE = 'ADMIN/ADMIN_SUMMARY_WRITE';
 const ADMIN_POST_WRITE = 'ADMIN/ADMIN_POST_WRITE';
 const ADMIN_IFRAMEURL_WRITE = 'ADMIN/ADMIN_IFRAMEURL_WRITE';
 const ADMIN_CATEGORY_WRITE = 'ADMIN/ADMIN_CATEGORY_WRITE';
@@ -14,8 +15,6 @@ const ADMIN_TAGS_DELETE = 'ADMIN/ADMIN_TAGS_DELETE';
 const ADMIN_MODIFY = 'ADMIN/ADMIN_MODIFY';
 const ADMIN_DELETE = 'ADMIN/ADMIN_DELETE';
 const ADMIN_POST='ADMIN/POST';
-const ADMIN_GET='ADMIN/GET';
-const ADMIN_SINGLE_GET='ADMIN/SINGLE_GET';
 
 //이미지 업로드 액션
 const ADMIN_THUMB_UPLOAD='ADMIN/THUMB_UPLOAD';
@@ -25,6 +24,7 @@ const ADMIN_FILE_DELETE='ADMIN/FILE_DELETE';
 
 //액션생성자
 export const titleWrite = createAction(ADMIN_TITLE_WRITE);
+export const summaryWrite = createAction(ADMIN_SUMMARY_WRITE);
 export const iframeUrlWrite = createAction(ADMIN_IFRAMEURL_WRITE);
 export const postCategory = createAction(ADMIN_CATEGORY_WRITE);
 export const postTags = createAction(ADMIN_TAGS_WRITE);
@@ -38,7 +38,9 @@ const initialState=Map({
         pending: false,
         error: false,
         data:Map({
+                postDate:'',
                 title:'',
+                summary:'',
                 body:'',
                 thumbnail:Map({
                     pending: false,
@@ -54,17 +56,7 @@ const initialState=Map({
                 category:'',
                 tags:List([])
             }),
-    }),
-    listData:Map({
-        pending: false,
-        error: false,
-        data: List([]),
-    }),
-    itemData:Map({
-        pending: false,
-        error: false,
-        data: List([]),
-    }),
+    })
     
     
 })
@@ -73,6 +65,10 @@ export default handleActions({
     [ADMIN_TITLE_WRITE]: (state, action) => {  
         const {title} = action.payload;
         return state.setIn(['createData','data','title'],title)
+    },
+    [ADMIN_SUMMARY_WRITE]: (state, action) => {  
+        const {summary} = action.payload;
+        return state.setIn(['createData','data','summary'],summary)
     },
     [ADMIN_POST_WRITE]: (state, action) => {  
         const {body} = action.payload;
@@ -103,25 +99,7 @@ export default handleActions({
         return state['itemData'].data[index].set('title', source)
     },
     //포스트 저장
-    
-    //포스트 리스트 불러오기
-    ...pending({
-        type:ADMIN_GET,
-        name:['listData'],
-        successResult:(state,action)=>{
-            const {data}=action.payload;
-            return state.setIn(['listData','data'],data);
-        }
-    }),
-    //개별 포스트 불러오기
-    ...pending({
-        type:ADMIN_SINGLE_GET,
-        name:['itemData'],
-        successResult:(state,action)=>{
-            const {data}=action.payload;
-            return state.setIn(['itemData','data'],data);
-        }
-    }),
+
     //썸네일 이미지 업로드
     ...pending({
         type:ADMIN_THUMB_UPLOAD,

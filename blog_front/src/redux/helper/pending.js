@@ -18,15 +18,18 @@ export const pending= ({
     return{
         [actionType.PENDING]: (state, action) => {
             return state.setIn([...name,'pending'],true)
+                        .setIn([...name,'state'],'waiting')
                         .setIn([...name,'error'],false)
         },
         [actionType.SUCCESS]: (state, action) => {
             return successResult(state,action).setIn([...name,'pending'],false)
+                                              .setIn([...name,'state'],'success')
            
         },
         [actionType.FAILURE]: (state, action) => {
             return state.setIn([...name,'pending'],false)
                         .setIn([...name,'error'],true)
+                        .setIn([...name,'state'],'fail')
         }
     }
 };
