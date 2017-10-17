@@ -12,8 +12,8 @@ export const motionActions = createAction(MOTION);
 const initialState=Map({
     motions:Map({
         isPressed:false,
-        clientWidth:0,
-        clientHeight:0,
+        detailView:false,
+        blockWidth:0,
         min:0,
         max:0,
         posX:0,
@@ -21,13 +21,13 @@ const initialState=Map({
         offsetX:0,
         relative:0,
         active:0,
-        moved:false,
-        eleX:0,
-        eleY:0,
         eleWidth:0,
         eleHeight:0,
         wrapperPd:0,
-        itemPd:0
+        itemPd:0,
+        innerWidth:window.innerWidth,
+        innerHeight:window.innerHeight,
+
     })
 })
 

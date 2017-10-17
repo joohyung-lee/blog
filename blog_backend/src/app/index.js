@@ -10,8 +10,6 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import http from 'http';
 
-
-
 //set express
 var app = express();
 app.use(bodyParser.urlencoded({extended:true}));

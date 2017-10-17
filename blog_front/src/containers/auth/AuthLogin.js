@@ -18,23 +18,18 @@ class AuthLogin extends Component {
             type:'AUTH/PROFILE'
         })
     }
-    componentDidMount(){         
-        const{modal}=this.props;
-        window.addEventListener('click',this.outHide);
-    }
     componentDidUpdate(prevProps, prevState){
         if(prevProps.authUser.isLogin !== this.props.authUser.isLogin) {
-            const {authUser,modalView} =this.props;      
+            const {authUser,modalView} =this.props;  
+            modalView.closeModal({
+                modalName:'mymenu'
+            });    
             if(authUser.isLogin){
-                if(authUser.cookie){
-                    return;
-                }else{
-                    setTimeout(function(){ 
-                        modalView.closeModal({
-                            modalName:'toast'
-                        }); 
-                    }, 2500);
-                }
+                setTimeout(function(){ 
+                    modalView.closeModal({
+                        modalName:'toast'
+                    }); 
+                }, 1500);
             }else{
                 modalView.openModal({
                     modalName:'toast'
@@ -43,32 +38,9 @@ class AuthLogin extends Component {
                     modalView.closeModal({
                         modalName:'toast'
                     }); 
-                }, 2500);
+                }, 1500);
             }
         } 
-    }
-    //메뉴 드랍다운
-    dropdown=(e)=>{
-        e.stopPropagation();
-        const {modal,modalView}=this.props;
-        if(modal.mymenu.open){
-            modalView.closeModal({
-                modalName:'mymenu'
-            }); 
-        }else{
-            modalView.openModal({
-                modalName:'mymenu'
-            }); 
-        }      
-    }
-    //바깥 클릭 시 메뉴드랍 접기
-    outHide=(e)=>{
-        const {modalView,modal}=this.props;
-        if(modal.mymenu.open){
-            modalView.closeModal({
-                modalName:'mymenu'
-            });
-        }
     }
     //logout
     logOut=()=>{
@@ -89,8 +61,8 @@ class AuthLogin extends Component {
                 </div>:              
                 <LoginState 
                     view={(authUser.isLogin)?'mypage':'login'}
-                    open={modal['mymenu'].open}
-                    dropdown={this.dropdown}
+                    open={this.props.open}
+                    dropdown={this.props.dropdown}
                     userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg} 
                     logOut={this.logOut}
                     authLoading={authUser.pending}
@@ -130,5 +102,6 @@ export default connect(
         auth:bindActionCreators(authActions,dispatch),
         request:bindActionCreators(httpRequest,dispatch),
         modalView: bindActionCreators(modalActions, dispatch)
+        
     })
 )(AuthLogin);

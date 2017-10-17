@@ -24,6 +24,9 @@ const initialState=Map({
     mymenu:Map({
         open:false,
     }),
+    postAuth:Map({
+        open:false,
+    }),
 })
 
 //리듀서

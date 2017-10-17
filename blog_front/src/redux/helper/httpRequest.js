@@ -9,6 +9,14 @@ function getLogoutAPI() {
 function getPostAPI() {
     return axios.get(`/api/post`);
 }
+//load single posts
+function getPostSingleAPI(category,postId){
+    return axios.get(`/api/post/single/${category}/${postId}`);
+}
+//load category posts
+function getPostCategoryAPI(category){
+    return axios.get(`/api/post/${category}`);
+}
 // load old posts
 function getOldPostAPI(listType,id) {
     return axios.get(`/api/post/${listType}/${id}`);
@@ -16,9 +24,7 @@ function getOldPostAPI(listType,id) {
 function savePostAPI(data) {
     return axios.post(`/api/post`,data);
 }
-function getPostSingleAPI(postId){
-    return axios.get(`/api/post/${postId}`);
-}
+
 function thumbUpload(data){
     return axios.post('/api/images/thumb',data)
 }
@@ -74,7 +80,6 @@ export const getAuthLogout = ({type}) => dispatch => {
 }
 //포스트글 저장
 export const savePost = ({data,type}) => dispatch => {   
-    console.log(data) 
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
     return savePostAPI(data).then(
@@ -99,6 +104,32 @@ export const getPost = (type) => dispatch => {
         }
     )   
 }
+//개별 포스트글 불러오기
+export const getSinglePost = (type,category,postId) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getPostSingleAPI(category,postId).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    )
+}
+//load category posts
+export const getCategoryPost = (type,category) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getPostCategoryAPI(category).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    )
+}
 //old posts
 export const getOldPost = (type,listType,id) => dispatch => {    
     const actionType=actions(type);
@@ -112,19 +143,7 @@ export const getOldPost = (type,listType,id) => dispatch => {
         }
     )   
 }
-//개별 포스트글 불러오기
-export const getSinglePost = (type,postId) => dispatch => {    
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return getPostSingleAPI(postId).then(
-        (response) => {
-            dispatch({
-                type: actionType.SUCCESS,
-                payload: response
-            })
-        }
-    )
-}
+
 //썸네일 이미지 업로드 
 export const postThumb=({file,name,type})=>dispatch=>{
     let data = new FormData();

@@ -17,10 +17,13 @@ const initialState=Map({
     listData:Map({
         pending: false,
         error: false,
+        state:'',
         lastPosts:false,
         data: List([]),
         oldPosts:Map({
-            
+            pending: false,
+            error: false,
+            state:'',
         })
     }),
     itemData:Map({
@@ -40,6 +43,7 @@ export default handleActions({
         successResult:(state,action)=>{
             const {data}=action.payload;
             return state.setIn(['listData','data'],data)
+                        .setIn(['listData','lastPosts'],false)
                         
         }
     }),

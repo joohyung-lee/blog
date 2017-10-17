@@ -16,7 +16,6 @@ const initialState=Map({
         pending: false,
         error: false,
         isLogin:false,
-        cookie:false,
         user:Map({})
     })
   

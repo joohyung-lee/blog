@@ -7,7 +7,7 @@ import * as adminAction from 'redux/admin';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import MarkdownEdit from 'components/admin/markdown';
+import {MarkdownEdit} from 'components/admin';
 
 class Posts extends Component { 
     componentDidMount(){

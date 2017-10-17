@@ -12,7 +12,7 @@ router.use(function timeLog(req, res, next) {
 });
 // GET ALL posts
 router.get('/', function (req, res) {
-    Post.find()
+    Post.find({},{"body":false})
     .sort({"_id": -1})
     .limit(6)
     .exec((err, posts) => {
@@ -20,6 +20,43 @@ router.get('/', function (req, res) {
         res.json(posts);
     });
 });
+//get single post
+router.get('/single/:category/:id',(req,res)=>{
+    let category=req.params.category;
+    let id = req.params.id;
+    Post.find({_id:req.params.id},function (err, posts) {
+        if (err) return res.status(500).json({
+            error: err
+        });
+        if (!posts) return res.status(404).json({
+            error: 'post not found'
+        });
+        res.json(posts);
+    })
+
+})
+//get category post
+router.get('/:category',(req,res)=>{
+    let category=req.params.category;
+    if(category==='main'){
+        Post.find({},{"body":false})
+        .sort({"_id": -1})
+        .limit(6)
+        .exec((err, posts) => {
+            if(err) throw err;
+            res.json(posts);
+        });
+    }else{
+    Post.find({category:req.params.category},{"body":false}) 
+        .sort({"_id": -1})
+        .limit(6)
+        .exec((err, posts) => {
+            if(err) throw err;
+            res.json(posts);
+        });
+    }
+})
+//load old posts
 router.get('/:listType/:id', (req, res) => {
     let listType = req.params.listType;
     let id = req.params.id;
@@ -31,7 +68,6 @@ router.get('/:listType/:id', (req, res) => {
             code: 1
         });
     }
-    
     // check post id
     if(!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({
@@ -39,9 +75,7 @@ router.get('/:listType/:id', (req, res) => {
             code: 2
         });
     }
-    
     let objId = new mongoose.Types.ObjectId(req.params.id);
-    
     if(listType === 'new') {
         // get new posts
         Post.find({ _id: { $gt: objId }})
@@ -60,21 +94,12 @@ router.get('/:listType/:id', (req, res) => {
             if(err) throw err;
             return res.json(posts);
         });
-    }
+    }    
+    
+    
+    
+    
 });
-// GET SINGLE POST
-router.get('/:id', function (req, res) {
-    Post.find({_id:req.params.id},function (err, post) {
-        if (err) return res.status(500).json({
-            error: err
-        });
-        if (!post) return res.status(404).json({
-            error: 'post not found'
-        });
-        res.json(post);
-    })
-});
-
 // // GET POST BY AUTHOR
 // Router.get('/api/books/author/:author', function (req, res) {
 //     Book.find({author:req.params.author},{_id:0,title:1,post_date:1},function(err,books){

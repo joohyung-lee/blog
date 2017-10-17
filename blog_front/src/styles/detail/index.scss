@@ -1,0 +1,18 @@
+@import "../common/color.scss";
+.detail-main{
+  background-color:#ccc;  
+  transition: height 0.5s;
+}
+
+.detail-wrap{
+    padding:20px;
+    .detail-content{
+     
+        .title{
+
+        }
+        .body{
+            
+        }
+    }
+}

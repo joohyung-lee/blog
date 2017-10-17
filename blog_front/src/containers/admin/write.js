@@ -10,8 +10,7 @@ import * as adminAction from 'redux/admin';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 //components
-import MarkdownEdit from 'components/admin/markdown';
-import ImageView from 'components/admin/imageView';
+import {MarkdownEdit,ImageView} from 'components/admin';
 
 import 'styles/admin/index.scss'
 class Write extends Component { 
@@ -140,8 +139,8 @@ class Write extends Component {
                         <select onChange={this.handleCategory}>
                             <option>전체</option>
                             <option>motionlab</option>
-                            <option>release</option>
                             <option>review</option>
+                            <option>projects</option>
                         </select>
                     </div>
                     <button className="btn-save" onClick={this.handleSubmit}>저장</button>

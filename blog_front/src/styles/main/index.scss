@@ -1,8 +1,42 @@
 @import "../common/color.scss";
 
 .main-container{
+    position: relative;
     width:100vw;
     height:100vh;
+    overflow: hidden;
+    background:$c-black-8;
+}
+.menu-list{
+    position: absolute;
+    left:0;
+    top:0;
+    width:300px;
+    height:100%;
+    z-index: 9999;
+    user-select: none;
+    ul{
+        margin-top:20vh;
+        li{
+            .disabled{
+                color:$t-black-4;
+                pointer-events: none;
+            }
+            a{
+                width: 100%;
+                display: inline-block;
+                padding: 4px 0 4px 40px;
+                font-size: 2rem;
+                color:$t-black-10;
+                transition: all .3s ease;
+            }
+        }
+    }
+}
+.main-wrapper.menu{
+    left:250px;
+    transform: scale(0.92);
+    
 }
 .main-wrapper{
     position: absolute;
@@ -10,32 +44,86 @@
     right:0;
     bottom:0;
     left:0;
-    background:$c-black-8;
-    overflow: hidden;
     padding:0 70px;
+    transform-origin: left center 0;
+    transition:left 0.4s,transform 0.3s ease-in-out;
     .title-wrap{
         position: relative;
         top:10vh;
         padding:0 20px;
         .menu-title{
+            position: relative;
             float: left;
-            
+            user-select: none;
+            padding-left:40px;
             h2{
                 padding-right:30px;
                 font-size:2rem;
                 font-weight: normal;
             }
+            .menu-icon{
+                position: absolute;
+                display: inline-block;
+                top:0px;
+                left:0;
+                width: 23px;
+                height:100%;
+                padding-top:12px;
+                cursor: pointer;
+            }
+            .menu-icon.active{
+                span{
+                    &:nth-child(1){
+                        top:7px;
+                        width:10px;
+                        transform: rotate(315deg);
+                    }
+                    &:nth-child(2){
+                        transform: rotate(0deg);
+                    }
+                    &:nth-child(3){
+                        top:5px;
+                        width:10px;
+                        transform: rotate(-315deg)
+                    }
+                }
+            }
+            .menu-icon{   
+                transition:all 0.5s ease;
+                span{
+                    position: relative;
+                    display: block;
+                    top:0;
+                    left:0;
+                    width:23px;
+                    height:1px;
+                    background-color:$c-black-0;
+                    transform-origin: left center;
+                    transition: all 0.5s ease;
+                    
+                    &:nth-child(2){
+                        top:6px;
+                        width: 23px;
+                        transform-origin: center;
+                    }
+                    &:nth-child(3){
+                        top:12px;
+                        width: 23px;  
+                        transform-origin: left center;
+                    }
+                }
+            }
         }
         .scroll-bar{
             position:relative;
             top:18px;
-            height:2px;
+            height:1px;
             background:$c-black-4;
             overflow:hidden;
             .indicator{
                 position: absolute;
                 width:30px;
-                height:2px;
+                height:1px;
                 background: #000;
             }
         }
@@ -49,26 +137,28 @@
         position: absolute;
         top:20vh;
         white-space: nowrap;
+        >div{
+            transform-style: preserve-3d;
+        }
         .old-posts-loading{
-            position: relative;
+            position: absolute;
             display: inline-block;
             width: 50px;
             height: 430px;
+            z-index: 10
         }
         .card-item{
-            position: relative;
+            transform-style: preserve-3d;
+            transform-origin: 50% 50% 0;
+            position: absolute;
             display: inline-block;
-            width:400px;
-            height:430px;
-            padding:22px;
-            transition:all .3s ease;
             &:first-child{
             }
             
             .fav-wrap{
                 position: absolute;
-                top:20px;
-                right:-20px;
+                top: 40px;
+                right: 3px;
                 .icon-fav{
                     position: relative;
                     width:40px;
@@ -117,7 +207,6 @@
                 background-repeat: no-repeat;
                 background-size:cover;
                 background-position: center;
-                transition:all .3s ease;
                 cursor: pointer;
                 &:hover{
                     

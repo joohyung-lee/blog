@@ -1,4 +1,4 @@
-import AuthLogin from './AuthLogin';
+import AuthLogin from './authLogin';
 export{
     AuthLogin,
 }
