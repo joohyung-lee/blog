@@ -1,14 +1,13 @@
 import { handleActions, createAction } from 'redux-actions';
 import axios from 'axios';
 import {pending} from 'redux/helper/pending'
-import { Map,List } from 'immutable';
+import { Map,List ,fromJS} from 'immutable';
 
 //액션
-
 const POSTS_GET='POSTS/GET';
 const POSTS_OLD_GET='POSTS/OLD_GET';
 const POSTS_SINGLE_GET='POSTS/SINGLE_GET';
-
+const POSTS_STAR_SAVE='POSTS/STAR_SAVE';
 //액션생성자
 
 
@@ -20,15 +19,20 @@ const initialState=Map({
         state:'',
         lastPosts:false,
         data: List([]),
+        starred:Map({
+            pending: false,
+            error: -1,
+            state:'',
+        }),
         oldPosts:Map({
             pending: false,
-            error: false,
+            error: -1,
             state:'',
         })
     }),
     itemData:Map({
         pending: false,
-        error: false,
+        error: -1,
         data: List([]),
     }),
     
@@ -43,8 +47,7 @@ export default handleActions({
         successResult:(state,action)=>{
             const {data}=action.payload;
             return state.setIn(['listData','data'],data)
-                        .setIn(['listData','lastPosts'],false)
-                        
+                        .setIn(['listData','lastPosts'],false)                      
         }
     }),
     //load old 
@@ -68,6 +71,18 @@ export default handleActions({
             return state.setIn(['itemData','data'],data);
         }
     }),
-    
+    //give star to post
+    ...pending({
+        type:POSTS_STAR_SAVE,
+        name:['listData','starred'],
+        successResult:(state,action)=>{
+            const {response,index}=action.payload;
+            const dataArr = fromJS(state.getIn(['listData','data']));
+            return state.setIn(['listData','data'],dataArr.update(
+                index,
+                (item)=>response.data.post
+            ));
+        }
+    }),
     
 }, initialState);

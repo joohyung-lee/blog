@@ -26,15 +26,15 @@ class CardItem extends Component {
                             <span>{this.props.author}</span>
                         </div>
                     </div>
+                    <div className="fav-info">
+                        <span className="count">{this.props.favCount}</span>
+                        <span>Collect</span>
+                    </div>
                 </div>
                 <div className="fav-wrap">
                     <span onClick={this.props.favClick}  className={(this.props.fav)?'icon-fav active':'icon-fav'}>
                         <IconFav/>
                     </span>
-                    <div className="fav-info">
-                        <span className="count">{this.props.favCount}</span>
-                        <span>Collect</span>
-                    </div>
                 </div>
                 <div className="summary-wrap">
                     <h3>{this.props.title}</h3> 

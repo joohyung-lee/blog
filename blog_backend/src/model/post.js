@@ -9,7 +9,8 @@ var postSchema = new Schema({
     body:String,
     iframeUrl:String,
     category:String,
-    tags:[],
+    starred: [String],
+    tags:[String],
     thumbnail:{},
     files:[],
     comments:[

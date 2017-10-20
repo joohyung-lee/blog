@@ -1,12 +1,38 @@
 import axios from 'axios';
-
+//loading progress
+let config = {
+    onUploadProgress: progressEvent => {
+        /* CONSTANTS */
+        let initial = 0; 
+        let delta = 1;
+        let speed=0.3; 
+        let percent=initial
+        let requestAnimationFrameID = requestAnimationFrame(doAnim); // Start the loop.
+        
+        let percentCompleted = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
+        function doAnim(percentCompleted) {
+            if(percent>=80){
+                cancelAnimationFrame(requestAnimationFrameID);
+                return
+            }
+            if(percentCompleted){
+                percent=100;
+            }
+            percent += delta*speed; 
+            requestAnimationFrameID = requestAnimationFrame(doAnim); 
+            //console.log(Math.floor(percent))  
+        }
+     
+    }
+  }
 function getAuthAPI() {
     return axios.get(`/auth/account`);
 }
 function getLogoutAPI() {
     return axios.get(`/auth/logout`);
 }
-function getPostAPI() {
+function getPostAPI() {  
+    
     return axios.get(`/api/post`);
 }
 //load single posts
@@ -15,12 +41,18 @@ function getPostSingleAPI(category,postId){
 }
 //load category posts
 function getPostCategoryAPI(category){
+
     return axios.get(`/api/post/${category}`);
 }
 // load old posts
-function getOldPostAPI(listType,id) {
-    return axios.get(`/api/post/${listType}/${id}`);
+function getOldPostAPI(category,listType,id) {
+    return axios.get(`/api/post/${category}/${listType}/${id}`);
 }
+//save starred post
+function savePostStarAPI(postId){
+    return axios.post(`/api/post/star/${postId}`);
+}
+//save post
 function savePostAPI(data) {
     return axios.post(`/api/post`,data);
 }
@@ -131,10 +163,10 @@ export const getCategoryPost = (type,category) => dispatch => {
     )
 }
 //old posts
-export const getOldPost = (type,listType,id) => dispatch => {    
+export const getOldPost = ({type,category,listType,id}) => dispatch => {    
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
-    return getOldPostAPI(listType,id).then(
+    return getOldPostAPI(category,listType,id).then(
         (response) => {
             dispatch({
                 type: actionType.SUCCESS,
@@ -205,4 +237,26 @@ export const deleteFiles=({index,filename,type})=>dispatch=>{
             })
         }
     )
+}
+//give star
+export const saveStar=({postId,index,type})=>dispatch=>{
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return savePostStarAPI(postId).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:{
+                    response,
+                    index:index
+                },
+            })
+        }).catch((error) => {
+            dispatch({
+                type: actionType.FAILURE,
+                payload:{
+                    error:error.response.data.code
+                }
+            });
+        });
 }

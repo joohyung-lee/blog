@@ -6,6 +6,9 @@ import {withRouter,Route,Switch,Redirect} from 'react-router-dom'
 import 'styles/common/common.scss';
 //components
 import {NotFound} from 'components/common/error';
+import LoginModal from 'components/common/modal/loginModal';
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+
 import {FadeTransition,DetailTransition,RouterMotion,DetailMotion} from 'components/route';
 //containers
 import {RedirectLogin} from 'components/loginPopup';
@@ -26,7 +29,12 @@ import * as commonAction from 'redux/common';
 import * as motionActions from 'redux/main';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+
+  }
   componentDidMount(){  
+    
     const {handleHeader,motionDispatch}=this.props;
     let re = /(auth|loginPopup)/;
     let isAuth = re.test(this.props.location.pathname);
@@ -53,12 +61,21 @@ class App extends Component {
       modalView.closeModal({
         modalName:'mymenu'
       });
+      modalView.closeModal({
+        modalName:'login'
+      });
     }
   }
-  motion=(val)=>{
+  fade=(val)=>{
     return spring(val, {
-      stiffness: 174,
-      damping: 24,
+      stiffness: 200,
+      damping: 26,
+    });
+  }
+  move=(val)=>{
+    return spring(val, {
+      stiffness: 170,
+      damping: 26,
     });
   }
   
@@ -73,18 +90,24 @@ class App extends Component {
       width:`100%`,
     };
   }
- 
+  loginClose=()=>{
+    const {modalView}=this.props;
+    modalView.closeModal({
+      modalName:'login'
+    });
+  }
   render() {
-    const {authUser,header,motion}=this.props;
+    const {authUser,header,motion,modal}=this.props;
+    
     const pageTransitions = {
       atEnter: {
-        opacity: 0,
+        opacity :0,
       },
       atLeave: {
-        opacity: this.motion(0),
+        opacity: this.fade(0),
       },
       atActive: {
-        opacity: this.motion(1),
+        opacity: this.fade(1),
       },
     };
     const detailLayer = {
@@ -92,35 +115,36 @@ class App extends Component {
         offsetY: 100,
       },
       atLeave: {
-        offsetY: this.motion(100)
+        offsetY: this.move(100)
       },
       atActive: {
-        offsetY: this.motion(0),
+        offsetY: this.move(0),
       },
     }
     return (
         <div>
+            <LoginModal open={modal['login'].open} close={this.loginClose}/>
             <Header mode={header.isHeader} />
             <Route render={({location}) => (
               <div>
+                <Route exact path="/" render={() => (
+                  <Redirect to="/main"/>
+                )}/>
                 <AnimatedSwitch
                   className="page-wrap"
-                  {...pageTransitions}
-                  
+                  {...pageTransitions}             
                   mapStyles={this.pageMapStyles}
                 >  
-                  <Route exact path="/" render={()=>(
-                    <Redirect to="/main"/>         
-                  )} />
                   <Route exact path="/:category" component={Main}/> 
+                  <Route exact path="/posts/:category/:postId"/> 
                   <Route exact path="/admin" component={AdminMain}/>
                   <Route path="/admin/posts/:id" component={Posts}/>
                   <Route exact path="/admin/write" component={Write}/>
                   <Route path="/auth/loginPopup/:name" component={RedirectLogin}/>
                   <Route path="/mypage/profile" component={Profile}/>
-                  <Route exact path="/posts/:category/:postId"/> 
+                  
                   <Route component={NotFound}/>   
-                </AnimatedSwitch>      
+                </AnimatedSwitch>
                 <AnimatedRoute
                   className={`detail-page-wrap ${(motion.detailView)?"hidden":""}`}
                   path="/posts/:category/:postId"
@@ -128,19 +152,6 @@ class App extends Component {
                   {...detailLayer}
                   mapStyles={this.detailMapStyles}
                 />
-                {/* <RouterMotion 
-                  open={motion.detailView}
-                  eleX={motion.eleX} 
-                  eleY={motion.eleY} 
-                  eleW={motion.eleWidth} 
-                  eleH={motion.eleHeight}
-                  itemPd={motion.itemPd}
-                >
-                <Route 
-                  location={location}
-                  path="/posts/:category/:postId"  
-                  component={DetailView}/> 
-                </RouterMotion> */}
 
             </div>
         )} />
@@ -153,7 +164,7 @@ export default withRouter(connect(
   (state)=>({
     header:state.common.toJS(),
     authUser:state.auth.toJS().profile.user,
-    modal:state.modal.toJS,
+    modal:state.modal.toJS(),
     motion:state.main.toJS().motions,
   }),
   (dispatch)=>({

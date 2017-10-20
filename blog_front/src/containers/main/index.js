@@ -9,6 +9,7 @@ import urlConfig from 'config/urlConfig'
 import {StaticLoading} from 'components/common/loading';
 import {CardItem,Menu} from 'components/main';
 //redux
+import * as modalActions from 'redux/modal';
 import * as httpRequest from 'redux/helper/httpRequest';
 import * as motionActions from 'redux/main';
 import * as postsActions from 'redux/posts';
@@ -26,6 +27,7 @@ class Main extends Component {
             loadingState: false,
             menuOpen:false
         };
+        
     }
     componentDidMount(){     
         const{get,data,motion}=this.props;
@@ -52,8 +54,9 @@ class Main extends Component {
         }
         
     }
-    componentDidUpdate(prevProps){
-        const{get,motionDispatch,postsDispatch}=this.props;
+    componentDidUpdate(prevProps,prevState){
+        const {menuOpen}=this.state;
+        const{get,motionDispatch,motion}=this.props;
         const locationDataChanged = prevProps.match.params.category !== this.props.match.params.category;
         const locationChanged = prevProps.location !== this.props.location;
         if(locationChanged){    
@@ -69,11 +72,11 @@ class Main extends Component {
             });            
         }
         if(prevProps.data!==this.props.data){
-            this.dimensions();
+            this.dimensions();    
         }
     }
     //setting response size
-    dimensions=(eleW=400,eleH=430,iPd=22,wPd=70)=>{     
+    dimensions=()=>{     
         const {motion,dataState,data}=this.props;
         let active = motion.active;          
         let md = new MobileDetect(window.navigator.userAgent);
@@ -84,12 +87,13 @@ class Main extends Component {
             window.addEventListener('mousemove',this.handleMove);
             window.addEventListener('mouseup',this.handleUp);
         }
-        const wrapperPd=wPd;//full width padding
-        const itemPd=iPd;//card item padding
-        const eleWidth=eleW;//card item width
-        const eleHeight=eleH;//card item height 
+        const wrapperPd=motion.wrapperPd;//full width padding
+        const itemPd=motion.itemPd;//card item padding
+        const eleWidth=motion.eleWidth;//card item width
+        const eleHeight=motion.eleHeight;//card item height 
         //full width
         let wrapperWidth=this.wrapperWidth.clientWidth-wrapperPd*2;
+        
         //contents width
         const blockWidth=data.length*eleWidth;  
         //possible width to scroll
@@ -128,7 +132,6 @@ class Main extends Component {
         //when scrolling less than elewidth, data load old posts
         if(max-offsetX<eleWidth){
             if(!this.state.loadingState && max!==0){
-                console.log('old')
                 this.loadOldPosts();
                 this.setState({
                     loadingState: true
@@ -217,7 +220,13 @@ class Main extends Component {
             // get load posts
             let lastId = data[data.length - 1]._id;
             // start request
-            return get.getOldPost('POSTS/OLD_GET','old', lastId);
+            return get.getOldPost({
+                type:'POSTS/OLD_GET',
+                category:this.props.match.params.category,
+                listType:'old', 
+                id:lastId,
+                
+            });
         }
     }
     handleUp=(e)=>{
@@ -238,6 +247,7 @@ class Main extends Component {
                 isPressed:false,
                 offsetX:mouseX,
                 active:Math.round(mouseX/eleWidth),
+                deltaX:0
             }
         });
     }
@@ -245,12 +255,14 @@ class Main extends Component {
         this.handleUp();
     }
     handleMouseOver=(i)=>{
-        const {motionDispatch}=this.props;
-        motionDispatch.motionActions({
-            motions:{
-                active:i
-            }
-        });
+        const {motion,motionDispatch}=this.props;
+        if(motion.active!==i){
+            motionDispatch.motionActions({
+                motions:{
+                    active:i
+                }
+            });
+        }
 
     }
     handleMouseOut=()=>{
@@ -273,21 +285,37 @@ class Main extends Component {
             this.props.history.push(`/posts/motionlab/${id}`);            
         }       
     }
-    favClick=(i,e)=>{
+    favClick=(postId,i,e)=>{
         e.stopPropagation();
-        const {motion}=this.props; 
+        const {get,authUser,modalView}=this.props;
+        if(!authUser.isLogin){
+            modalView.openModal({
+                modalName:'login'
+              });
+        }else{
+            get.saveStar({   
+                postId:postId,
+                index:i,
+                type:'POSTS/STAR_SAVE'
+            });
+        }
+        
     }
     menuOpen=()=>{     
+        const {menuOpen}=this.state;
         this.setState({
             menuOpen:!this.state.menuOpen
         });
         setTimeout(function(){ 
-           this.dimensions(400,430,22,0); 
+            this.dimensions();
         }.bind(this), 400);
+
         
     }
     menuClose=()=>{
-
+        setTimeout(function(){ 
+            this.dimensions(); 
+        }.bind(this), 400);
     }
     getStyles=(prev)=>{
         const{data,motion,dataState}=this.props;
@@ -349,20 +377,24 @@ class Main extends Component {
         const {menuOpen}=this.state;
         const {motion,authUser,data,loading,dataState,oldLoading}=this.props;
         const {isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,max,scrollWidth,indicator} = motion;
-        const style=(isPressed)?{x:offsetX}:{x:spring(offsetX)}
-        return (
-            
-            <div className="main-container">   
+        const style=(isPressed)?{x:offsetX}:{x:spring(offsetX)};
+               
+        return (     
+            <div>   
                 <Menu open={menuOpen} linkLoading={loading}/>
                 <Motion style={style}>
                     {({x,barX})=>
-                    <div ref={(ref)=>{this.wrapperWidth=ref}} 
-                        className={(menuOpen)?`main-wrapper menu`:`main-wrapper`} 
+                    <div className="main-container"
                         onTouchStart={this.handleDown.bind(null,x)} 
                         onMouseDown={this.handleDown.bind(null,x)} 
                         onWheel={this.handleWheel.bind(null,x)}
+                    > 
+                    <div ref={(ref)=>{this.wrapperWidth=ref}} 
+                        className={(menuOpen)?`main-wrapper menu`:`main-wrapper`} 
+                        
                         style={{
-                            padding:`0px ${wrapperPd}px`
+                            padding:`0px ${wrapperPd}px`,
+                            left:(menuOpen)?`${250}px`:0
                         }}
                         >
                         <div className="title-wrap">
@@ -384,7 +416,6 @@ class Main extends Component {
                         <div className="card-item-wrap" 
                             style={{
                                 transform:`translate3d(${-x}px,0,0)`,
-                                minWidth:`calc(100% - ${wrapperPd*2}px)`
                                 }}>
                                 <TransitionMotion
                                 willEnter={this.willEnter}
@@ -395,12 +426,13 @@ class Main extends Component {
                                     return(
                                     <div>
                                     {currentStyles.map((config, i) =>{
+                                        let isFav = (config.data.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
                                         return(
                                         <CardItem key={config.key} 
                                             onMouseUp={this.itemUp.bind(null,config.data._id,i)}
-                                            favClick={this.favClick.bind(null,i)}
-                                            fav={false}
-                                            favCount={25}
+                                            favClick={this.favClick.bind(null,config.data._id,i)}
+                                            fav={isFav}
+                                            favCount={(config.data.starred.length==='')?0:config.data.starred.length}
                                             onMouseOver={this.handleMouseOver.bind(null,i)} 
                                             onMouseOut={this.handleMouseOut}
                                             category={config.data.category}
@@ -445,6 +477,7 @@ class Main extends Component {
                             
                         </div>
                     </div>
+                    </div>
                     }
                 </Motion>
             </div>
@@ -461,11 +494,13 @@ export default connect(
         oldLoading:state.posts.toJS().listData.oldPosts.pending,
         oldDataState:state.posts.toJS().listData.oldPosts.state,
         isLast:state.posts.toJS().listData.lastPosts,
-        error:state.posts.toJS().listData.error,
+        starState:state.posts.toJS().listData.starred,
         data:state.posts.toJS().listData.data
     }),
     (dispatch)=>({
         motionDispatch:bindActionCreators(motionActions,dispatch),
         get:bindActionCreators(httpRequest,dispatch),
+        modalView:bindActionCreators(modalActions,dispatch),
+        
     })
 )(Main);

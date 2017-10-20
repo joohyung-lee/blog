@@ -47,7 +47,7 @@ router.get('/:category',(req,res)=>{
             res.json(posts);
         });
     }else{
-    Post.find({category:req.params.category},{"body":false}) 
+    Post.find({category:category},{"body":false}) 
         .sort({"_id": -1})
         .limit(6)
         .exec((err, posts) => {
@@ -57,7 +57,8 @@ router.get('/:category',(req,res)=>{
     }
 })
 //load old posts
-router.get('/:listType/:id', (req, res) => {
+router.get('/:category/:listType/:id', (req, res) => {
+    let category = req.params.category;
     let listType = req.params.listType;
     let id = req.params.id;
 
@@ -76,9 +77,9 @@ router.get('/:listType/:id', (req, res) => {
         });
     }
     let objId = new mongoose.Types.ObjectId(req.params.id);
-    if(listType === 'new') {
+    if(category === 'main') {
         // get new posts
-        Post.find({ _id: { $gt: objId }})
+        Post.find({ _id: { $lt: objId }})
         .sort({_id: -1})
         .limit(6)
         .exec((err, posts) => {
@@ -86,8 +87,9 @@ router.get('/:listType/:id', (req, res) => {
             return res.json(posts);
         });
     } else {
+        
         // get old posts
-        Post.find({ _id: { $lt: objId }})
+        Post.find({ $and:[{_id:{ $lt: objId }},{category: category}]})
         .sort({_id: -1})
         .limit(6)
         .exec((err, posts) => {
@@ -182,5 +184,59 @@ router.delete('/:id', function (req, res) {
         res.status(404).end();
     });
 });
+// GIVE STAR
+router.post('/star/:id', (req, res) => {
+    // CHECK MEMO ID VALIDITY
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({
+            error: "INVALID ID",
+            code: 1
+        });
+    }
 
+    // CHECK LOGIN STATUS
+
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
+        return res.status(403).json({
+            error: "NOT LOGGED IN",
+            code: 2
+        });
+    }
+
+    // POST POST
+    Post.findById(req.params.id, (err, post) => {
+        if(err) throw err;
+
+        // POST DOES NOT EXIST
+        if(!post) {
+            return res.status(404).json({
+                error: "NO RESOURCE",
+                code: 3
+            });
+        }
+
+        // GET INDEX OF USERNAME IN THE ARRAY
+        let index = post.starred.indexOf(req.session.passport.user.userName);
+
+        // CHECK WHETHER THE USER ALREADY HAS GIVEN A STAR
+        let hasStarred = (index === -1) ? false : true;
+
+        if(!hasStarred) {
+            // IF IT DOES NOT EXIST
+            post.starred.push(req.session.passport.user.userName);
+        } else {
+            // ALREADY starred
+            post.starred.splice(index, 1);
+        }
+
+        // SAVE THE post
+        post.save((err, post) => {
+            if(err) throw err;
+            res.json({
+                'has_starred': !hasStarred,
+                post,
+            });
+        });
+    });
+});
 module.exports = router;

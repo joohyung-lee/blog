@@ -7,7 +7,6 @@ const MOTION= 'MAIN/MOTION';
 //액션생성자
 export const motionActions = createAction(MOTION);
 
-
 //초기화
 const initialState=Map({
     motions:Map({
@@ -21,10 +20,10 @@ const initialState=Map({
         offsetX:0,
         relative:0,
         active:0,
-        eleWidth:0,
-        eleHeight:0,
-        wrapperPd:0,
-        itemPd:0,
+        eleWidth:400,
+        eleHeight:430,
+        wrapperPd:70,
+        itemPd:22,
         innerWidth:window.innerWidth,
         innerHeight:window.innerHeight,
 

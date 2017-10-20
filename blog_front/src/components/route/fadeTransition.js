@@ -4,10 +4,13 @@ import PropTypes from 'prop-types';
 import Transition from 'react-transition-group/Transition';
 
 import CSSTransition from 'react-transition-group/CSSTransition';
-const duration = 500;
+const duration = 400;
 
 const defaultStyle = {
-  transition: `opacity ${duration}ms ease-in-out`,
+  position:`absolute`,
+  left:0,
+  top:0,
+  transition: `opacity ${duration}ms ease`,
   opacity: 0,
 }
 

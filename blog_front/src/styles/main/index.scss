@@ -11,12 +11,14 @@
     position: absolute;
     left:0;
     top:0;
-    width:300px;
+    width:330px;
     height:100%;
-    z-index: 9999;
-    user-select: none;
+    z-index: 7000;
+    background: -moz-linear-gradient(left, rgba(241,241,241,1) 40px,rgba(241,241,241,0.87) 40%, rgba(241,241,241,0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(241,241,241,1) 40px,rgba(241,241,241,0.87) 40%,rgba(241,241,241,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(241,241,241,1) 40px,rgba(241, 241, 241, 0.87) 40%,rgba(241,241,241,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */    
     ul{
-        margin-top:20vh;
+        margin-top:16vh;
         li{
             .disabled{
                 color:$t-black-4;
@@ -40,16 +42,16 @@
 }
 .main-wrapper{
     position: absolute;
-    top:0px;
+    top:16vh;
     right:0;
     bottom:0;
     left:0;
     padding:0 70px;
-    transform-origin: left center 0;
-    transition:left 0.4s,transform 0.3s ease-in-out;
+    transform-origin: left top 0;
+    transition:all 0.4s cubic-bezier(0.17, 0.57, 0.36, 1);
     .title-wrap{
         position: relative;
-        top:10vh;
+        top:0;
         padding:0 20px;
         .menu-title{
             position: relative;
@@ -98,8 +100,8 @@
                     width:23px;
                     height:1px;
                     background-color:$c-black-0;
-                    transform-origin: left center;
-                    transition: all 0.5s ease;
+                    transform-origin: left top;
+                    transition: all 0.5s ease-out;
                     
                     &:nth-child(2){
                         top:6px;
@@ -135,7 +137,7 @@
     }
     .card-item-wrap{
         position: absolute;
-        top:20vh;
+        top:8vh;
         white-space: nowrap;
         >div{
             transform-style: preserve-3d;
@@ -186,18 +188,7 @@
                         
                     }
                 }
-                .fav-info{
-                    position: absolute;
-                    top:10px;
-                    right:50px;
-                    .count{
-                        font-weight: bold;
-                        margin-right:6px;
-                    }
-                    span{
-                        color:$t-white-10
-                    }
-                }
+                
             }
             .card-item-box{
                 position: absolute;
@@ -210,6 +201,18 @@
                 cursor: pointer;
                 &:hover{
                     
+                }
+                .fav-info{
+                    position: absolute;
+                    top:27px;
+                    right:30px;
+                    .count{
+                        font-weight: bold;
+                        margin-right:6px;
+                    }
+                    span{
+                        color:$t-white-10
+                    }
                 }
                 
             }
