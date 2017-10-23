@@ -102,8 +102,9 @@ class Main extends Component {
         }
         const wrapperPd=70;//full width padding
         const itemPd=22;//card item padding
-        const eleWidth=400;//card item width
-        const eleHeight=430;//card item height 
+        const eleResponse=window.innerWidth/3.5;
+        const eleWidth=(eleResponse>420)?420:(eleResponse<300)?300:eleResponse;//card item width
+        const eleHeight=eleWidth*1.15;//card item height 
         //full width
         let wrapperWidth=this.wrapperWidth.clientWidth-wrapperPd*2;
         
