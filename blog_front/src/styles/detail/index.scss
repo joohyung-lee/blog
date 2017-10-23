@@ -3,7 +3,12 @@
   background-color:#ccc;  
   transition: height 0.5s;
 }
+.detail-page-wrap{
+    &>div{
+        background-color:#fff;
+    }
 
+}
 .detail-wrap{
     padding:20px;
     .detail-content{

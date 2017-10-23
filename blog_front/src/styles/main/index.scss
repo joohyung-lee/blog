@@ -198,9 +198,20 @@
                 background-repeat: no-repeat;
                 background-size:cover;
                 background-position: center;
+                overflow: hidden;
+                transition: all .4s ease;
                 cursor: pointer;
-                &:hover{
-                    
+                &:before{
+                    content: "";
+                    position: absolute;
+                    top:0;
+                    right:0;
+                    bottom:0;
+                    left:0;
+                    background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 100%); /* FF3.6-15 */
+                    background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 50%,rgba(0,0,0,0.5) 100%); /* Chrome10-25,Safari5.1-6 */
+                    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 50%,rgba(0,0,0,0.5) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
                 }
                 .fav-info{
                     position: absolute;
@@ -221,7 +232,7 @@
                 width: 100%;
                 bottom:0;
                 left:0;
-                padding:0 20px 55px 20px;
+                padding:0 20px 50px 20px;
                 .post-meta{
                     span{
                         font-size: 0.9rem;
@@ -269,6 +280,12 @@
                 padding:0 22px;
                 white-space: normal;
                 word-break: keep-all;
+                h3{
+                    font-size:1.3rem;
+                    font-weight: 400;
+                    color:$c-black-1;
+                    margin-bottom:10px;
+                }
                 p{
                     color:$c-black-1;
                 }
@@ -278,7 +295,7 @@
             transform: translate3d(0,0px,0);
             
             .card-item-box{
-                box-shadow: 0 0 20px 0 rgba(0,0,0,0.6);
+                box-shadow: 0 0 40px 0 rgba(0,0,0,0.4);
             }
         }
     }

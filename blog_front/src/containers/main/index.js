@@ -23,15 +23,21 @@ const springSetting = {stiffness: 300, damping: 30};
 class Main extends Component {
     constructor(props){
         super(props);
+        const{motion}=this.props;
         this.state = {
             loadingState: false,
-            menuOpen:false
+            menuOpen:false,
+            motionState:{
+                isPressed:false,
+                min:0,
+                offsetX:0,
+                active:0
+            }
         };
         
     }
     componentDidMount(){     
         const{get,data,motion}=this.props;
-        
         //if data is exist it will load previous data
         if(!motion.detailView){
             get.getCategoryPost('POSTS/GET',this.props.match.params.category);
@@ -56,19 +62,25 @@ class Main extends Component {
     }
     componentDidUpdate(prevProps,prevState){
         const {menuOpen}=this.state;
-        const{get,motionDispatch,motion}=this.props;
+        const{get,motionDispatch}=this.props;
         const locationDataChanged = prevProps.match.params.category !== this.props.match.params.category;
         const locationChanged = prevProps.location !== this.props.location;
         if(locationChanged){    
             get.getCategoryPost('POSTS/GET',this.props.match.params.category);
             motionDispatch.motionActions({
                 motions:{
+                    detailView:false,
                     offsetX:0,
-                    detailView:false
+                    active:0
                 }
             });
             this.setState({
-                loadingState: false
+                loadingState: false,
+                motionState:{
+                    ...this.state.motionState,
+                    offsetX:0,
+                    active:0
+                }
             });            
         }
         if(prevProps.data!==this.props.data){
@@ -77,7 +89,8 @@ class Main extends Component {
     }
     //setting response size
     dimensions=()=>{     
-        const {motion,dataState,data}=this.props;
+        const {motion,data}=this.props;
+        const{motionState}=this.state;
         let active = motion.active;          
         let md = new MobileDetect(window.navigator.userAgent);
         if(md.mobile()){
@@ -87,10 +100,10 @@ class Main extends Component {
             window.addEventListener('mousemove',this.handleMove);
             window.addEventListener('mouseup',this.handleUp);
         }
-        const wrapperPd=motion.wrapperPd;//full width padding
-        const itemPd=motion.itemPd;//card item padding
-        const eleWidth=motion.eleWidth;//card item width
-        const eleHeight=motion.eleHeight;//card item height 
+        const wrapperPd=70;//full width padding
+        const itemPd=22;//card item padding
+        const eleWidth=400;//card item width
+        const eleHeight=430;//card item height 
         //full width
         let wrapperWidth=this.wrapperWidth.clientWidth-wrapperPd*2;
         
@@ -99,14 +112,14 @@ class Main extends Component {
         //possible width to scroll
         const maxScrollWidth=(blockWidth-wrapperWidth<0)?0:blockWidth-wrapperWidth;   
         //moved scroll
-        let offsetX=motion.offsetX;
-        offsetX=offsetX>maxScrollWidth?maxScrollWidth:offsetX<0?0:offsetX;
+        let offset=motionState.offsetX;
+        offset=offset>maxScrollWidth?maxScrollWidth:offset<0?0:offset;
         
         //dispatch motions to redux
-        const {motionDispatch}=this.props;
         const indicator=(maxScrollWidth<this.scrollWidth.clientWidth)?this.scrollWidth.clientWidth-maxScrollWidth:0
-        motionDispatch.motionActions({
-            motions:{     
+        this.setState({     
+            motionState:{
+                ...this.state.motionState,
                 isPressed:false,
                 blockWidth:blockWidth,
                 max:maxScrollWidth,//possible width to scroll
@@ -117,16 +130,15 @@ class Main extends Component {
                 relative:this.scrollWidth.clientWidth/(maxScrollWidth+indicator),
                 wrapperPd:wrapperPd,//full width padding
                 itemPd:itemPd,//card item padding
-                offsetX:offsetX,//moved scroll
+                offsetX:offset,//moved scroll
                 active:active//card index
             }
-        });
+        })
     }
     handleWheel=(pos,e)=>{
         e.preventDefault();
         e.stopPropagation();
-        const{motion}=this.props;
-        const {min,max,eleWidth,offsetX,active} = motion;
+        const {min,max,eleWidth,offsetX} = this.state.motionState;
         e.deltaX=e.deltaY;
         let mouseX=offsetX+e.deltaX;
         //when scrolling less than elewidth, data load old posts
@@ -151,9 +163,9 @@ class Main extends Component {
         }else{
             mouseX=offsetX+e.deltaX;
         }
-        const {motionDispatch}=this.props;
-        motionDispatch.motionActions({
-            motions:{
+        this.setState({
+            motionState:{
+                ...this.state.motionState,                
                 offsetX:mouseX,
                 active:Math.round(mouseX/eleWidth)
             }
@@ -162,24 +174,26 @@ class Main extends Component {
     }
     handleDown=(pos,e)=>{
         let event=(e.type=='mousedown')?e:(e.type=='touchstart')?e.touches[0]:e;
-        const {motionDispatch}=this.props;
-        motionDispatch.motionActions({
-            motions:{
-                isPressed:true,
-                startX:event.pageX,
-                posX:event.pageX,
-                offsetX:pos,
-                deltaX:0,
-                indicatorX:pos,
-            }
-        });
+            this.setState({
+                motionState:{
+                    ...this.state.motionState,                    
+                    isPressed:true,
+                    startX:event.pageX,
+                    posX:event.pageX,
+                    offsetX:pos,
+                    deltaX:0,
+                    indicatorX:pos,
+                }
+            })
     }
     
     handleMove=(e)=>{  
         let event=(e.type=='mousemove')?e:(e.type=='touchmove')?e.touches[0]:e; 
         const{motion,data}=this.props;   
-        const {min,max,posX,isPressed,eleWidth,offsetX} = motion;       
+        const {max,posX,isPressed,eleWidth,offsetX,startX,active} = this.state.motionState;       
+        const distance=startX-event.pageX;
         if(isPressed){
+            let count=(Math.round(offsetX/eleWidth)<0)?0:Math.round(offsetX/eleWidth);
             //when scrolling less than elewidth, data load old posts
             if(max-offsetX<eleWidth){
                 if(!this.state.loadingState && max>0){
@@ -196,15 +210,17 @@ class Main extends Component {
                 }
             }
             const deltaX=posX-event.pageX;
-            const {motionDispatch}=this.props;
-            motionDispatch.motionActions({
-                motions:{
-                    posX:event.pageX,    
-                    deltaX:deltaX,
-                    offsetX:offsetX+deltaX,
-                    active:Math.round(offsetX/eleWidth),
-                }
-            });   
+            if (deltaX > 2 || deltaX < -2) {
+                this.setState({
+                    motionState:{
+                        ...this.state.motionState,                    
+                        posX:event.pageX,    
+                        deltaX:deltaX,
+                        offsetX:offsetX+deltaX,
+                        active:(Math.abs(distance) > 20)?count:active,
+                    }
+                })
+            }
         }
     }
     loadOldPosts=()=>{
@@ -230,8 +246,8 @@ class Main extends Component {
         }
     }
     handleUp=(e)=>{
-        const{motion,data}=this.props;   
-        const {min,max,eleWidth,offsetX,deltaX} = motion;   
+        const{motionDispatch}=this.props;   
+        const {min,max,eleWidth,offsetX,deltaX} = this.state.motionState;   
         const accel=offsetX+(deltaX*4.2);
         let mouseX;
         if(accel>max){
@@ -241,52 +257,62 @@ class Main extends Component {
         }else{
             mouseX=accel;
         }
-        const {motionDispatch}=this.props;
-        motionDispatch.motionActions({
-            motions:{
+        this.setState({
+            motionState:{
+                ...this.state.motionState,                
                 isPressed:false,
                 offsetX:mouseX,
-                active:Math.round(mouseX/eleWidth),
                 deltaX:0
             }
         });
     }
-    handleTouchUp=(e)=>{
-        this.handleUp();
-    }
-    handleMouseOver=(i)=>{
-        const {motion,motionDispatch}=this.props;
-        if(motion.active!==i){
-            motionDispatch.motionActions({
-                motions:{
-                    active:i
-                }
-            });
-        }
-
-    }
-    handleMouseOut=()=>{
-        const {motion}=this.props;
-        const {eleWidth,offsetX} = motion;
-    }
-
     itemUp=(id,i,e)=>{
         let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.touches[0]:e; 
         const {motion,motionDispatch}=this.props;
-        const {offsetX,eleWidth,wrapperPd,itemPd,startX,excClick}=motion;
+        const {offsetX,eleWidth,wrapperPd,itemPd,startX}=this.state.motionState;
         const distance=startX-event.pageX;
         if(Math.abs(distance) < 20){
+            this.setState({
+                motionState:{
+                    ...this.state.motionState,                    
+                    offsetX:offsetX
+                }
+            })
             motionDispatch.motionActions({
                 motions:{
                     active:i,
                     detailView:true,
+                    offsetX:offsetX
                 }
             });
             this.props.history.push(`/posts/motionlab/${id}`);            
         }       
     }
+    handleTouchUp=(e)=>{
+        this.handleUp();
+    }
+    handleMouseOver=(i,e)=>{
+        const{active}=this.state.motionState;
+        this.setState({
+            motionState:{
+                ...this.state.motionState,                    
+                active:i,
+            }
+        })
+    }
+    handleMouseOut=()=>{
+        const {motion}=this.props;
+        const {eleWidth,offsetX} = motion;
+    }
+    
     favClick=(postId,i,e)=>{
         e.stopPropagation();
+        const {motionDispatch}=this.props;        
+        motionDispatch.motionActions({
+            motions:{
+                active:i,
+            }
+        });
         const {get,authUser,modalView}=this.props;
         if(!authUser.isLogin){
             modalView.openModal({
@@ -308,9 +334,7 @@ class Main extends Component {
         });
         setTimeout(function(){ 
             this.dimensions();
-        }.bind(this), 400);
-
-        
+        }.bind(this), 400);  
     }
     menuClose=()=>{
         setTimeout(function(){ 
@@ -319,8 +343,13 @@ class Main extends Component {
     }
     getStyles=(prev)=>{
         const{data,motion,dataState}=this.props;
-        const {eleWidth,detailView} = motion;
+        const{eleWidth,active,distance,offsetX,deltaX}=this.state.motionState;
+        const {detailView} = motion;
+        
         if(dataState==="success" || detailView===true){
+            // let num=offsetX/eleWidth-Math.floor(offsetX/eleWidth);
+            // let count=Number((num=num.toString()).substring(0, num.indexOf('.')+3));    
+            // let dir = (deltaX > 0) ? 1 : 1; 
             return data.map((item, i) => {
                 if(i===0){
                     return{
@@ -328,10 +357,10 @@ class Main extends Component {
                         data:item,
                         style: {
                             size:eleWidth*i,
-                            opacity:spring(1),
+                            opacity:spring((i===active)?1:0.9),
+                            scale:spring((i===active)?1.07:1),
                             sizeX:spring(0),
                             sizeY:spring(0),
-                            scale:spring(1),
                             rotate:spring(0)
                         },
                     }
@@ -341,8 +370,8 @@ class Main extends Component {
                         data:item,
                         style: {
                             size:eleWidth*i,
-                            opacity:spring(1),
-                            scale:spring(1),
+                            opacity:spring((i===active)?1:0.9),
+                            scale:spring((i===active)?1.07:1),
                             sizeX:spring((typeof prev==="undefined")?0:(typeof prev[i]!=="undefined")?prev[i-1].style.sizeX:0),
                             sizeY:spring((typeof prev==="undefined")?0:(typeof prev[i]!=="undefined")?prev[i-1].style.sizeY:0),
                             rotate:spring((typeof prev==="undefined")?0:(typeof prev[i]!=="undefined")?prev[i-1].style.rotate:0)
@@ -374,16 +403,20 @@ class Main extends Component {
         }
     }
     render() { 
+       
         const {menuOpen}=this.state;
         const {motion,authUser,data,loading,dataState,oldLoading}=this.props;
-        const {isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,max,scrollWidth,indicator} = motion;
-        const style=(isPressed)?{x:offsetX}:{x:spring(offsetX)};
-               
+        const {isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator,distance} = this.state.motionState;
+        const style=(isPressed)?{
+                x:offsetX,
+            }:{
+                x:spring(offsetX)
+            };
         return (     
             <div>   
                 <Menu open={menuOpen} linkLoading={loading}/>
                 <Motion style={style}>
-                    {({x,barX})=>
+                    {({x,scale})=>
                     <div className="main-container"
                         onTouchStart={this.handleDown.bind(null,x)} 
                         onMouseDown={this.handleDown.bind(null,x)} 
@@ -433,6 +466,7 @@ class Main extends Component {
                                             favClick={this.favClick.bind(null,config.data._id,i)}
                                             fav={isFav}
                                             favCount={(config.data.starred.length==='')?0:config.data.starred.length}
+                                            favOver={this.handleMouseOver.bind(null,i)}
                                             onMouseOver={this.handleMouseOver.bind(null,i)} 
                                             onMouseOut={this.handleMouseOut}
                                             category={config.data.category}
@@ -441,7 +475,7 @@ class Main extends Component {
                                             author={config.data.author}
                                             userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}
                                             summary={config.data.summary}
-                                            className={motion.active===i?"card-item hover":"card-item"}
+                                            className={active===i?"card-item hover":"card-item"}
                                             wrapStyle={{
                                                 width:`${eleWidth}px`,
                                                 height:`${eleHeight}px`,

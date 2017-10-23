@@ -32,7 +32,7 @@ class CardItem extends Component {
                     </div>
                 </div>
                 <div className="fav-wrap">
-                    <span onClick={this.props.favClick}  className={(this.props.fav)?'icon-fav active':'icon-fav'}>
+                    <span onClick={this.props.favClick} onMouseOver={this.props.favOver} className={(this.props.fav)?'icon-fav active':'icon-fav'}>
                         <IconFav/>
                     </span>
                 </div>

@@ -48,7 +48,7 @@ class App extends Component {
     const locationChanged = nextProps.location !== this.props.location;
     const {modalView,motionDispatch}=this.props;
     let detail=/(main|motionlab|project|review|posts)/;
-    let isDetail = detail.test(this.props.location.pathname);
+    let isDetail = detail.test(nextProps.location.pathname);
     if(locationChanged){    
       if(!isDetail){
         motionDispatch.motionActions({
@@ -78,7 +78,11 @@ class App extends Component {
       damping: 26,
     });
   }
-  
+  mainMapStyles(styles) {
+    return {
+      transform: `translateY(${styles.offsetY}px) scale(${styles.scale})`,
+    };
+  }
   pageMapStyles(styles) {
     return {
       opacity: styles.opacity,
@@ -102,12 +106,18 @@ class App extends Component {
     const pageTransitions = {
       atEnter: {
         opacity :0,
+        offsetY: 70,
+        scale:0.95
       },
       atLeave: {
         opacity: this.fade(0),
+        offsetY: this.fade(70),
+        scale:this.fade(0.95)
       },
       atActive: {
         opacity: this.fade(1),
+        offsetY: this.fade(0),
+        scale:this.fade(1)
       },
     };
     const detailLayer = {
@@ -133,7 +143,7 @@ class App extends Component {
                 <AnimatedSwitch
                   className="page-wrap"
                   {...pageTransitions}             
-                  mapStyles={this.pageMapStyles}
+                  mapStyles={(motion.detailView)?this.mainMapStyles:this.pageMapStyles}
                 >  
                   <Route exact path="/:category" component={Main}/> 
                   <Route exact path="/posts/:category/:postId"/> 
