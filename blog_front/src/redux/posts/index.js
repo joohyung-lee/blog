@@ -5,6 +5,8 @@ import { Map,List ,fromJS} from 'immutable';
 
 //액션
 const POSTS_GET='POSTS/GET';
+const POSTS_DELETE='POSTS/DELETE';
+const POSTS_CATEGORY_GET='POSTS/CATEGORY_GET';
 const POSTS_OLD_GET='POSTS/OLD_GET';
 const POSTS_SINGLE_GET='POSTS/SINGLE_GET';
 const POSTS_STAR_SAVE='POSTS/STAR_SAVE';
@@ -18,6 +20,9 @@ const initialState=Map({
         error: false,
         state:'',
         lastPosts:false,
+        page:1,
+        pages:List([]),
+        total:1,
         data: List([]),
         starred:Map({
             pending: false,
@@ -28,7 +33,12 @@ const initialState=Map({
             pending: false,
             error: -1,
             state:'',
-        })
+        }),
+        delPosts:Map({
+            pending: false,
+            error: -1,
+            state:'',
+        }),
     }),
     itemData:Map({
         pending: false,
@@ -40,9 +50,36 @@ const initialState=Map({
 })
 //리듀서
 export default handleActions({
-    //포스트 리스트 불러오기
+    //load all posts
     ...pending({
         type:POSTS_GET,
+        name:['listData'],
+        successResult:(state,action)=>{
+            const {data}=action.payload;
+            let pages=[];
+            for(let i=0; i< data.pages; i++){
+                pages.push(i)
+            }
+            return state.setIn(['listData','data'],data.docs)
+                        .setIn(['listData','page'],Number(data.page)) 
+                        .setIn(['listData','pages'],pages) 
+                        .setIn(['listData','total'],data.total)                      
+        }
+    }),
+    //delete post
+    ...pending({
+        type:POSTS_DELETE,
+        name:['listData','delPosts'],
+        successResult:(state,action)=>{
+            const {index}=action.payload;
+            const postsArr = fromJS(state.getIn(['listData','data']));
+            return state.setIn(['listData','data'],postsArr.splice(index,1))
+                
+        }
+    }),
+    //load category posts
+    ...pending({
+        type:POSTS_CATEGORY_GET,
         name:['listData'],
         successResult:(state,action)=>{
             const {data}=action.payload;

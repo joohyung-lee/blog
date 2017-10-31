@@ -10,9 +10,12 @@ export const motionActions = createAction(MOTION);
 //초기화
 const initialState=Map({
     motions:Map({
+        isPressed:false,
         detailView:false,
+        min:0,
         offsetX:0,
         active:0,
+        locationState:false
     })
 })
 

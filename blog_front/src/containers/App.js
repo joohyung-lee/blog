@@ -13,9 +13,8 @@ import {FadeTransition,DetailTransition,RouterMotion,DetailMotion} from 'compone
 //containers
 import {RedirectLogin} from 'components/loginPopup';
 import {Profile} from 'containers/mypage';
-import AdminMain from 'containers/admin/';
+import AdminMain from 'containers/admin';
 import Write from 'containers/admin/write';
-import Posts from 'containers/admin/posts';
 import Header from 'containers/header';
 import Main from 'containers/main';
 import {DetailView} from 'containers/detail';
@@ -27,6 +26,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as commonAction from 'redux/common';
 import * as motionActions from 'redux/main';
+
+//font
+import FontFaceObserver from 'fontfaceobserver';
+var font = new FontFaceObserver('Roboto');
+
+font.load().then(function () {
+  console.log('fonts has loaded.');
+});
 
 class App extends Component {
   constructor(props){
@@ -53,7 +60,6 @@ class App extends Component {
       if(!isDetail){
         motionDispatch.motionActions({
           motions:{
-              offsetX:0,
               detailView:false
           }
         });
@@ -80,7 +86,7 @@ class App extends Component {
   }
   mainMapStyles(styles) {
     return {
-      transform: `translateY(${styles.offsetY}px) scale(${styles.scale})`,
+      transform: `translateY(${styles.offsetY}px)`,
     };
   }
   pageMapStyles(styles) {
@@ -106,12 +112,12 @@ class App extends Component {
     const pageTransitions = {
       atEnter: {
         opacity :0,
-        offsetY: 70,
+        offsetY: 80,
         scale:0.95
       },
       atLeave: {
         opacity: this.fade(0),
-        offsetY: this.fade(70),
+        offsetY: this.fade(80),
         scale:this.fade(0.95)
       },
       atActive: {
@@ -147,9 +153,9 @@ class App extends Component {
                 >  
                   <Route exact path="/:category" component={Main}/> 
                   <Route exact path="/posts/:category/:postId"/> 
-                  <Route exact path="/admin" component={AdminMain}/>
-                  <Route path="/admin/posts/:id" component={Posts}/>
+                  <Route exact path="/admin/posts" component={AdminMain}/>
                   <Route exact path="/admin/write" component={Write}/>
+                  <Route exact path="/admin/write/:id" component={Write}/>
                   <Route path="/auth/loginPopup/:name" component={RedirectLogin}/>
                   <Route path="/mypage/profile" component={Profile}/>
                   

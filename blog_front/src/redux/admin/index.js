@@ -1,17 +1,19 @@
 import { handleActions, createAction } from 'redux-actions';
 import axios from 'axios';
 import {pending} from 'redux/helper/pending'
-import { Map,List } from 'immutable';
+import { Map,List,fromJS } from 'immutable';
 
 //액션
 const ADMIN_TITLE_WRITE = 'ADMIN/ADMIN_TITLE_WRITE';
 const ADMIN_SUMMARY_WRITE = 'ADMIN/ADMIN_SUMMARY_WRITE';
 const ADMIN_POST_WRITE = 'ADMIN/ADMIN_POST_WRITE';
+const ADMIN_BGCOLOR_WRITE = 'ADMIN/ADMIN_BGCOLOR_WRITE';
 const ADMIN_IFRAMEURL_WRITE = 'ADMIN/ADMIN_IFRAMEURL_WRITE';
 const ADMIN_CATEGORY_WRITE = 'ADMIN/ADMIN_CATEGORY_WRITE';
 const ADMIN_TAGS_WRITE = 'ADMIN/ADMIN_TAGS_WRITE';
 const ADMIN_TAGS_DELETE = 'ADMIN/ADMIN_TAGS_DELETE';
 
+const ADMIN_SINGLE_GET='ADMIN/ADMIN_SINGLE_GET';
 const ADMIN_MODIFY = 'ADMIN/ADMIN_MODIFY';
 const ADMIN_DELETE = 'ADMIN/ADMIN_DELETE';
 const ADMIN_POST='ADMIN/POST';
@@ -19,12 +21,15 @@ const ADMIN_POST='ADMIN/POST';
 //이미지 업로드 액션
 const ADMIN_THUMB_UPLOAD='ADMIN/THUMB_UPLOAD';
 const ADMIN_THUMB_DELETE='ADMIN/THUMB_DELETE';
+const ADMIN_GIF_UPLOAD='ADMIN/GIF_UPLOAD';
+const ADMIN_GIF_DELETE='ADMIN/GIF_DELETE';
 const ADMIN_FILE_UPLOAD='ADMIN/FILE_UPLOAD';
 const ADMIN_FILE_DELETE='ADMIN/FILE_DELETE';
 
 //액션생성자
 export const titleWrite = createAction(ADMIN_TITLE_WRITE);
 export const summaryWrite = createAction(ADMIN_SUMMARY_WRITE);
+export const bgColorWrite = createAction(ADMIN_BGCOLOR_WRITE);
 export const iframeUrlWrite = createAction(ADMIN_IFRAMEURL_WRITE);
 export const postCategory = createAction(ADMIN_CATEGORY_WRITE);
 export const postTags = createAction(ADMIN_TAGS_WRITE);
@@ -34,7 +39,42 @@ export const postModify = createAction(ADMIN_MODIFY);
 
 //초기화
 const initialState=Map({
+    imageLoading:Map({
+        thumbnail:Map({
+            pending: false,
+        }),
+        gif:Map({
+            pending: false,
+        }),
+        files:Map({
+            pending: false,
+        }),
+    }),
     createData:Map({
+        pending: false,
+        error: false,
+        save:false,
+        data:Map({
+                postDate:'',
+                title:'',
+                summary:'',
+                body:'',
+                thumbnail:Map({
+                    data: Map({}),
+                }),
+                gif:Map({
+                    data: Map({}),
+                }),
+                files:Map({
+                    data: List([]),
+                }),
+                iframeUrl:'',
+                bgColor:'',
+                category:'',
+                tags:List([])
+            }),
+    }),
+    modifyData:Map({
         pending: false,
         error: false,
         data:Map({
@@ -43,99 +83,196 @@ const initialState=Map({
                 summary:'',
                 body:'',
                 thumbnail:Map({
-                    pending: false,
-                    error: false,
+                    data: Map({}),
+                }),
+                gif:Map({
                     data: Map({}),
                 }),
                 files:Map({
-                    pending: false,
-                    error: false,
                     data: List([]),
                 }),
                 iframeUrl:'',
+                bgColor:'',
                 category:'',
                 tags:List([])
             }),
     })
-    
-    
 })
 //리듀서
 export default handleActions({
     [ADMIN_TITLE_WRITE]: (state, action) => {  
-        const {title} = action.payload;
-        return state.setIn(['createData','data','title'],title)
+        const {writeType,title} = action.payload;
+        if(writeType==='write'){
+            return state.setIn(['createData','data','title'],title)
+        }else{
+            return state.setIn(['modifyData','data','title'],title)
+        }
     },
     [ADMIN_SUMMARY_WRITE]: (state, action) => {  
-        const {summary} = action.payload;
-        return state.setIn(['createData','data','summary'],summary)
+        const {writeType,summary} = action.payload;
+        if(writeType==='write'){
+            return state.setIn(['createData','data','summary'],summary)
+        }else{
+            return state.setIn(['modifyData','data','summary'],summary)
+        }
     },
     [ADMIN_POST_WRITE]: (state, action) => {  
-        const {body} = action.payload;
-        return state.setIn(['createData','data','body'],body)
+        const {writeType,body} = action.payload;
+        if(writeType==='write'){
+            return state.setIn(['createData','data','body'],body)
+        }else{
+            return state.setIn(['modifyData','data','body'],body)
+        }
+    },
+    [ADMIN_BGCOLOR_WRITE]: (state, action) => {  
+        const {writeType,bgColor} = action.payload;
+        if(writeType==='write'){
+            return state.setIn(['createData','data','bgColor'],bgColor)
+        }else{
+            return state.setIn(['modifyData','data','bgColor'],bgColor)
+        }
     },
     [ADMIN_IFRAMEURL_WRITE]: (state, action) => {  
-        const {iframeUrl} = action.payload;
-        return state.setIn(['createData','data','iframeUrl'],iframeUrl)
+        const {writeType,iframeUrl} = action.payload;
+        if(writeType==='write'){
+            return state.setIn(['createData','data','iframeUrl'],iframeUrl)
+        }else{
+            return state.setIn(['modifyData','data','iframeUrl'],iframeUrl)
+        }
     },
     [ADMIN_CATEGORY_WRITE]: (state, action) => {  
-        const {category} = action.payload;
-        return state.setIn(['createData','data','category'],category)
+        const {writeType,category} = action.payload;
+        if(writeType==='write'){
+            return state.setIn(['createData','data','category'],category)
+        }else{
+            return state.setIn(['modifyData','data','category'],category)
+        }
     },
     [ADMIN_TAGS_WRITE]: (state, action) => {  
-        const {tags} = action.payload;
-        const tagsArr = state.getIn(['createData','data','tags']);
-        return state.setIn(['createData','data','tags'],tagsArr.push(tags));
+        const {writeType,tags} = action.payload;
+        if(writeType==='write'){
+            const tagsArr = state.getIn(['createData','data','tags']);
+            return state.setIn(['createData','data','tags'],tagsArr.push(tags));
+        }else{
+            const tagsArr = state.getIn(['modifyData','data','tags']);
+            return state.setIn(['modifyData','data','tags'],tagsArr.push(tags));
+        }
     },
     [ADMIN_TAGS_DELETE]: (state, action) => {  
-        const {index} = action.payload;
-        const tagsArr = state.getIn(['createData','data','tags']);
-        return state.setIn(['createData','data','tags'],tagsArr.splice(index,1));
+        const {writeType,index} = action.payload;
+        if(writeType==='write'){
+            const tagsArr = state.getIn(['createData','data','tags']);
+            return state.setIn(['createData','data','tags'],tagsArr.splice(index,1));
+        }else{
+            const tagsArr = state.getIn(['modifyData','data','tags']);
+            return state.setIn(['modifyData','data','tags'],tagsArr.splice(index,1));
+        }
     },
-    
-    //포스트글 수정
-    [ADMIN_MODIFY]: (state, action) => {  
-        const {source,index} = action.payload;
-        return state['itemData'].data[index].set('title', source)
-    },
-    //포스트 저장
-
+    //save post
+    ...pending({
+        type:ADMIN_POST,
+        name:['createData'],
+        successResult:(state,action)=>{
+            return state.setIn(['createData','pending'],false)
+                        .setIn(['createData','data'],initialState.getIn(['createData','data']))
+                        .setIn(['createData','save'],true)
+        }
+    }),
+    //save modify post
+    ...pending({
+        type:ADMIN_MODIFY,
+        name:['modifyData'],
+        successResult:(state,action)=>{
+            return state.setIn(['modifyData','pending'],false)
+        }
+    }),
+    //수정 포스트 불러오기
+    ...pending({
+        type:ADMIN_SINGLE_GET,
+        name:['modifyData'],
+        successResult:(state,action)=>{
+            const {data}=action.payload;
+            return state.setIn(['modifyData','data'],fromJS(data[0]));
+        }
+    }),
     //썸네일 이미지 업로드
     ...pending({
         type:ADMIN_THUMB_UPLOAD,
-        name:['createData','data','thumbnail'],
+        name:['imageLoading','thumbnail'],
         successResult:(state,action)=>{
             const {data}=action.payload;
-            return state.setIn(['createData','data','thumbnail','data'],data);
+            if(action.writeType==="write"){
+                return state.setIn(['createData','data','thumbnail','data'],data);
+            }else{
+                return state.setIn(['modifyData','data','thumbnail','data'],data);
+            }
         }
     }),
     //썸네일 이미지 지우기
     ...pending({
         type:ADMIN_THUMB_DELETE,
-        name:['createData','data','thumbnail'],
+        name:['imageLoading','thumbnail'],
         successResult:(state,action)=>{
-            const fileArr = state.getIn(['createData','data','thumbnail','data']);
-            return state.setIn(['createData','data','thumbnail','data'],'');
+            if(action.writeType==="write"){
+                return state.setIn(['createData','data','thumbnail','data'],'');
+            }else{
+                return state.setIn(['modifyData','data','thumbnail','data'],'');
+            }
+        }
+    }),
+    //GIF 이미지 업로드
+    ...pending({
+        type:ADMIN_GIF_UPLOAD,
+        name:['imageLoading','gif'],
+        successResult:(state,action)=>{
+            const {data}=action.payload;
+            if(action.writeType==="write"){
+                return state.setIn(['createData','data','gif','data'],data);
+            }else{
+                return state.setIn(['modifyData','data','gif','data'],data);
+            }
+        }
+    }),
+    //GIF 이미지 지우기
+    ...pending({
+        type:ADMIN_GIF_DELETE,
+        name:['imageLoading','gif'],
+        successResult:(state,action)=>{
+            if(action.writeType==="write"){
+                return state.setIn(['createData','data','gif','data'],'');
+            }else{
+                return state.setIn(['modifyData','data','gif','data'],'');
+            }
         }
     }),
     //포스트 이미지 업로드
     ...pending({
         type:ADMIN_FILE_UPLOAD,
-        name:['createData','data','files'],
+        name:['imageLoading','files'],
         successResult:(state,action)=>{
             const {data}=action.payload;
-            const fileArr = state.getIn(['createData','data','files','data']);
-            return state.setIn(['createData','data','files','data'],fileArr.concat(data));
+            if(action.writeType==="write"){
+                const fileArr = state.getIn(['createData','data','files','data']);
+                return state.setIn(['createData','data','files','data'],fileArr.concat(data));
+            }else{
+                const fileArr = state.getIn(['modifyData','data','files','data']);
+                return state.setIn(['modifyData','data','files','data'],fileArr.concat(data));
+            }
         }
     }),
     //포스트 이미지 지우기
     ...pending({
         type:ADMIN_FILE_DELETE,
-        name:['createData','data','files'],
+        name:['imageLoading','files'],
         successResult:(state,action)=>{
             const {data,index}=action.payload;
-            const fileArr = state.getIn(['createData','data','files','data']);
-            return state.setIn(['createData','data','files','data'],fileArr.splice(index,1));
+            if(action.writeType==="write"){
+                const fileArr = state.getIn(['createData','data','files','data']);
+                return state.setIn(['createData','data','files','data'],fileArr.splice(index,1));
+            }else{
+                const fileArr = state.getIn(['modifyData','data','files','data']);
+                return state.setIn(['modifyData','data','files','data'],fileArr.splice(index,1));
+            }
         }
     }),
     

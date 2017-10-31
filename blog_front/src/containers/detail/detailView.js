@@ -54,20 +54,12 @@ class DetailView extends Component {
             ]
         }
     }
-    componentDidMount(){
-        
+    componentDidMount(){   
         this.dimentions();
         window.addEventListener('resize',this.dimentions);
         const {get,data,motion,motionDispatch}=this.props; 
         window.addEventListener('click',this.outHide);
         get.getSinglePost('POSTS/SINGLE_GET',this.props.match.params.category,this.props.match.params.postId);
-        // setTimeout(function(){ 
-        //     motionDispatch.motionActions({
-        //         motions:{
-        //             detailView:false
-        //         }
-        //     }); 
-        // }, 500);
         
     }
     componentWillUnmount(){

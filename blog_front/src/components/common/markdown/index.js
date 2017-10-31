@@ -4,6 +4,10 @@ import Remarkable from 'remarkable';
 import hljs from 'highlight.js';
 import 'styles/markdown/index.scss';
 class MarkdownView extends Component {
+    constructor(props){
+        super(props);
+    }
+    
     rawMarkup=()=>{
         const { source } = this.props;
          var md = new Remarkable('full', {
@@ -37,15 +41,17 @@ class MarkdownView extends Component {
              return ''; // use external default escaping
          }
          });
-         var rawMarkup = md.render(source);
          
+         var rawMarkup = md.render(source);
          return {
              __html: rawMarkup
          }
     }
     render() {
         return (
+            <div>
             <div className="markdown-body" dangerouslySetInnerHTML={this.rawMarkup()}></div>
+            </div>
         );
     }
 }

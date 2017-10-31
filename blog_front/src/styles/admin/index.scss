@@ -1,6 +1,141 @@
 @import '../common/color.scss';
+.admin-posts-wrapper{
+    position: relative;
+    padding:50px 20px 20px;
+    max-width: 900px;
+    margin: 20px auto;
+    .page-navigation{
+        text-align: center;
+        margin-bottom: 10px;
+        ul{
+            li{
+                display: inline-block;
+                margin-right:5px;
+                span{
+                    display: inline-block;
+                    width: 30px;
+                    height:30px;
+                    line-height: 30px;
+                    text-align: center;
+                    border:1px solid $t-black-4;
+                    cursor: pointer;
+                    &:hover{
+                        background-color:$t-white-10;
+                        border-color:#2196F3;
+                        color:#2196F3;
+                    }
+                }
+            }
+            .active{
+                span{
+                    background-color:$t-white-10;
+                    border-color:#2196F3;
+                    color:#2196F3;
+                }
+            }
+        }
+    }
+    .admin-posts-contents{
+        
+        
+        ul{
+
+        }
+        li{
+            position: relative;
+            display: flex;
+            height:100px;
+            padding:0 60px 0 150px;
+            margin-bottom:5px;
+            background-color: $t-white-10;
+            .image-wrap{
+                position: absolute;
+                left:0;
+                top:0;
+                width: 150px;
+                height: 100px;
+                background-size: cover;
+            }
+            .txt-wrap{
+                width:100%;
+                position: relative;
+                padding:10px;
+                h2{
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin-top: 5px;
+                }
+                p{
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    color:$t-black-8;
+                }
+                .category{
+                    display: inline-block;
+                    padding:2px 5px;
+                    border:1px solid #2196F3;
+                    color:#2196F3;
+                }
+                .date{
+                    margin-left: 10px;
+                    color:$t-black-5
+                }
+                
+            }
+            .btn-group{
+                position: absolute;
+                top:15px;
+                right:10px;
+                text-align: center;
+                a{
+                    padding:4px 10px;
+                    display: block;
+                    border:1px solid $c-black-4;
+                    border-radius: 3px;
+                    height: 30px;
+                    background-color: $t-white-10;
+                    &:hover{
+                        background-color:darken($t-white-10,10)  
+                    }
+                }
+                .btn-delete{
+                    width:45px;
+                    height: 30px;
+                    margin-top:10px;
+                    border:none;
+                    background-color: #F44336;
+                    color:$t-white-10;
+                    overflow: hidden;
+                    &:hover{
+                        background-color:darken(#F44336,10)  
+                    }
+                    &:disabled{
+                        text-indent: -999px;
+                    }
+                }
+                .image-loader{
+                    position: absolute;
+                    top:auto;
+                    left:auto;
+                    right:38px;
+                    bottom:30px;
+                    svg{
+                        width: 30px;
+                        height:30px;
+                    }
+                }
+            }
+        }
+    }
+}
 .admin-wrapper{
     padding:50px 20px 20px;
+    background-color:$t-white-10;
+    
     .write-input{
         width:100%;
         height:35px;
@@ -25,6 +160,21 @@
         display: flex;
         .post-title{
             flex:2;
+        }
+        .bgcolor-code{
+            position: relative;
+            margin-left:10px;
+            input{
+                padding-left:25px;
+            }
+            .color-box{
+                display: inline-block;
+                position: absolute;
+                width: 20px;
+                height:20px;
+                left:0;
+                bottom:6px;
+            }
         }
         .iframe-url{
             flex:1;
@@ -87,6 +237,12 @@
             
         }
     }
+    .col-flex{
+       display: flex;
+       .upload-wrap:last-child{
+           margin-left:10px;
+       }
+    }
     .upload-wrap{
         display: flex;
         margin-top:5px;
@@ -96,14 +252,6 @@
         span{
             align-self: center;
             color:#fff;
-        }
-        .thumb-preview{
-            display: flex;
-            margin-left:5px;
-            img{
-                align-self: center;
-                width:100px;
-            }
         }
     }
     .post-images{
@@ -126,7 +274,6 @@
                 }
                 .size{
                     padding:4px;
-                    margin-top:5px;
                     color:$c-black-2;
                     background:$c-black-7;
                 }

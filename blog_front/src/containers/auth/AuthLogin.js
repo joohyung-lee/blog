@@ -25,7 +25,7 @@ class AuthLogin extends Component {
                 modalName:'mymenu'
             });    
             if(authUser.isLogin){
-                setTimeout(function(){ 
+                setTimeout(()=>{ 
                     modalView.closeModal({
                         modalName:'toast'
                     }); 
@@ -34,7 +34,7 @@ class AuthLogin extends Component {
                 modalView.openModal({
                     modalName:'toast'
                 });
-                setTimeout(function(){ 
+                setTimeout(()=>{ 
                     modalView.closeModal({
                         modalName:'toast'
                     }); 

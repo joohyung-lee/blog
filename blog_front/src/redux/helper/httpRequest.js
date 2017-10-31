@@ -7,8 +7,7 @@ let config = {
         let delta = 1;
         let speed=0.3; 
         let percent=initial
-        let requestAnimationFrameID = requestAnimationFrame(doAnim); // Start the loop.
-        
+        let requestAnimationFrameID = requestAnimationFrame(doAnim); // Start the loop.        
         let percentCompleted = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
         function doAnim(percentCompleted) {
             if(percent>=80){
@@ -21,8 +20,7 @@ let config = {
             percent += delta*speed; 
             requestAnimationFrameID = requestAnimationFrame(doAnim); 
             //console.log(Math.floor(percent))  
-        }
-     
+        }  
     }
   }
 function getAuthAPI() {
@@ -31,9 +29,11 @@ function getAuthAPI() {
 function getLogoutAPI() {
     return axios.get(`/auth/logout`);
 }
-function getPostAPI() {  
-    
-    return axios.get(`/api/post`);
+function getPostAPI(url,pageId) {   
+    return axios.get(`/api/post/${url}/${pageId}`);
+}
+function deletePostAPI(url,id) {   
+    return axios.delete(`/api/post/${url}/${id}`);
 }
 //load single posts
 function getPostSingleAPI(category,postId){
@@ -41,7 +41,6 @@ function getPostSingleAPI(category,postId){
 }
 //load category posts
 function getPostCategoryAPI(category){
-
     return axios.get(`/api/post/${category}`);
 }
 // load old posts
@@ -56,16 +55,31 @@ function savePostStarAPI(postId){
 function savePostAPI(data) {
     return axios.post(`/api/post`,data);
 }
-
+//update post
+function updatePostAPI(data,id) {
+    return axios.put(`/api/post/${id}`,data);
+}
+// save thumb
 function thumbUpload(data){
     return axios.post('/api/images/thumb',data)
 }
+//delete thumb
 function thumbDelete(filename){
     return axios.delete(`/api/images/thumb/${filename}`);
 }
+// save gif
+function gifUpload(data){
+    return axios.post('/api/images/thumb',data)
+}
+//delete gif
+function gifDelete(filename){
+    return axios.delete(`/api/images/thumb/${filename}`);
+}
+// save files
 function fileUpload(data){
     return axios.post('/api/images',data)
 }
+// delete files
 function fileDelete(filename){
     return axios.delete(`/api/images/${filename}`);
 }
@@ -123,15 +137,45 @@ export const savePost = ({data,type}) => dispatch => {
         }
     )   
 }
-//포스트글 전부 불러오기
-export const getPost = (type) => dispatch => {    
+//포스트글 update
+export const updatePost = ({data,type,id}) => dispatch => {   
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
-    return getPostAPI().then(
+    return updatePostAPI(data,id).then(
         (response) => {
             dispatch({
                 type: actionType.SUCCESS,
                 payload: response
+            })
+        }
+    )   
+}
+//포스트글 전부 불러오기
+export const getPost = ({type,url,pageId}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getPostAPI(url,pageId).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    )   
+}
+//delete post
+export const deletePost = ({type,url,id,index}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return deletePostAPI(url,id).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:{
+                    response,
+                    index:index
+                } 
+                
             })
         }
     )   
@@ -177,7 +221,7 @@ export const getOldPost = ({type,category,listType,id}) => dispatch => {
 }
 
 //썸네일 이미지 업로드 
-export const postThumb=({file,name,type})=>dispatch=>{
+export const postThumb=({file,name,type,writeType})=>dispatch=>{
     let data = new FormData();
         data.append("thumb",file);
     const actionType=actions(type);
@@ -187,25 +231,57 @@ export const postThumb=({file,name,type})=>dispatch=>{
             dispatch({
                 type: actionType.SUCCESS,
                 payload:response,
+                writeType:writeType
             })
         }
     )
 }
 //썸네일 이미지 지우기
-export const deleteThumb=({filename,type})=>dispatch=>{   
-       const actionType=actions(type);
-       dispatch({type: actionType.PENDING});
-       return thumbDelete(filename).then(
-           (response)=>{
-               dispatch({
-                   type: actionType.SUCCESS,
-                   payload:response                   
-               })
-           }
-       )
-   }
+export const deleteThumb=({filename,type,writeType})=>dispatch=>{   
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return thumbDelete(filename).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:response,
+                writeType:writeType            
+            })
+        }
+    )
+}
+//save gif 
+export const postGif=({file,name,type,writeType})=>dispatch=>{
+    let data = new FormData();
+        data.append("thumb",file);
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return gifUpload(data).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:response,
+                writeType:writeType
+            })
+        }
+    )
+}
+//delete gif
+export const deleteGif=({filename,type,writeType})=>dispatch=>{   
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return gifDelete(filename).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:response,
+                writeType:writeType                   
+            })
+        }
+    )
+}
 //포스트 이미지 불러오기   
-export const postFiles=({files,name,type})=>dispatch=>{
+export const postFiles=({files,name,type,writeType})=>dispatch=>{
     let data = new FormData();
     for (let i = 0, len = files.length; i < len; i++) {
         data.append("photos",files[i]);
@@ -218,12 +294,13 @@ export const postFiles=({files,name,type})=>dispatch=>{
             dispatch({
                 type: actionType.SUCCESS,
                 payload:response,
+                writeType:writeType
             })
         }
     )
 }
 //포스트 이미지 지우기
-export const deleteFiles=({index,filename,type})=>dispatch=>{
+export const deleteFiles=({index,filename,type,writeType})=>dispatch=>{
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
     return fileDelete(filename).then(
@@ -232,8 +309,9 @@ export const deleteFiles=({index,filename,type})=>dispatch=>{
                 type: actionType.SUCCESS,
                 payload:{
                     response,
-                    index:index
+                    index:index,
                 },
+                writeType:writeType
             })
         }
     )

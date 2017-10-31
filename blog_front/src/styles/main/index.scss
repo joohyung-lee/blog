@@ -36,9 +36,9 @@
     }
 }
 .main-wrapper.menu{
-    left:250px;
-    transform: scale(0.92);
-    
+    transform: scale(0.92) translateX(300px);
+    -webkit-transform: scale(0.92) translateX(300px);
+    width:calc(100% - 300px);
 }
 .main-wrapper{
     position: absolute;
@@ -46,9 +46,13 @@
     right:0;
     bottom:0;
     left:0;
+    width:100%;
     padding:0 70px;
+    transform: scale(1) translateX(0px);
+    -webkit-transform: scale(1);
     transform-origin: left top 0;
-    transition:all 0.4s cubic-bezier(0.17, 0.57, 0.36, 1);
+    transition:transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+    -webkit-transition:-webkit-transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
     .title-wrap{
         position: relative;
         top:0;
@@ -154,9 +158,6 @@
             transform-origin: 50% 50% 0;
             position: absolute;
             display: inline-block;
-            &:first-child{
-            }
-            
             .fav-wrap{
                 position: absolute;
                 top: 40px;
@@ -192,25 +193,10 @@
             }
             .card-item-box{
                 position: absolute;
-                padding:10px;
-                border-radius:10px;
-                background-color:#fff;
-                background-repeat: no-repeat;
-                background-size:cover;
-                background-position: center;
+                border-radius:0px;
+                background-color:#000;
                 overflow: hidden;
-                transition: all .4s ease;
-                cursor: pointer;
-                &:before{
-                    content: "";
-                    position: absolute;
-                    top:0;
-                    right:0;
-                    bottom:0;
-                    left:0;
-                    
-
-                }
+                cursor: pointer;         
                 .fav-info{
                     position: absolute;
                     top:27px;
@@ -225,27 +211,65 @@
                 }
                 
             }
+            .card-item-image{
+                background-repeat: no-repeat;
+                background-size:cover;
+                background-position: center;
+                width:100%;
+            }
+            .gif-loading-wrap{
+                position: absolute;
+                top:20px;
+                right:20px;
+                &.in{
+                    opacity: 1;
+                }
+                &.out{
+                    opacity: 0;
+                }
+                .gif-loading{
+                    width:50px;
+                    height:25px;  
+                    transform-origin: 50% 50%;
+                }
+                .gif-loading.animate{              
+                    animation: loadingrotate .7s linear infinite;
+                    animation-delay: 300ms;
+                }
+            }
+            .fade-in{
+                opacity: 1;
+                transition: opacity 1s;
+            }
+            .fade-out{
+                opacity: 0;
+                transition: opacity 1s;
+                
+            }
             .card-item-bottom{
                 position: absolute;
                 width: 100%;
+                height: 34%;
                 bottom:0;
                 left:0;
-                padding:0 20px 50px 20px;
+                padding:20px 20px 50px 20px;
+                background-color: $t-white-10;
                 .post-meta{
                     span{
-                        font-size: 0.9rem;
-                        color:$t-white-9;
+                        font-size: 1rem;
+                        color:$t-black-7;
                     }
                     .category{
-                        font-weight: bold;
+                        font-weight: 400;
                         margin-right:10px;
+                        color:$t-black-7;
                     }
                 }
                 h3{
                     margin-top:4px;
-                    font-size: 1.3rem;
-                    font-weight: 300;
-                    color:$t-white-10;
+                    font-size: 1.2rem;
+                    font-weight: 600;
+                    color:$t-black-9;
                     white-space: normal;
                     word-break: keep-all;
                 }
@@ -257,8 +281,8 @@
                     span{
                         display: inline-block;
                         margin-left:6px;
-                        font-size:0.9rem;
-                        color:$t-white-9;
+                        font-size:1rem;
+                        color:$t-black-9;
                     }
                     .avatar{
                         display: inline-block;
@@ -290,10 +314,8 @@
             }
         }
         .card-item.hover{
-            transform: translate3d(0,0px,0);
-            
             .card-item-box{
-                box-shadow: 0 0 40px 0 rgba(0,0,0,0.4);
+                
             }
         }
     }

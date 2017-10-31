@@ -23,7 +23,7 @@ const persistedState=localStorage.getItem('admin')?
     }:{}
 const store = createStore(modules,persistedState,composeEnhancers(middleware));
 //로그인 팝업이 성공 후에 부모(opener)에게 함수 전달
-window.loginSuccess = function() {
+window.loginSuccess = ()=> {
     store.dispatch(modalActions.openModal({
         modalName:'toast'
     }));
@@ -32,10 +32,16 @@ window.loginSuccess = function() {
     }));
 
 };
+
 //로컬스토리지에 저장
 store.subscribe(() => {
-    const { admin} = store.getState();
-    localStorage.setItem('admin', JSON.stringify(admin));
+    if(window.location.pathname==='/admin/write'){
+        const {admin} = store.getState();
+        if(admin.getIn(['createData','save'])){
+            return localStorage.removeItem('admin');
+        }
+        localStorage.setItem('admin', JSON.stringify(admin));
+    }
 });
 
 export default store;

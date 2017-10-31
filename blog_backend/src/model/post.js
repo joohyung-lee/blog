@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
+
 var Schema = mongoose.Schema;
 
 var postSchema = new Schema({
@@ -7,12 +9,18 @@ var postSchema = new Schema({
     title:String,
     summary:String,
     body:String,
+    bgColor:String,
     iframeUrl:String,
     category:String,
     starred: [String],
     tags:[String],
-    thumbnail:{},
-    files:[],
+    thumbnail:{data:{
+        type: Schema.Types.Mixed, default: {}
+    }},
+    gif:{data:{
+        type: Schema.Types.Mixed, default: {}
+    }},
+    files:{data:[]},
     comments:[
         {
             postId:String,
@@ -22,6 +30,6 @@ var postSchema = new Schema({
     ],
     postDate: String
    
-});
-
+},{ minimize: false });
+postSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('post',postSchema);

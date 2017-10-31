@@ -11,15 +11,47 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 // GET ALL posts
-router.get('/', function (req, res) {
-    Post.find({},{"body":false})
-    .sort({"_id": -1})
-    .limit(6)
-    .exec((err, posts) => {
-        if(err) throw err;
-        res.json(posts);
-    });
+router.get('/:url/:pageId', function (req, res) {
+    if(req.params.url==='admin'){
+        Post.paginate({}, {limit: 10, page:req.params.pageId,sort: { "_id": -1 }}, function(err, result) {
+            res.json({
+                docs:result.docs,
+                total:result.total,
+                pages:result.pages,
+                page:result.page
+            });
+        });
+    }
 });
+
+// DELETE POST
+router.delete('/:url/:id', (req, res) => {  
+    if(req.params.url==='admin'){
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                error: "INVALID ID",
+                code: 1
+            });
+        }
+    
+        Post.findById(req.params.id, (err, post) => {
+            if(err) throw err;
+    
+            if(!post) {
+                return res.status(404).json({
+                    error: "NO RESOURCE",
+                    code: 3
+                });
+            }    
+            // REMOVE THE post
+            Post.remove({ _id: req.params.id }, err => {
+                if(err) throw err;
+                res.json({ del: true });
+            });
+        });
+    }
+});
+  
 //get single post
 router.get('/single/:category/:id',(req,res)=>{
     let category=req.params.category;
@@ -78,7 +110,6 @@ router.get('/:category/:listType/:id', (req, res) => {
     }
     let objId = new mongoose.Types.ObjectId(req.params.id);
     if(category === 'main') {
-        // get new posts
         Post.find({ _id: { $lt: objId }})
         .sort({_id: -1})
         .limit(6)
@@ -86,9 +117,7 @@ router.get('/:category/:listType/:id', (req, res) => {
             if(err) throw err;
             return res.json(posts);
         });
-    } else {
-        
-        // get old posts
+    } else {  
         Post.find({ $and:[{_id:{ $lt: objId }},{category: category}]})
         .sort({_id: -1})
         .limit(6)
@@ -97,10 +126,6 @@ router.get('/:category/:listType/:id', (req, res) => {
             return res.json(posts);
         });
     }    
-    
-    
-    
-    
 });
 // // GET POST BY AUTHOR
 // Router.get('/api/books/author/:author', function (req, res) {
@@ -114,16 +139,17 @@ router.get('/:category/:listType/:id', (req, res) => {
 // CREATE POST
 router.post('/', function (req, res) {
     var post = new Post();
-    
     post.author = req.session.passport.user.userName;
     post.title = req.body.title;
-    post.summary = req.body.summary;
     post.body = req.body.body;
+    post.summary = req.body.summary;
+    post.bgColor = req.body.bgColor;
     post.iframeUrl = req.body.iframeUrl;
     post.category = req.body.category;
     post.tags = req.body.tags;
-    post.thumbnail = req.body.thumbnail.data;
-    post.files = req.body.files.data;
+    post.thumbnail = req.body.thumbnail;
+    post.gif = req.body.gif;
+    post.files = req.body.files;
     post.postDate=req.body.postDate;
     post.save(function (err) {
         if (err) {
@@ -140,7 +166,6 @@ router.post('/', function (req, res) {
 
     });
 });
-
 // UPDATE THE POST
 router.put('/:id', function (req, res) {
     Post.findById(req.params.id, function (err, post) {
@@ -150,11 +175,18 @@ router.put('/:id', function (req, res) {
         if (!post) return res.status(404).json({
             error: 'post not found'
         });
-
-        // req.body.title='change joo';
-        if (req.body.title) post.title = req.body.title;
-        if (req.body.author) post.author = req.body.author;
-        if (req.body.post_date) post.post_date = req.body.post_date;
+        post.author = req.session.passport.user.userName;
+        post.title = req.body.title;
+        post.body = req.body.body;
+        post.summary = req.body.summary;
+        post.bgColor = req.body.bgColor;
+        post.iframeUrl = req.body.iframeUrl;
+        post.category = req.body.category;
+        post.tags = req.body.tags;
+        post.thumbnail = req.body.thumbnail;
+        post.gif = req.body.gif;
+        post.files = req.body.files;
+        post.postDate=req.body.postDate;
 
         post.save(function (err) {
             if (err) res.status(500).json({
@@ -164,24 +196,6 @@ router.put('/:id', function (req, res) {
                 message: 'post updated'
             });
         });
-    });
-});
-
-// DELETE POST
-router.delete('/:id', function (req, res) {
-    Post.remove({
-        _id: req.params.id
-    }, function (err, ouput) {
-        if (err) return res.status(500).json({
-            error: "database fail"
-        });
-        if (!output.result.n) return res.status(404).json({
-            error: "post not found"
-        });
-        res.json({
-            message: "post deleted"
-        });
-        res.status(404).end();
     });
 });
 // GIVE STAR
