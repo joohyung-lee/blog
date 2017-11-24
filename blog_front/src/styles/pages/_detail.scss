@@ -1,0 +1,21 @@
+.detail-main{
+  background-color:#ccc;  
+}
+.detail-page-wrap{
+    &>div{
+        background-color:#fff;
+    }
+
+}
+.detail-wrap{
+    padding:20px;
+    .detail-content{
+     
+        .title{
+
+        }
+        .body{
+            
+        }
+    }
+}

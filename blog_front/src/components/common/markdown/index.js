@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Remarkable from 'remarkable';
 import hljs from 'highlight.js';
-import 'styles/markdown/index.scss';
 class MarkdownView extends Component {
     constructor(props){
         super(props);

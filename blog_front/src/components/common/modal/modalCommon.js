@@ -1,5 +1,4 @@
 import React, { propTypes } from 'react';
-import 'styles/common/modal/modal.scss';
 
 //modal 컴포넌트
 const Modal=({open,children})=> {

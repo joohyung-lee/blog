@@ -14,14 +14,22 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 //components
 import {MarkdownEdit,ImageView} from 'components/admin';
-import 'styles/admin/index.scss';
+//error
+import {Forbidden} from 'components/common/error'
 class Write extends Component { 
     constructor(props){
         super(props);
         this.state={
             innerHeight:window.innerHeight
         }
-        this.writeType=(typeof this.props.match.params.id==="undefined")?"write":"modify"
+        this.writeType=(typeof this.props.match.params.id==="undefined")?"write":"modify";
+        
+    }
+    componentWillMount(){
+        const {writeupload}=this.props;
+        writeupload.getAdminAuth({
+            type:'AUTH/ADMIN_PROFILE'
+        })
     }
     componentDidMount(){
         const {writeupload}=this.props;
@@ -210,7 +218,7 @@ class Write extends Component {
         }
     }
     render() {
-        const {writePost,thumb,gif,files,writeLoading,imageLoading}=this.props;
+        const {writePost,thumb,gif,files,writeLoading,imageLoading,error,isAuth}=this.props;
         return (
             <Scrollbars
             style={{
@@ -323,25 +331,17 @@ Write.propTypes = {
 };
 export default withRouter(connect(
     (state,props)=>{
-        const{id}=props.match.params;    
-        if(typeof id==="undefined"){
-            return{
-                writeLoading:state.admin.getIn(['createData']).toJS().pending,
-                writePost:state.admin.getIn(['createData','data']).toJS(),
-                imageLoading:state.admin.getIn(['imageLoading']).toJS(),
-                thumb:state.admin.getIn(['createData','data','thumbnail']).toJS(),
-                gif:state.admin.getIn(['createData','data','gif']).toJS(),
-                files:state.admin.getIn(['createData','data','files']).toJS(),
-            }
-        }else{
-            return{
-                writeLoading:state.admin.getIn(['modifyData']).toJS().pending,
-                writePost:state.admin.getIn(['modifyData','data']).toJS(),
-                imageLoading:state.admin.getIn(['imageLoading']).toJS(),
-                thumb:state.admin.getIn(['modifyData','data','thumbnail']).toJS(),
-                gif:state.admin.getIn(['modifyData','data','gif']).toJS(),
-                files:state.admin.getIn(['modifyData','data','files']).toJS(),
-            }
+        const{id}=props.match.params; 
+        const writeType=(typeof id==="undefined")?"createData":"modifyData" 
+        return{
+            isAuth:state.auth.getIn(['adminProfile']).toJS().error,
+            writeLoading:state.admin.getIn([writeType]).toJS().pending,
+            writePost:state.admin.getIn([writeType,'data']).toJS(),
+            imageLoading:state.admin.getIn(['imageLoading']).toJS(),
+            thumb:state.admin.getIn([writeType,'data','thumbnail']).toJS(),
+            gif:state.admin.getIn([writeType,'data','gif']).toJS(),
+            files:state.admin.getIn([writeType,'data','files']).toJS(),
+            error:state.admin.getIn([writeType]).toJS().error
         }
 
     },

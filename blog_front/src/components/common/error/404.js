@@ -4,16 +4,19 @@ import * as commonAction from 'redux/common';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 class NotFound extends Component {
-    componentDidMount(){
-        // const {handleHeader}=this.props;
-        // handleHeader.isHeader({
-        //     visible:false
-        // });
+    componentWillMount(){
+       
+        const {handleHeader}=this.props;
+        console.log(handleHeader)
+        handleHeader.isHeader({
+            visible:false
+        });
     }
     render() {
         return (
             <div>
-                {this.props.location.pathname}
+                <h1>404</h1>
+                <a href="/home">home으로 가기</a>
             </div>
         );
     }

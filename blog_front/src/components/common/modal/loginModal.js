@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {TransitionMotion,spring} from 'react-motion';
-import 'styles/common/modal/modal.scss';
 const springOption={
     enter:{
         stiffness: 180, 
@@ -48,7 +47,7 @@ class LoginModal extends Component {
     }
     //구글 로그인
     googleLogin=()=>{
-        window.open('/auth/loginPopup/goolge','google','_blank'); 
+        window.open('/auth/loginPopup/google','google','_blank'); 
     }
     //페이스북 로그인
     facebookLogin=()=>{

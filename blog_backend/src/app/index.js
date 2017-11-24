@@ -27,12 +27,31 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //connect to mongodb server
-mongoose.connect(process.env.DB_URI);
+//mongoose.connect(process.env.DB_URI);
 var db=mongoose.connection;
-db.on('error',console.error);
-db.once('open',function(){
-    console.log('connected to mongod server');
+db.on('connecting', function() {
+  console.log('connecting to MongoDB...');
 });
+
+db.on('error', function(error) {
+  console.error('Error in MongoDb connection: ' + error);
+  mongoose.disconnect();
+});
+db.on('connected', function() {
+  console.log('MongoDB connected!');
+});
+db.once('open', function() {
+  console.log('MongoDB connection opened!');
+});
+db.on('reconnected', function () {
+  console.log('MongoDB reconnected!');
+});
+db.on('disconnected', function() {
+  console.log('MongoDB disconnected!');
+  mongoose.connect(process.env.DB_URI, {server:{auto_reconnect:true}});
+});
+mongoose.connect(process.env.DB_URI, {server:{auto_reconnect:true}});
+
 //import router
 var router=require('../routes');
 app.use('/',router);

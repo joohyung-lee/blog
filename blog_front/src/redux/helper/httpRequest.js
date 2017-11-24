@@ -23,66 +23,88 @@ let config = {
         }  
     }
   }
+//auth -v admin  
+function getAdminAuthAPI() {
+    return axios.get(`/auth/admin/account`);
+}  
+//save post -v admin
+function savePostAPI(data) {
+    return axios.post(`/api/post`,data);
+}
+//get posts -v admin
+function getPostAPI(pageId) {   
+    return axios.get(`/api/post/admin/${pageId}`);
+}
+//search posts -v admin
+function getSearchPostAPI(title,pageId) {   
+    return axios.get(`/api/post/search/${title}/${pageId}`);
+}
+//delete post -v admin
+function deletePostAPI(id) {   
+    return axios.delete(`/api/post/admin/${id}`);
+}
+//update post -v admin
+function updatePostAPI(data,id) {
+    return axios.put(`/api/post/${id}`,data);
+}
+// save thumb -v admin
+function thumbUpload(data){
+    return axios.post('/api/images/thumb',data)
+}
+//delete thumb -v admin
+function thumbDelete(filename){
+    return axios.delete(`/api/images/thumb/${filename}`);
+}
+// save gif -v admin
+function gifUpload(data){
+    return axios.post('/api/images/thumb',data)
+}
+//delete gif -v admin
+function gifDelete(filename){
+    return axios.delete(`/api/images/thumb/${filename}`);
+}
+// save files -v admin
+function fileUpload(data){
+    return axios.post('/api/images',data)
+}
+// delete files -v admin
+function fileDelete(filename){
+    return axios.delete(`/api/images/${filename}`);
+}
+//-------------------------admin end
+//auth
 function getAuthAPI() {
     return axios.get(`/auth/account`);
 }
+//logout
 function getLogoutAPI() {
     return axios.get(`/auth/logout`);
 }
-function getPostAPI(url,pageId) {   
-    return axios.get(`/api/post/${url}/${pageId}`);
-}
-function deletePostAPI(url,id) {   
-    return axios.delete(`/api/post/${url}/${id}`);
+//load category posts
+function getPostCategoryAPI(category){
+    return axios.get(`/api/post/list/${category}`);
 }
 //load single posts
 function getPostSingleAPI(category,postId){
     return axios.get(`/api/post/single/${category}/${postId}`);
 }
-//load category posts
-function getPostCategoryAPI(category){
-    return axios.get(`/api/post/${category}`);
-}
 // load old posts
 function getOldPostAPI(category,listType,id) {
-    return axios.get(`/api/post/${category}/${listType}/${id}`);
+    return axios.get(`/api/post/category/${category}/${listType}/${id}`);
 }
 //save starred post
 function savePostStarAPI(postId){
     return axios.post(`/api/post/star/${postId}`);
 }
-//save post
-function savePostAPI(data) {
-    return axios.post(`/api/post`,data);
+//search posts
+function getSearchPostsAPI(searchKeyword){
+    return axios.get(`/api/post/main/search/posts/${searchKeyword}`);
 }
-//update post
-function updatePostAPI(data,id) {
-    return axios.put(`/api/post/${id}`,data);
+//search tags in posts
+function getSearchTagsAPI(tagsname){
+    return axios.get(`/api/post/main/search/tags/${tagsname}`);
 }
-// save thumb
-function thumbUpload(data){
-    return axios.post('/api/images/thumb',data)
-}
-//delete thumb
-function thumbDelete(filename){
-    return axios.delete(`/api/images/thumb/${filename}`);
-}
-// save gif
-function gifUpload(data){
-    return axios.post('/api/images/thumb',data)
-}
-//delete gif
-function gifDelete(filename){
-    return axios.delete(`/api/images/thumb/${filename}`);
-}
-// save files
-function fileUpload(data){
-    return axios.post('/api/images',data)
-}
-// delete files
-function fileDelete(filename){
-    return axios.delete(`/api/images/${filename}`);
-}
+
 //pending type
 const actions=(type)=>{
     return {
@@ -91,7 +113,282 @@ const actions=(type)=>{
         FAILURE : `${type}_FAILURE`
     }
 }
-//인증
+//auth -v admin
+export const getAdminAuth = ({type}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getAdminAuthAPI().then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    });    
+}
+//save posts -v admin
+export const savePost = ({data,type}) => dispatch => {   
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return savePostAPI(data).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    });   
+}
+//update post -v admin
+export const updatePost = ({data,type,id}) => dispatch => {   
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return updatePostAPI(data,id).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    });   
+}
+//get posts -v admin
+export const getPost = ({type,pageId}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getPostAPI(pageId).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    });    
+}
+//searcn posts -v admin
+export const getSearchPost = ({type,title,pageId}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getSearchPostAPI(title,pageId).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    });    
+}
+//delete post -v admin
+export const deletePost = ({type,id,index}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return deletePostAPI(id).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:{
+                    response,
+                    index:index
+                } 
+                
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    });    
+}
+//upload thumb -v admin
+export const postThumb=({file,name,type,writeType})=>dispatch=>{
+    let data = new FormData();
+        data.append("thumb",file);
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return thumbUpload(data).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:response,
+                writeType:writeType
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    }); 
+}
+//delete thumb -v admin
+export const deleteThumb=({filename,type,writeType})=>dispatch=>{   
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return thumbDelete(filename).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:response,
+                writeType:writeType            
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    }); 
+}
+//save gif -v admin
+export const postGif=({file,name,type,writeType})=>dispatch=>{
+    let data = new FormData();
+        data.append("thumb",file);
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return gifUpload(data).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:response,
+                writeType:writeType
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    }); 
+}
+//delete gif -v admin
+export const deleteGif=({filename,type,writeType})=>dispatch=>{   
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return gifDelete(filename).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:response,
+                writeType:writeType                   
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    }); 
+}
+//save posts images -v admin
+export const postFiles=({files,name,type,writeType})=>dispatch=>{
+    let data = new FormData();
+    for (let i = 0, len = files.length; i < len; i++) {
+        data.append("photos",files[i]);
+    }
+    //data.append('name', name);  
+    const actionType=actions(type); 
+    dispatch({type: actionType.PENDING});
+    return fileUpload(data).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:response,
+                writeType:writeType
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    }); 
+}
+//delete posts images -v admin
+export const deleteFiles=({index,filename,type,writeType})=>dispatch=>{
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return fileDelete(filename).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:{
+                    response,
+                    index:index,
+                },
+                writeType:writeType
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    }); 
+}
+//----------------------------admin end
+//auth
 export const getAuth = ({type}) => dispatch => {    
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
@@ -111,7 +408,7 @@ export const getAuth = ({type}) => dispatch => {
         }
     )   
 }
-//로그아웃
+//logout
 export const getAuthLogout = ({type}) => dispatch => {    
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
@@ -122,65 +419,18 @@ export const getAuthLogout = ({type}) => dispatch => {
                 payload: response
             })
         }
-    )   
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    });    
 }
-//포스트글 저장
-export const savePost = ({data,type}) => dispatch => {   
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return savePostAPI(data).then(
-        (response) => {
-            dispatch({
-                type: actionType.SUCCESS,
-                payload: response
-            })
-        }
-    )   
-}
-//포스트글 update
-export const updatePost = ({data,type,id}) => dispatch => {   
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return updatePostAPI(data,id).then(
-        (response) => {
-            dispatch({
-                type: actionType.SUCCESS,
-                payload: response
-            })
-        }
-    )   
-}
-//포스트글 전부 불러오기
-export const getPost = ({type,url,pageId}) => dispatch => {    
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return getPostAPI(url,pageId).then(
-        (response) => {
-            dispatch({
-                type: actionType.SUCCESS,
-                payload: response
-            })
-        }
-    )   
-}
-//delete post
-export const deletePost = ({type,url,id,index}) => dispatch => {    
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return deletePostAPI(url,id).then(
-        (response) => {
-            dispatch({
-                type: actionType.SUCCESS,
-                payload:{
-                    response,
-                    index:index
-                } 
-                
-            })
-        }
-    )   
-}
-//개별 포스트글 불러오기
+
+//load single post
 export const getSinglePost = (type,category,postId) => dispatch => {    
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
@@ -191,7 +441,12 @@ export const getSinglePost = (type,category,postId) => dispatch => {
                 payload: response
             })
         }
-    )
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:error
+        });
+    }); 
 }
 //load category posts
 export const getCategoryPost = (type,category) => dispatch => {    
@@ -204,7 +459,15 @@ export const getCategoryPost = (type,category) => dispatch => {
                 payload: response
             })
         }
-    )
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    }); 
 }
 //old posts
 export const getOldPost = ({type,category,listType,id}) => dispatch => {    
@@ -217,105 +480,18 @@ export const getOldPost = ({type,category,listType,id}) => dispatch => {
                 payload: response
             })
         }
-    )   
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:error.response.data.code,
+                msg:error.response.data.error,
+            }
+        });
+    });    
 }
 
-//썸네일 이미지 업로드 
-export const postThumb=({file,name,type,writeType})=>dispatch=>{
-    let data = new FormData();
-        data.append("thumb",file);
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return thumbUpload(data).then(
-        (response)=>{
-            dispatch({
-                type: actionType.SUCCESS,
-                payload:response,
-                writeType:writeType
-            })
-        }
-    )
-}
-//썸네일 이미지 지우기
-export const deleteThumb=({filename,type,writeType})=>dispatch=>{   
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return thumbDelete(filename).then(
-        (response)=>{
-            dispatch({
-                type: actionType.SUCCESS,
-                payload:response,
-                writeType:writeType            
-            })
-        }
-    )
-}
-//save gif 
-export const postGif=({file,name,type,writeType})=>dispatch=>{
-    let data = new FormData();
-        data.append("thumb",file);
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return gifUpload(data).then(
-        (response)=>{
-            dispatch({
-                type: actionType.SUCCESS,
-                payload:response,
-                writeType:writeType
-            })
-        }
-    )
-}
-//delete gif
-export const deleteGif=({filename,type,writeType})=>dispatch=>{   
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return gifDelete(filename).then(
-        (response)=>{
-            dispatch({
-                type: actionType.SUCCESS,
-                payload:response,
-                writeType:writeType                   
-            })
-        }
-    )
-}
-//포스트 이미지 불러오기   
-export const postFiles=({files,name,type,writeType})=>dispatch=>{
-    let data = new FormData();
-    for (let i = 0, len = files.length; i < len; i++) {
-        data.append("photos",files[i]);
-    }
-    //data.append('name', name);  
-    const actionType=actions(type); 
-    dispatch({type: actionType.PENDING});
-    return fileUpload(data).then(
-        (response)=>{
-            dispatch({
-                type: actionType.SUCCESS,
-                payload:response,
-                writeType:writeType
-            })
-        }
-    )
-}
-//포스트 이미지 지우기
-export const deleteFiles=({index,filename,type,writeType})=>dispatch=>{
-    const actionType=actions(type);
-    dispatch({type: actionType.PENDING});
-    return fileDelete(filename).then(
-        (response)=>{
-            dispatch({
-                type: actionType.SUCCESS,
-                payload:{
-                    response,
-                    index:index,
-                },
-                writeType:writeType
-            })
-        }
-    )
-}
+
 //give star
 export const saveStar=({postId,index,type})=>dispatch=>{
     const actionType=actions(type);
@@ -337,4 +513,44 @@ export const saveStar=({postId,index,type})=>dispatch=>{
                 }
             });
         });
+}
+//searcn posts tags
+export const getSearchPosts = ({type,searchKeyword}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getSearchPostsAPI(searchKeyword).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:1
+            }
+        });
+    });
+}
+//searcn posts tags
+export const getSearchTags = ({type,tagsname}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return getSearchTagsAPI(tagsname).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload: response
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:1
+            }
+        });
+    });
 }

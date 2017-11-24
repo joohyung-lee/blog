@@ -15,25 +15,35 @@ class DefaultLoading extends Component {
   }
   render() {
     const{color}=this.props;
+    const size=this.props.size?this.props.size:"50";
+    const r=this.props.r?this.props.r:'15';
+    const stroke=this.props.stroke?this.props.stroke:2;
     return (
-        <div className={`image-loader`} >
-          <svg x="0px" y="0px" width="50" height="50" viewBox="0 0 50 50" 
+        <div className={this.props.class?this.props.class:`image-loader`} 
+          style={{
+            width:`${size}px`,
+            height:`${size}px`
+          }}
+        >
+          <svg x="0px" y="0px" width={size} height={size} 
+          viewBox={`0 0 ${size} ${size}`}
           fill={"none"}
           stroke={color==='white'?"rgba(255,255,255,0.2)":"rgba(0,0,0,0.2)"} 
-          strokeWidth={2} 
+          strokeWidth={stroke} 
           strokeDasharray={`200`}
           strokeDashoffset={0}
           >
-          <circle cx="25" cy="25" r="15"/>
+          <circle cx={size/2} cy={size/2} r={r}/>
           </svg>
-          <svg x="0px" y="0px" width="50" height="50" viewBox="0 0 50 50" 
+           <svg x="0px" y="0px" width={size} height={size} 
+          viewBox={`0 0 ${size} ${size}`} 
           fill={"none"}
           stroke={color==='white'?"rgba(255,255,255,1)":"rgba(0,0,0,1)"}
-          strokeWidth={2} 
+          strokeWidth={stroke} 
           strokeDasharray={`200`}
           strokeDashoffset={170}
           >
-          <circle cx="25" cy="25" r="15"/>
+          <circle cx={size/2} cy={size/2} r={r}/>
           </svg>
         </div>
     );

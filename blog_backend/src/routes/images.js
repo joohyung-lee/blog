@@ -13,7 +13,7 @@ function getFileDate(date) {
     const hour = date.getHours();
     const min = date.getMinutes();
     const sec = date.getSeconds();
-    const fullDate = year+""+month+""+day+""+hour+""+min+""+sec;
+    const fullDate = year+"_"+month+""+day+"_"+hour+"_"+min+"_"+sec;
     return fullDate
 }
 //fileupload
@@ -33,6 +33,14 @@ const thumbUpload = multer({ storage : thumbstorage })
 const upload = multer({ storage : storage })
 
 router.post('/thumb', thumbUpload.single('thumb'), (req, res) => {
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
+    || req.session.passport.user.email!=="joomation@gmail.com"
+    ) {
+        return res.status(403).json({
+            error: "NOT ADMIN LOGGED IN",
+            code: 403
+        });
+    }
     const file = req.file;
     const meta = req.body; 
     // gm(file.path)
@@ -59,6 +67,14 @@ router.post('/thumb', thumbUpload.single('thumb'), (req, res) => {
 });
 
 router.post('/', upload.any(), (req, res) => {
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
+    || req.session.passport.user.email!=="joomation@gmail.com"
+    ) {
+        return res.status(403).json({
+            error: "NOT ADMIN LOGGED IN",
+            code: 403
+        });
+    }
     const file = req.files; 
     const meta = req.body; 
     res.json(file)
@@ -78,6 +94,14 @@ router.get('/thumb/:name',function (req,res){
     })
 });
 router.delete('/thumb/:name', function (req, res) {
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
+    || req.session.passport.user.email!=="joomation@gmail.com"
+    ) {
+        return res.status(403).json({
+            error: "NOT ADMIN LOGGED IN",
+            code: 403
+        });
+    }
     const filename = req.params.name;
     fs.unlink(path.join(__dirname,'../../images/thumb/'+filename), function (err,data) { 
         if (err) return res.status(500).json({
@@ -87,6 +111,14 @@ router.delete('/thumb/:name', function (req, res) {
     });
 });
 router.delete('/thumb/:name', function (req, res) {
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
+    || req.session.passport.user.email!=="joomation@gmail.com"
+    ) {
+        return res.status(403).json({
+            error: "NOT ADMIN LOGGED IN",
+            code: 403
+        });
+    }
     const filename = req.params.name;
     fs.unlink(path.join(__dirname,'../../images/thumb/'+filename), function (err,data) { 
         if (err) return res.status(500).json({
@@ -108,6 +140,14 @@ router.get('/:name',function (req,res){
     })
 });
 router.delete('/:name', function (req, res) {
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
+    || req.session.passport.user.email!=="joomation@gmail.com"
+    ) {
+        return res.status(403).json({
+            error: "NOT ADMIN LOGGED IN",
+            code: 403
+        });
+    }
     const filename = req.params.name;
     fs.unlink(path.join(__dirname,'../../images/'+filename), function (err,data) { 
         if (err) return res.status(500).json({

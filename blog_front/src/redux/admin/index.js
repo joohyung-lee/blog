@@ -52,7 +52,7 @@ const initialState=Map({
     }),
     createData:Map({
         pending: false,
-        error: false,
+        error: -1,
         save:false,
         data:Map({
                 postDate:'',
@@ -76,7 +76,7 @@ const initialState=Map({
     }),
     modifyData:Map({
         pending: false,
-        error: false,
+        error: -1,
         data:Map({
                 postDate:'',
                 title:'',

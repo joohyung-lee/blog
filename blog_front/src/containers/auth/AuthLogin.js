@@ -53,11 +53,10 @@ class AuthLogin extends Component {
     render() {    
         const {authUser,modal} =this.props;  
         return (
-            <div>
+            <div className="login-state">
                 {
                 (authUser.pending)?
-                <div className="login-state">
-                    
+                <div>
                 </div>:              
                 <LoginState 
                     view={(authUser.isLogin)?'mypage':'login'}
@@ -67,6 +66,7 @@ class AuthLogin extends Component {
                     logOut={this.logOut}
                     authLoading={authUser.pending}
                     username={authUser.user.userName}
+                    adminUser={authUser.user.email==="joomation@gmail.com"?true:false}
                 />   
                 }    
                 <LoginToast 

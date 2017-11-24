@@ -1,0 +1,405 @@
+.admin-posts-wrapper{
+    position: absolute;
+    max-width: 1200px;
+    top:0;
+    right:0;
+    width: 100%;
+    left:0;
+    padding:50px 20px 20px;
+    margin: 20px auto;
+    .admin-posts-header{
+        position: relative;
+        margin-bottom:10px;
+        .search-box{
+            position: relative;
+            width:calc(100% - 70px);
+            margin-bottom:20px;
+            input{
+                width:100%;
+                height: 45px;
+                padding:0 50px 0 10px;
+                border:none;
+                background: none;
+                border-bottom:1px solid $t-black-8;
+                outline: none;
+                font-size: 1.5rem;
+            }
+            button{
+                position: absolute;
+                top:0;
+                right:0;
+                height: 35px;
+                border:none;
+                border-radius: 0;
+                background-color: $t-black-8;
+                color:$t-white-10;
+            }
+        }
+        .write{
+            position: absolute;
+            top:0;
+            right:0;
+            height: 37px;
+            line-height: 28px;
+            background-color: #0AC466;
+            color:#fff;
+            border:none;
+        }
+    }
+    .page-navigation{
+        text-align: center;
+        margin-top: 10px;
+        display: flex;
+        .total{
+            line-height: 30px;
+            span{
+                color:$t-black-7;
+            }
+            .count{
+                font-weight: 400;
+                margin-left:5px;
+                
+            }
+        }
+        ul{
+            flex:1;
+            text-align: right;
+            li{
+                display: inline-block;
+                margin-right:5px;
+                span{
+                    display: inline-block;
+                    width: 30px;
+                    height:30px;
+                    line-height: 30px;
+                    text-align: center;
+                    border:1px solid $t-black-4;
+                    color:$t-black-6;
+                    background-color:$t-white-10;
+                    cursor: pointer;
+                    &:hover{
+                        background-color:$t-white-10;
+                        border-color:$t-black-9;
+                        color:$t-black-9;
+                    }
+                }
+                .page-move{
+                    background: none;
+                }
+                .disabled{
+                    pointer-events:none;
+                    border:1px solid $t-black-2;
+                    color:$t-black-2;
+                    border:1px solid $t-black-2;
+                }
+            }
+            .active{
+                span{
+                    background-color:$t-black-8;
+                    border-color:$t-black-9;
+                    color:$t-white-10;
+                    &:hover{
+                        background-color:$t-black-8;
+                        border-color:$t-black-9;
+                        color:$t-white-10; 
+                    }
+                }
+            }
+        }
+    }
+    .admin-posts-contents{            
+        ul{
+            display: flex;
+            flex-wrap: wrap;
+            
+        }
+        li{
+            position: relative;
+            display: inline-block;
+            width: calc(50% - 6px);
+            height:100px;
+            padding:0 60px 0 150px;
+            margin:3px;
+            background-color: $t-white-10;
+            @media screen and (max-width: $screen-pad-large) {
+                width: 100%;
+            }
+            .image-wrap{
+                position: absolute;
+                left:0;
+                top:0;
+                width: 150px;
+                height: 100px;
+                background-size: cover;
+                background-color:$c-black-5;
+            }
+            .txt-wrap{
+                width:100%;
+                position: relative;
+                padding:10px;
+                h2{
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin-top: 5px;
+                }
+                p{
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    color:$t-black-8;
+                }
+                .category{
+                    display: inline-block;
+                    padding:4px 7px;
+                    color:$t-white-10;
+                    background-color: $t-black-9;
+                }
+                .date{
+                    margin-left: 10px;
+                    color:$t-black-5
+                }
+                
+            }
+            .btn-group{
+                position: absolute;
+                top:15px;
+                right:10px;
+                text-align: center;
+                a{
+                    padding:4px 10px;
+                    display: block;
+                    border:1px solid $c-black-4;
+                    border-radius: 3px;
+                    height: 30px;
+                    background-color: $t-white-10;
+                    &:hover{
+                        background-color:darken($t-white-10,10)  
+                    }
+                }
+                .btn-delete{
+                    width:45px;
+                    height: 30px;
+                    margin-top:10px;
+                    border:none;
+                    background-color: #F44336;
+                    color:$t-white-10;
+                    overflow: hidden;
+                    &:hover{
+                        background-color:darken(#F44336,10)  
+                    }
+                    &:disabled{
+                        text-indent: -999px;
+                    }
+                }
+                .image-loader{
+                    position: absolute;
+                    top:auto;
+                    left:auto;
+                    right:38px;
+                    bottom:30px;
+                    svg{
+                        width: 30px;
+                        height:30px;
+                    }
+                }
+            }
+        }
+    }
+}
+.admin-wrapper{
+    padding:50px 20px 20px;
+    background-color:$t-white-10;
+    
+    .write-input{
+        width:100%;
+        height:35px;
+        border:none;
+        border-bottom:1px solid $c-black-0;
+        font-size:16px;
+        outline:none;
+    }
+    
+    input[type=file]{
+        display: none;
+    }
+    .btn-upload{
+        display: inline-block;
+        padding:10px 20px;
+        background: $c-black-0;
+        color:#fff;
+        text-align: center;
+        cursor: pointer;
+    }
+    .header{
+        display: flex;
+        .post-title{
+            flex:2;
+        }
+        .bgcolor-code{
+            position: relative;
+            margin-left:10px;
+            input{
+                padding-left:25px;
+            }
+            .color-box{
+                display: inline-block;
+                position: absolute;
+                width: 20px;
+                height:20px;
+                left:0;
+                bottom:6px;
+            }
+        }
+        .iframe-url{
+            flex:1;
+            margin-left:10px;
+        }
+        .post-category{
+            width:100px;
+            select{
+                width:100%;
+                height:35px;
+            }
+        }
+        .btn-save{
+            background-color: $c-black-0;
+            color:#fff;
+            margin-left:30px;
+        }
+    }
+    .summary{
+        margin-top:10px;
+        textarea{
+            padding:10px;
+            width:100%;
+            border:1px solid $c-black-0;
+            outline: none;
+        }
+    }
+    .post-tags{
+        display: flex;
+        flex-wrap: wrap;
+        margin-top:10px;
+      
+        input{
+            flex-basis:200px;
+        }
+        ul{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        ul li{
+            position:relative;
+            margin:5px;
+            padding:0 20px 0 5px;
+            height: 25px;
+            line-height: 25px;
+            border: 1px solid $c-black-6;
+            border-radius: 3px;
+            background:$c-black-9;
+            .btn-delete{
+                position: absolute;
+                display: inline-block;
+                width:15px;
+                line-height: 25px;
+                right:0;
+                top:0;
+                bottom:0;
+                text-align: center;
+                cursor: pointer;
+            }
+            
+        }
+    }
+    .col-flex{
+       display: flex;
+       .upload-wrap:last-child{
+           margin-left:10px;
+       }
+    }
+    .upload-wrap{
+        display: flex;
+        margin-top:5px;
+        .btn-upload{
+            display: flex;
+        }
+        span{
+            align-self: center;
+            color:#fff;
+        }
+    }
+    .post-images{
+        margin-top:10px;
+    }
+    .file-preview{
+        ul{
+            display: flex;
+            flex-wrap: wrap;
+            li{
+                position: relative;
+                flex-basis: 150px;
+                width: 150px;
+                padding: 5px;
+                margin-left: 5px;
+                word-break: break-all;
+                border: 1px solid #ccc;
+                p{
+                    font-size: 12px;
+                }
+                .size{
+                    padding:4px;
+                    color:$c-black-2;
+                    background:$c-black-7;
+                }
+                img{
+                    width: 100%;
+                }
+                .btn-delete{
+                    position: absolute;
+                    display: inline-block;
+                    right:-5px;
+                    top:-5px;
+                    width:20px;
+                    height:20px;
+                    text-align: center;
+                    line-height: 20px;
+                    border-radius: 50%;
+                    background:$c-black-0;
+                    color:#fff;
+                    cursor: pointer;
+                    z-index: 10;
+                }
+                &:hover .url-content{
+                    display: block;
+                }
+                .url-content{
+                    position: absolute;
+                    display: none;
+                    top:0;
+                    right:0;
+                    bottom:0;
+                    left:0;
+                    background:rgba(0,0,0,0.5);
+                    input{
+                        position: absolute;
+                        top: 40px;
+                        left: 5px;
+                        width: 138px;
+                    }
+                    button{
+                        position: absolute;
+                        top: 80px;
+                        left: 0px;
+                        right:0;
+                        width: 80px;
+                        margin:0 auto;
+                        background-color:$c-black-8;
+                    }
+                }
+            }
+        }
+    }
+}

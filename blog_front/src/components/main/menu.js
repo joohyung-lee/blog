@@ -53,6 +53,9 @@ class Menu extends Component {
                             >
                                 <ul>
                                     <li>
+                                        <Link className={(this.props.linkLoading)?"disabled":""} to="/home">All Posts</Link>
+                                    </li>
+                                    <li>
                                         <Link className={(this.props.linkLoading)?"disabled":""} to="/motionlab">Motion Lab</Link>
                                     </li>
                                     <li>

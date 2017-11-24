@@ -1,0 +1,215 @@
+.main-container{
+    position: relative;
+    width:100vw;
+    height:100vh;
+    background:$c-black-8;
+}
+.menu-list{
+    position: absolute;
+    left:0;
+    top:0;
+    width:330px;
+    height:100%;
+    z-index: 7000;
+    background: -moz-linear-gradient(left, rgba(241,241,241,1) 40px,rgba(241,241,241,0.87) 40%, rgba(241,241,241,0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(241,241,241,1) 40px,rgba(241,241,241,0.87) 40%,rgba(241,241,241,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(241,241,241,1) 40px,rgba(241, 241, 241, 0.87) 40%,rgba(241,241,241,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */    
+    ul{
+        margin-top:16vh;
+        li{
+            .disabled{
+                color:$t-black-4;
+                pointer-events: none;
+            }
+            a{
+                width: 100%;
+                display: inline-block;
+                padding: 4px 0 4px 40px;
+                font-size: 2rem;
+                color:$t-black-10;
+                transition: all .3s ease;
+            }
+        }
+    }
+}
+.main-wrapper.menu{
+    transform: scale(0.92) translateX(300px);
+    -webkit-transform: scale(0.92) translateX(300px);
+    width:calc(100% - 300px);
+}
+.main-wrapper{
+    position: absolute;
+    top:16vh;
+    right:0;
+    bottom:0;
+    left:0;
+    width:100%;
+    padding:0 70px;
+    transform: scale(1) translateX(0px);
+    -webkit-transform: scale(1);
+    transform-origin: left top 0;
+    transition:transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+    -webkit-transition:-webkit-transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+    .title-wrap{
+        position: relative;
+        height:55px;
+        top:0;
+        padding:0 30px 0 20px;
+        .pages{
+            position: relative;
+            top: calc(50% - 10px);
+            float: left;
+            padding-right: 10px;
+            font-weight: 600;
+            color: $c-black-0;
+            line-height: 20px;
+        }
+        .total{
+            position: absolute;
+            right:0;
+            top: calc(50% - 10px);
+            font-weight: 400;
+            line-height: 20px;
+            color:$c-black-3;
+        }
+        .menu-title{
+            position: relative;
+            float: left;
+            height:55px;            
+            user-select: none;
+            padding-left:50px;
+            
+            .main-txt{
+                position: relative;
+                padding-right:30px;
+                line-height: 55px;
+                *{
+                    font-weight: 400;
+                    font-size: 2.8rem;
+                }
+                span{
+                    display: inline-block;
+                }
+                h2{
+                    position: absolute;
+                    top:0px;
+                    white-space: nowrap;
+                    cursor: pointer;
+                }
+            }
+            .menu-icon{
+                position: absolute;
+                display: inline-block;
+                top:0px;
+                bottom:0;
+                left:0;
+                width: 23px;
+                height:16px;
+                margin:auto;
+                cursor: pointer;
+            }
+            .menu-icon.active{
+                span{
+                    &:nth-child(1){
+                        top:7px;
+                        width:10px;
+                        transform: rotate(315deg);
+                    }
+                    &:nth-child(2){
+                        transform: rotate(0deg);
+                    }
+                    &:nth-child(3){
+                        top:5px;
+                        width:10px;
+                        transform: rotate(-315deg)
+                    }
+                }
+            }
+            .menu-icon{   
+                transition:all 0.5s ease;
+                span{
+                    position: relative;
+                    display: block;
+                    top:0;
+                    left:0;
+                    width:23px;
+                    height:1px;
+                    background-color:$c-black-0;
+                    transform-origin: left top;
+                    transition: all 0.5s ease-out;
+                    
+                    &:nth-child(2){
+                        top:6px;
+                        width: 23px;
+                        transform-origin: center;
+                    }
+                    &:nth-child(3){
+                        top:12px;
+                        width: 23px;  
+                        transform-origin: left center;
+                    }
+                }
+            }
+        }
+        .scroll-bar{
+            position:relative;
+            top:calc(50% - 1px);
+            height:1px;
+            background:$c-black-4;
+            overflow:hidden;
+            .indicator{
+                position: absolute;
+                width:30px;
+                height:1px;
+                background: #000;
+            }
+        }
+        &:after{
+            content:"";
+            display: block;
+            clear: both;
+        }
+    }
+    .card-item-wrap{
+        position: absolute;
+        top:100px;
+        white-space: nowrap;
+        >div{
+            transform-style: preserve-3d;
+        }
+        .card-item-image{
+               
+            img{
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px; 
+            }
+        }
+        .old-posts-loading{
+            position: absolute;
+            display: inline-block;
+            width: 50px;
+            height: 430px;
+            z-index: 10
+        }
+        .card-item{
+            transform-style: preserve-3d;
+            transform-origin: 50% 50% 0;
+            position: absolute;
+            display: inline-block;
+        }   
+    }
+}
+.detail{ 
+    > div{
+        position: absolute;
+        left:0;
+        top:0px;
+        right:0;
+    }
+    .iframe-wrap{
+        margin:0 auto;
+        .iframe-content{
+            background-color:#fff;
+        }
+    }
+}

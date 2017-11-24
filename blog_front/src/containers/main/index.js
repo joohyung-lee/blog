@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {Motion,TransitionMotion,spring} from 'react-motion';
-import {withRouter,Route,Switch} from 'react-router-dom';
-
+import {Motion,TransitionMotion,StaggeredMotion,spring} from 'react-motion';
 import MobileDetect from 'mobile-detect'
 //config
 import urlConfig from 'config/urlConfig'
@@ -9,15 +7,14 @@ import urlConfig from 'config/urlConfig'
 import {StaticLoading} from 'components/common/loading';
 import {CardItem,Menu} from 'components/main';
 //redux
+import * as commonAction from 'redux/common';
 import * as modalActions from 'redux/modal';
 import * as httpRequest from 'redux/helper/httpRequest';
 import * as motionActions from 'redux/main';
 import * as postsActions from 'redux/posts';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import defaultAvatar from 'images/defaultAvatar.svg';
-import 'styles/main/index.scss';
 const springSetting = {stiffness: 300, damping: 30};
 
 class Main extends Component {
@@ -27,29 +24,57 @@ class Main extends Component {
         this.state = {
             loadingState: false,
             menuOpen:false,
+            favActive:0,
+            mainText:[
+                {
+                    key:'home',
+                    data:'All Posts',
+                },
+                {
+                    key:'motionlab',
+                    data:'Motion Lab',
+                },
+                {
+                    key:'projects',
+                    data:'Projects',
+                },
+                {
+                    key:'review',
+                    data:'Review',
+                }
+            ],
+            searchKeyowrdAni:[],
+            mainIndex:0,
+
         };
         
     }
+    componentWillMount(){
+        const url=this.props.location.pathname.replace('/','');
+        this.state.mainText.map((item,i)=>{
+            if(url===item.key){
+                this.setState({
+                    mainIndex:i
+                })
+            }
+        })
+    }
     componentDidMount(){     
-        const{get,data,motion}=this.props;
-        //if data is exist it will load previous data
-        if(!motion.detailView){
-            get.getCategoryPost('POSTS/CATEGORY_GET',this.props.match.params.category);
+        const{get,data,motion,common,handleHeader}=this.props;
+        const url=this.props.location.pathname.replace('/','');
+        if(!common.mainLoad){
+            get.getCategoryPost('POSTS/CATEGORY_GET',url);
         }
+        handleHeader.mainLoad({
+            mainLoad:true
+        })
         this.dimensions();
-        window.addEventListener('resize',this.dimensions);     
+        window.addEventListener('resize',this.dimensions); 
+        
     }
     
     componentWillUnmount(){
         const{motionDispatch,motion}=this.props;
-        if(!motion.detailView){
-            motionDispatch.motionActions({
-                motions:{
-                    offsetX:0,
-                    active:0
-                }
-            });   
-        }
         window.removeEventListener("resize", this.dimensions);
         let md = new MobileDetect(window.navigator.userAgent);
         if(md.mobile()){
@@ -61,20 +86,29 @@ class Main extends Component {
         }
         
     }
+
     componentDidUpdate(prevProps,prevState){
         const{get,motionDispatch}=this.props;
+        const{starState}=this.state;
         const locationChanged = prevProps.location !== this.props.location;   
-        if(locationChanged){    
-            get.getCategoryPost('POSTS/CATEGORY_GET',this.props.match.params.category);
+        if(locationChanged){        
             motionDispatch.motionActions({
                 motions:{
-                    detailView:false,
                     offsetX:0,
                     active:0,
                 }
-            });         
+            });    
+            const url=this.props.location.pathname.replace('/','');
+            get.getCategoryPost('POSTS/CATEGORY_GET',url);   
+            this.state.mainText.map((item,i)=>{
+                if(url===item.key){
+                    this.setState({
+                        mainIndex:i
+                    })
+                }
+            })
         }
-        if(prevProps.data!==this.props.data){
+        if(prevProps.data.length!==this.props.data.length){
             this.dimensions();    
         }
     }
@@ -95,8 +129,10 @@ class Main extends Component {
         const wrapperPd=70;//full width padding
         const itemPd=21;//card item padding
         const eleResponse=window.innerWidth/3.5;
-        const eleWidth=(eleResponse>425)?425:(eleResponse<380)?380:eleResponse;//card item width
-        const eleHeight=eleWidth*1.12;//card item height 
+        const minDesk=window.innerWidth/2.5;
+        const maxDesk=window.innerWidth/4.5;
+        const eleWidth=(window.innerWidth>1600)?(maxDesk>400)?400:maxDesk:(window.innerWidth<1024)?minDesk:eleResponse;//card item width
+        const eleHeight=eleWidth*1.2;//card item height 
         //full width
         let wrapperWidth=this.wrapperWidth.clientWidth-wrapperPd*2;
         
@@ -130,8 +166,7 @@ class Main extends Component {
         e.stopPropagation();
         const{motionDispatch,motion}=this.props; 
         const {min,max,eleWidth,offsetX} = motion;
-        e.deltaX=e.deltaY;
-        let mouseX=offsetX+e.deltaX;
+        let mouseX=offsetX+e.deltaX+e.deltaY;
         //when scrolling less than elewidth, data load old posts
         if(max-offsetX<eleWidth){
             if(!this.state.loadingState && max!==0){
@@ -152,7 +187,7 @@ class Main extends Component {
         }else if(mouseX < min){
             mouseX=min;
         }else{
-            mouseX=offsetX+e.deltaX;
+            mouseX=offsetX+e.deltaX+e.deltaY;
         }
         motionDispatch.motionActions({
             motions:{
@@ -213,6 +248,7 @@ class Main extends Component {
     }
     loadOldPosts=()=>{
         const {isLast,get,data,dataState}=this.props;
+        const url=this.props.location.pathname.replace('/','');
         if(dataState==='success'){
             if(isLast) {
                 return new Promise(
@@ -226,7 +262,7 @@ class Main extends Component {
             // start request
             return get.getOldPost({
                 type:'POSTS/OLD_GET',
-                category:this.props.match.params.category,
+                category:url,
                 listType:'old', 
                 id:lastId,
                 
@@ -254,8 +290,11 @@ class Main extends Component {
                 }
             });
         }
+
     }
+
     itemUp=(id,i,e)=>{
+        console.log('up')
         let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.touches[0]:e; 
         const {motion,motionDispatch}=this.props;
         const {offsetX,eleWidth,wrapperPd,itemPd,startX}=motion;
@@ -264,7 +303,6 @@ class Main extends Component {
             motionDispatch.motionActions({
                 motions:{
                     active:i,
-                    detailView:true,
                     offsetX:offsetX
                 }
             });
@@ -277,11 +315,13 @@ class Main extends Component {
     handleMouseOver=(i,e)=>{
         const{motion,motionDispatch}=this.props;
         const{active}=motion;
-        motionDispatch.motionActions({
-            motions:{
-                active:i,
-            }
-        });
+        if(active!==i){
+            motionDispatch.motionActions({
+                motions:{
+                    active:i,
+                }
+            });
+        }
     }
     handleMouseOut=()=>{
         const {motion}=this.props;
@@ -290,18 +330,21 @@ class Main extends Component {
     
     favClick=(postId,i,e)=>{
         e.stopPropagation();
-        const {motionDispatch}=this.props;        
+        const {starState}=this.state;
+        const {motionDispatch,postAction,get,authUser,modalView}=this.props;        
         motionDispatch.motionActions({
             motions:{
                 active:i,
             }
         });
-        const {get,authUser,modalView}=this.props;
         if(!authUser.isLogin){
             modalView.openModal({
                 modalName:'login'
               });
         }else{
+            this.setState({
+                favActive:i
+            });
             get.saveStar({   
                 postId:postId,
                 index:i,
@@ -326,10 +369,10 @@ class Main extends Component {
     }
     getStyles=(prev)=>{
         const{data,motion,dataState}=this.props;
-        const{eleWidth,active,distance,offsetX,deltaX}=motion;
+        const{eleWidth,active,isPressed,offsetX,deltaX}=motion;
         const {detailView} = motion;
         
-        if(dataState==="success" || detailView===true){
+        if(dataState==="success"){
             return data.map((item, i) => {
                 if(i===0){
                     return{
@@ -342,9 +385,9 @@ class Main extends Component {
                             sizeX:spring(0),
                             sizeY:spring(0),
                             rotate:spring(0),
-                            shadowSize1:spring((i===active)?10:0),
-                            shadowSize2:spring((i===active)?50:0),
-                            shadowColor:spring((i===active)?0.2:0),
+                            shadowSize1:spring((i===active)?20:10),
+                            shadowSize2:spring((i===active)?70:50),
+                            shadowColor:spring((i===active)?0.25:0.2),
                         },
                     }
                 }else{
@@ -358,9 +401,9 @@ class Main extends Component {
                             sizeX:spring((typeof prev==="undefined")?0:(typeof prev[i]!=="undefined")?prev[i-1].style.sizeX:0),
                             sizeY:spring((typeof prev==="undefined")?0:(typeof prev[i]!=="undefined")?prev[i-1].style.sizeY:0),
                             rotate:spring((typeof prev==="undefined")?0:(typeof prev[i]!=="undefined")?prev[i-1].style.rotate:0),
-                            shadowSize1:spring((i===active)?10:0),
-                            shadowSize2:spring((i===active)?50:0),
-                            shadowColor:spring((i===active)?0.2:0),
+                            shadowSize1:spring((i===active)?20:10),
+                            shadowSize2:spring((i===active)?70:50),
+                            shadowColor:spring((i===active)?0.25:0.2),
                         },
                     }
                 }
@@ -394,14 +437,20 @@ class Main extends Component {
             shadowColor:spring(0),
         }
     }
-    onRest=()=>{
-
+    countZero=(num)=>{
+        if(num<10){
+            if(num===0){
+                return 0
+            }
+            return '0'+num
+        }else{
+            return num
+        }
     }
-    render() { 
-       
-        const {menuOpen}=this.state;
-        const {motion,authUser,data,loading,dataState,oldLoading}=this.props;
-        const {isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator,distance} = motion;
+    render() {   
+        const {menuOpen,favActive,mainIndex}=this.state;
+        const {motion,authUser,data,loading,total,oldLoading,starLoading,common}=this.props;
+        const {isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
         const style=(isPressed)?{
                 x:offsetX,
             }:{
@@ -427,11 +476,36 @@ class Main extends Component {
                         >
                         <div className="title-wrap">
                             <div className="menu-title">
-                                <h2>All Posts</h2>
+                                <TransitionMotion
+                                styles={this.state.mainText.map((item,i)=>{
+                                    return{
+                                        key: item.key,
+                                        data:item.data,
+                                        style: {
+                                            offset:spring(i>mainIndex?50:i<mainIndex?-50:0),
+                                            opacity:spring(i===mainIndex?1:0)
+                                        },
+                                    }
+                                })}
+                                >
+                                    {currentStyles=>
+                                        <div className="main-txt">
+                                            {currentStyles.map((config,i)=>{
+                                                return <h2 key={config.key} style={{
+                                                    transform:`translateY(${config.style.offset}px)`,
+                                                    opacity:config.style.opacity,
+                                                    position:mainIndex===i?`relative`:`absolute`,
+                                                    pointerEvents:mainIndex===i?``:`none`
+                                                }}>{config.data}</h2>
+                                            })}
+                                        </div>
+                                    }
+                                </TransitionMotion>
                                 <div className={(menuOpen)?"menu-icon active":"menu-icon"} onClick={this.menuOpen}> 
                                     <span/><span/><span/>
                                 </div>
                             </div>
+                            <span className="pages">{this.countZero(active+1)}</span>
                             <div ref={(ref)=>{this.scrollWidth=ref}} className="scroll-bar">
                                 <div className="indicator"
                                     style={{
@@ -440,6 +514,8 @@ class Main extends Component {
                                     }}
                                 ></div>
                             </div>
+                            <span className="total">{this.countZero(total)}</span>
+                                
                         </div>
                         <div className="card-item-wrap" 
                             style={{
@@ -458,14 +534,15 @@ class Main extends Component {
                                         const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
                                         return(
                                         <CardItem key={config.key} 
-                                            onMouseUp={this.itemUp.bind(null,config.data._id,i)}
-                                            favClick={this.favClick.bind(null,config.data._id,i)}
+                                            onMouseUp={this.itemUp.bind(this,config.data._id,i)}
+                                            favClick={this.favClick.bind(this,config.data._id,i)}
                                             fav={isFav}
+                                            favLoading={favActive===i?starLoading?true:false:false}
+                                            favCount={(config.data.starred.length==='')?0:config.data.starred.length}
+                                            favOver={this.handleMouseOver.bind(this,i)}
                                             isGif={isGif}
                                             gifLoad={(active===i && isGif)?true:false}
-                                            favCount={(config.data.starred.length==='')?0:config.data.starred.length}
-                                            favOver={this.handleMouseOver.bind(null,i)}
-                                            onMouseOver={this.handleMouseOver.bind(null,i)} 
+                                            onMouseOver={this.handleMouseOver.bind(this,i)} 
                                             onMouseOut={this.handleMouseOut}
                                             category={config.data.category}
                                             postDate={config.data.postDate}
@@ -482,14 +559,18 @@ class Main extends Component {
                                                 transform:`perspective(600px) rotateY(${config.style.rotate}deg) matrix(${config.style.scale},0.00,0.00,${config.style.scale},${config.style.sizeX},${config.style.sizeY})`,
                                                 opacity:config.style.opacity
                                             }}
+                                            responseFont={(eleWidth-itemPd*2)/21}
+                                            imgHeight={(eleWidth-itemPd*2)*3/4}
+                                            bottomHeight={(eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4}
                                             thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}
                                             gifSrc={(config.data.gif.data.path)?`${urlConfig.url}/api/${config.data.gif.data.path}`:''}
                                             style={{
-                                                width:`calc(100% - ${itemPd*2}px)`,
-                                                height:`calc(100% - ${itemPd*2}px)`,
+                                                width:`${eleWidth-itemPd*2}px`,
+                                                height:`${eleHeight-itemPd*2}px`,
+                                                borderRadius:`10px`,
                                                 boxShadow: `0 ${config.style.shadowSize1}px ${config.style.shadowSize2}px rgba(52, 73, 94, ${config.style.shadowColor})`,
-                                                backgroundColor:(typeof config.data.bgColor!=='undefined')?config.data.bgColor:null
                                             }} 
+                                            bgColor={(typeof config.data.bgColor!=='undefined')?config.data.bgColor:null}
                                         />
                                         )}
                                         )
@@ -528,13 +609,18 @@ export default connect(
         oldLoading:state.posts.toJS().listData.oldPosts.pending,
         oldDataState:state.posts.toJS().listData.oldPosts.state,
         isLast:state.posts.toJS().listData.lastPosts,
-        starState:state.posts.toJS().listData.starred,
-        data:state.posts.toJS().listData.data
+        starLoading:state.posts.toJS().listData.starred.pending,
+        data:state.posts.toJS().listData.data,
+        total:state.posts.toJS().listData.total,
+        error:state.posts.toJS().listData.error,
+        common:state.common.toJS()
     }),
     (dispatch)=>({
         motionDispatch:bindActionCreators(motionActions,dispatch),
         get:bindActionCreators(httpRequest,dispatch),
         modalView:bindActionCreators(modalActions,dispatch),
+        postAction: bindActionCreators(postsActions, dispatch),
+        handleHeader:bindActionCreators(commonAction,dispatch),
         
     })
 )(Main);

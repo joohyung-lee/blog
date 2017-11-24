@@ -39,9 +39,19 @@ failureRedirect: `${proxied_url}auth/loginPopup/fail`,
 successRedirect:`${proxied_url}auth/loginPopup/success`
 }));
 
-
-  
-router.get('/account', ensureAuthenticated, function(req, res){
+//admin user
+router.get('/admin/account', adminAuthenticated, function(req, res){
+  Account.findById(req.session.passport.user, function(err, user) {
+    if(err) {
+      console.log(err);  // handle errors
+    } else {
+      res.json({
+          user:req.user,
+      });
+    }
+  });
+});  
+router.get('/account', ensureAuthenticated, function(req, res){ 
   Account.findById(req.session.passport.user, function(err, user) {
     if(err) {
       console.log(err);  // handle errors
@@ -61,6 +71,19 @@ router.get('/logout', function(req, res) {
 });
 
 // Simple route middleware to ensure user is authenticated.
+function adminAuthenticated(req, res, next) {
+  if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
+  || req.session.passport.user.email!=="joomation@gmail.com") {   
+      return res.status(403).json({
+          error: "NOT LOGGED IN",
+          code: 403
+      });
+  }
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect(`${proxied_url}`);
+}
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next();

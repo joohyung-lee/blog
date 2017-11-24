@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {TransitionMotion,spring} from 'react-motion';
-import 'styles/common/modal/modal.scss';
 const springOption={
     enter:{
         stiffness: 180, 

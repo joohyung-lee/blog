@@ -37,7 +37,7 @@ window.loginSuccess = ()=> {
 store.subscribe(() => {
     if(window.location.pathname==='/admin/write'){
         const {admin} = store.getState();
-        if(admin.getIn(['createData','save'])){
+        if(admin.getIn(['createData','save']) || admin.getIn(['createData','error'])!==-1){
             return localStorage.removeItem('admin');
         }
         localStorage.setItem('admin', JSON.stringify(admin));

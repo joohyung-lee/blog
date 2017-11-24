@@ -15,7 +15,8 @@ const initialState=Map({
         min:0,
         offsetX:0,
         active:0,
-        locationState:false
+        locationState:false,
+        scale:false
     })
 })
 

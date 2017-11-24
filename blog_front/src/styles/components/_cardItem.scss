@@ -1,0 +1,200 @@
+.card-item{
+    position: relative;
+    .card-item-boxWrap{
+        width:100%;
+        height:100%;
+    }
+    .icon-fav{
+        position: absolute;
+        right:40px;
+        bottom:45px;
+        display: inline-block;  
+        @media screen and (max-width: $screen-desktop) {
+            right:35px;
+        } 
+        .svg-wrap{
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+            transform-origin: center;
+            svg{
+                width:100%;
+                height:100%;
+            }
+            .svg-fav{
+            }
+            path{
+                fill:none;
+                stroke: $t-black-6;
+                transition: all .2s ease;
+            }
+            &:hover{
+                .svg-fav{
+                }
+                path{
+                    fill:none;
+                    stroke: $t-black-8;
+                    stroke-width: 1.3px; 
+                }
+            }
+        }
+        .fav-info{
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 25px;
+            .count{
+                margin-right: 5px;
+                font-weight: 600;
+                text-align: right;
+                font-size: 1rem;
+                color:$t-black-8;
+                 
+            }
+        }        
+        cursor: pointer;
+        .fav-loading{
+            pointer-events: none;
+        }
+        
+    }
+    .icon-fav.active{
+        .svg-wrap{
+            animation:scale-bounce-up 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            transform-origin: center center;
+            path{
+                fill:$t-black-8;
+                
+            }
+            &:hover{
+                .svg-fav{
+                }
+                path{
+                    
+                    fill:$t-black-8;
+                    stroke: $t-black-8;
+                    stroke-width: 1px; 
+                }
+            }
+        }
+        
+    }
+    .card-item-box{
+        position: relative;
+        cursor: pointer;   
+        border-radius: 10px;
+        overflow: hidden;
+       
+    }
+    .card-item-image{
+        position: relative;
+        width:100%;
+        background-color:#222;
+       
+        img{
+            display: inline-block;
+            width: 100%;
+        }
+    }
+    .gif-loading-wrap{
+        position: absolute;
+        top:20px;
+        right:20px;
+        &.in{
+            opacity: 1;
+        }
+        &.out{
+            opacity: 0;
+        }
+        .gif-loading{
+            width:50px;
+            height:25px;  
+            transform-origin: 50% 50%;
+        }
+        .gif-loading.animate{              
+            animation: loadingrotate .7s linear infinite;
+            animation-delay: 300ms;
+        }
+    }
+    .fade-in{
+        opacity: 1;
+        transition: opacity 1s;
+    }
+    .fade-out{
+        opacity: 0;
+        transition: opacity 1s;
+        
+    }
+    .card-item-bottom{
+        width: 100%;
+        padding:20px 20px 50px 20px;
+        background-color: $t-white-10;
+        @media screen and (max-width: $screen-desktop) {
+            padding:15px 15px 50px 15px;
+           
+        }
+        .post-meta{
+            .category{
+                font-weight: 400;
+                color:$c-black-2;
+            }
+        }
+        h3{
+            margin-top:4px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color:$c-black-0;
+            white-space: normal;
+            word-break: keep-all;
+        }
+        .avatar-wrap{
+            position: absolute;
+            left:0;
+            bottom:15px;
+            padding:0 0 0 60px;
+            span{
+                display: block;
+                line-height: 1.4;
+                font-size:1rem;
+                color:$c-black-0;
+            }
+            .date{
+                font-size:0.9rem;
+                color:$c-black-2;
+            }
+            .avatar{
+                position: absolute;
+                left:15px;
+                width:35px;
+                height: 35px;
+                vertical-align: middle;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+        }
+    }
+    .summary-wrap{
+        position: absolute;
+        width: 100%;
+        top: 100%;
+        left: 0;
+        padding:0 22px;
+        white-space: normal;
+        word-break: keep-all;
+        h3{
+            font-size:1.3rem;
+            font-weight: 400;
+            color:$c-black-1;
+            margin-bottom:10px;
+        }
+        p{
+            color:$c-black-1;
+        }
+    }
+}
+.card-item.hover{
+    .card-item-box{
+        
+    }
+}

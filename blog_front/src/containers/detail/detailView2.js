@@ -15,8 +15,6 @@ import { bindActionCreators } from 'redux';
 import * as modalActions from 'redux/modal';
 import * as motionActions from 'redux/main';
 
-//css
-import 'styles/detail/index.scss';
 class DetailView extends Component {
     constructor(props){
         super(props);

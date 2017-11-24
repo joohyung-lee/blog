@@ -1,8 +1,8 @@
-import FadeTransition from './fadeTransition';
-import RouterMotion from './routerMotion';
-import DetailMotion from './detailMotion';
+import MainRoute from './mainRoute';
+import SearchRoute from './searchRoute';
+import FadeTransition from './searchRoute';
 export{
-    FadeTransition,
-    RouterMotion,
-    DetailMotion
+    MainRoute,
+    SearchRoute,
+    FadeTransition
 }

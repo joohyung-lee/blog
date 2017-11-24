@@ -6,7 +6,7 @@ class RedirectLogin extends Component {
     componentDidMount(){
         
         switch (this.props.match.params.name) {
-            case 'goolge':                  
+            case 'google':                  
                 window.location.href=urlConfig.GOOGLE_LOGIN_URL;                    
                 break;
             case 'facebook':                  
