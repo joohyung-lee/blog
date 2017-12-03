@@ -9,7 +9,7 @@ import * as modalActions from 'redux/modal';
 import * as authActions from 'redux/auth';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+//svg
 import defaultAvatar from 'images/defaultAvatar.svg';
 class AuthLogin extends Component {
     componentWillMount(){
@@ -61,7 +61,9 @@ class AuthLogin extends Component {
                 <LoginState 
                     view={(authUser.isLogin)?'mypage':'login'}
                     open={this.props.open}
+                    header={this.props.header}
                     dropdown={this.props.dropdown}
+                    avatarFace={this.props.avatarFace}
                     userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg} 
                     logOut={this.logOut}
                     authLoading={authUser.pending}

@@ -34,7 +34,7 @@ class Search extends Component{
             tagRightScroll:false,
             favActive:0,
             active:null,
-            scrollLoad:false
+            scrollLoad:false,
             
         }
     }
@@ -391,11 +391,11 @@ class Search extends Component{
         })
         if(value.scrollTop>1){
             this.setState({
-                searchScroll:true
+                searchScroll:true,
             })
         }else{
             this.setState({
-                searchScroll:false
+                searchScroll:false,
             })
         }
     }
@@ -477,18 +477,14 @@ class Search extends Component{
     }
     handleMouseOut=(i,e)=>{
         const{active}=this.state;
-        if(active===i){
-            return false;
-            
-        }else{
-            this.setState({
-                active:null
-            })
-        }
+        this.setState({
+            active:null
+        })
        
     }
     itemUp=(id,i,e)=>{
-        return this.props.history.push(`/posts/motionlab/${id}`);            
+        this.props.history.push(`/posts/motionlab/${id}`)
+ 
     }
     render(){
         const {common,tags,postsData,postsLoading,authUser,starLoading} = this.props;

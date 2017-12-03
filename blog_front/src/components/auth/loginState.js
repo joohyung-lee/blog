@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {TransitionMotion,spring} from 'react-motion';
 import * as httpRequest from 'redux/helper/httpRequest';
+//svg
+import DefaultAvatar from 'images/default-avatar';
 //router
 import {Link} from 'react-router-dom';
 
@@ -91,7 +93,9 @@ class LoginState extends Component {
                     {(this.props.view==='login')?
                         <button className="btn-login" onClick={this.props.dropdown}>Login</button>:
                         <div className="avatar-wrap" onClick={this.props.dropdown}>
-                            <div className="avatar" style={{backgroundImage:`url(${this.props.userImg})`}}>
+                        
+                            <div className="avatar" style={{backgroundImage:`url(${this.props.header?'':this.props.userImg})`}}>
+                                {this.props.header?<DefaultAvatar open={this.props.avatarFace}/>:null}
                             </div>
                         </div>
                     }

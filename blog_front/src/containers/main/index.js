@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import defaultAvatar from 'images/defaultAvatar.svg';
 const springSetting = {stiffness: 300, damping: 30};
+const springSetting2 = {stiffness: 230, damping: 15};
 
 class Main extends Component {
     constructor(props){
@@ -126,13 +127,39 @@ class Main extends Component {
             window.addEventListener('mousemove',this.handleMove);
             window.addEventListener('mouseup',this.handleUp);
         }
-        const wrapperPd=70;//full width padding
-        const itemPd=21;//card item padding
         const eleResponse=window.innerWidth/3.5;
+        const mobileSize=window.innerWidth/1.2;
         const minDesk=window.innerWidth/2.5;
         const maxDesk=window.innerWidth/4.5;
-        const eleWidth=(window.innerWidth>1600)?(maxDesk>400)?400:maxDesk:(window.innerWidth<1024)?minDesk:eleResponse;//card item width
-        const eleHeight=eleWidth*1.2;//card item height 
+        //full width padding
+        const wrapperPd=(window.innerWidth<1600)?
+            (window.innerWidth<1024)?
+            window.innerWidth<670?
+            30:
+            50:
+            50:
+            70
+        //card item padding
+        const itemPd=(window.innerWidth<1600)?
+            (window.innerWidth<1024)?
+            window.innerWidth<670?
+            15:
+            15:
+            15:
+            20;
+        //card item width
+        const eleWidthSize=(window.innerWidth>1600)?
+            (maxDesk>400)?
+            400:
+            maxDesk:
+            (window.innerWidth<1024)?
+            window.innerWidth<670?
+            mobileSize:
+            minDesk:
+            eleResponse;
+        const eleWidth=eleWidthSize;
+        //card item height 
+        const eleHeight=eleWidth*1.2;
         //full width
         let wrapperWidth=this.wrapperWidth.clientWidth-wrapperPd*2;
         
@@ -294,8 +321,7 @@ class Main extends Component {
     }
 
     itemUp=(id,i,e)=>{
-        console.log('up')
-        let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.touches[0]:e; 
+        let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.changedTouches[0]:e; 
         const {motion,motionDispatch}=this.props;
         const {offsetX,eleWidth,wrapperPd,itemPd,startX}=motion;
         const distance=startX-event.pageX;
@@ -306,6 +332,9 @@ class Main extends Component {
                     offsetX:offsetX
                 }
             });
+            this.setState({
+                menuOpen:false
+            })
             this.props.history.push(`/posts/motionlab/${id}`);            
         }       
     }
@@ -454,13 +483,13 @@ class Main extends Component {
         const style=(isPressed)?{
                 x:offsetX,
             }:{
-                x:spring(offsetX)
+                x:spring(offsetX),
             };
         return (     
             <div>   
                 <Menu open={menuOpen} linkLoading={loading}/>
                 <Motion style={style} onRest={this.onRest}>
-                    {({x,scale})=>
+                    {({x})=>
                     <div className="main-container"
                         onTouchStart={this.handleDown.bind(this,x)} 
                         onMouseDown={this.handleDown.bind(this,x)} 
@@ -468,10 +497,8 @@ class Main extends Component {
                     > 
                     <div ref={(ref)=>{this.wrapperWidth=ref}} 
                         className={(menuOpen)?`main-wrapper menu`:`main-wrapper`} 
-                        
                         style={{
                             padding:`0px ${wrapperPd}px`,
-                            
                         }}
                         >
                         <div className="title-wrap">
@@ -482,8 +509,8 @@ class Main extends Component {
                                         key: item.key,
                                         data:item.data,
                                         style: {
-                                            offset:spring(i>mainIndex?50:i<mainIndex?-50:0),
-                                            opacity:spring(i===mainIndex?1:0)
+                                            offset:spring(i>mainIndex?50:i<mainIndex?-50:0,springSetting2),
+                                            opacity:spring(i===mainIndex?1:0,springSetting2)
                                         },
                                     }
                                 })}

@@ -151,7 +151,7 @@ class Header extends Component {
                         value={common.searchValue} 
                         onKeyDown={this.handleSearch}
                         searchClose={this.backSearch}/>
-                        <AuthLogin open={modal['mymenu'].open} dropdown={this.dropdown}/>
+                        <AuthLogin open={modal['mymenu'].open} header={false} dropdown={this.dropdown} avatarFace={modal['mymenu'].open}/>
                     </div>
                     
                 </div>

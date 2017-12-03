@@ -188,7 +188,7 @@
                     z-index: 1;
                     transform: scale(1.03)
                 }
-                &:active{
+                &.scale{
                     transform: scale(0.96)
                 }
                 .card-item-box{

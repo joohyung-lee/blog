@@ -248,7 +248,7 @@ class AdminMain extends Component {
                                             onClick={this.handleDelete.bind(this,item._id,i)}
                                             >삭제</button>
                                             {(delActive===i && delLoading)?
-                                            <DefaultLoading color="white"/>:null
+                                            <DefaultLoading color="white" size="20" r="8" stroke="1"/>:null
                                             }
                                         </div>
                                     </li>

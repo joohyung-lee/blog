@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import IconFav from 'images/iconFav';
 import GifLoading from 'images/gifLoading';
 import DefaultLoading from 'images/defaultLoading';
-import GifText from 'images/gifText';
 class CardItem extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +11,8 @@ class CardItem extends Component {
             thumbLoading:false,
             gifLoading:false,
             imgSrc:null,
-            imgLoadState:'wating'
+            imgLoadState:'wating',
+            startX:0
         }
       }
     componentDidMount() {
@@ -50,32 +50,52 @@ class CardItem extends Component {
             };
         }
     }      
-    handleDown=()=>{
-        this.setState({
-            itemPress:true
-        })
-    }  
-    handleUp=(e)=>{
+    handleMouseOut=(e)=>{
         this.setState({
             itemPress:false
         });
-        //console.log(this.props.onMouseUp(e))
-        return this.props.onMouseUp(e);
+        return this.props.onMouseOut(e);        
+    }
+    handleDown=(e)=>{
+        let event=(e.type=='mouseup')?e:(e.type=='touchstart')?e.touches[0]:e;  
+        this.setState({
+            itemPress:true,
+            startX:event.pageX,
+        })
+    }  
+    handleMove=(e)=>{
+        const {startX} = this.state;
+        this.setState({
+            itemPress:false
+        }) 
+    }
+    handleUp=(e)=>{
+        const {startX} = this.state;
+        let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.changedTouches[0]:e;     
+        const distance=startX-event.pageX;
+        if(Math.abs(distance) < 1){    
+            return (this.state.itemPress)?this.props.onMouseUp(e):false;
+        }
+        
     } 
     render() {
-        const {thumbLoading,gifLoading,imgSrc,imgLoadState}=this.state;
+        const {thumbLoading,gifLoading,imgSrc,imgLoadState,itemPress}=this.state;
         return (
-            <div className={this.props.className} 
+            <div className={(itemPress)?`scale ${this.props.className}`:this.props.className} 
                 style={this.props.wrapStyle}
             >
-                <div className="card-item-boxWrap">
+                <div className={`card-item-boxWrap`}>
                     <div className="card-item-box" 
                         onMouseOver={this.props.onMouseOver} 
-                        onMouseOut={this.props.onMouseOut}
-                        
-                        onTouchEnd={this.props.onTouchEnd}
+                        onMouseOut={this.handleMouseOut}
                         onMouseDown={this.handleDown}
+                        onMouseMove={this.handleMove}
                         onMouseUp={this.handleUp}
+        
+                        onTouchStart={this.handleDown}
+                        onTouchMove={this.handleMove}
+                        onTouchEnd={this.handleUp}
+                        
                         style={this.props.style}
                     >    
                         <div className="card-item-image" style={{
@@ -86,12 +106,10 @@ class CardItem extends Component {
                             {
                                 thumbLoading?<DefaultLoading color="white"/>:null
                             }
+
                             {(this.props.isGif)?
-                            <div className={`${(!gifLoading && this.props.gifLoad)?`gif-loading-wrap out`:`gif-loading-wrap in`}`}>
-                                {(gifLoading)?
-                                    <GifLoading open={gifLoading}/>:
-                                    <GifText/>
-                                }
+                            <div className={`gif-loading-wrap ${(this.props.gifLoad)?(!gifLoading)?`out`:`in`:``}`}>
+                                <GifLoading open={gifLoading && this.props.gifLoad}/>
                             </div>:null
                             }
                         </div>
