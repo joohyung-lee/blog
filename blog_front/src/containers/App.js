@@ -99,8 +99,8 @@ class App extends Component {
   }
   move=(val)=>{
     return spring(val, {
-      stiffness: 174,
-      damping: 24,
+      stiffness: 120,
+      damping: 15,
     });
   }
   mainMapStyles(styles) {
@@ -197,7 +197,7 @@ class App extends Component {
                     <Route component={NotFound}/>   
                   </AnimatedSwitch>
                   <AnimatedRoute
-                    className={`detail-page-wrap ${(motion.detailView)?"hidden":""}`}
+                    className={`detail-page-wrap`}
                     path="/posts/:category/:postId"
                     component={DetailView}
                     {...detailLayer}

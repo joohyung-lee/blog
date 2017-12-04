@@ -62,7 +62,7 @@ html,body{
     position: relative;
     transition: transform 0.4s ease;
     height:100vh;
-    transform-origin:50% 0;
+    transform-origin:50% 50%;
     &.scale{
         transform: scale(0.92);
         .thumb-vertical{

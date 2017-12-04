@@ -64,18 +64,26 @@ class CardItem extends Component {
         })
     }  
     handleMove=(e)=>{
-        const {startX} = this.state;
-        this.setState({
-            itemPress:false
-        }) 
+        const {startX,itemPress} = this.state;
+        let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.changedTouches[0]:e;     
+        
+        if(itemPress){
+            const distance=startX-event.pageX;
+            if(Math.abs(distance)>1){
+                this.setState({
+                    itemPress:false
+                })
+            }
+             
+        }
+        
+        
     }
     handleUp=(e)=>{
         const {startX} = this.state;
         let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.changedTouches[0]:e;     
         const distance=startX-event.pageX;
-        if(Math.abs(distance) < 1){    
-            return (this.state.itemPress)?this.props.onMouseUp(e):false;
-        }
+        return (this.state.itemPress)?this.props.onMouseUp(e):false;
         
     } 
     render() {

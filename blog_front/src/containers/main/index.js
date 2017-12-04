@@ -46,7 +46,6 @@ class Main extends Component {
             ],
             searchKeyowrdAni:[],
             mainIndex:0,
-
         };
         
     }
@@ -320,23 +319,17 @@ class Main extends Component {
 
     }
 
-    itemUp=(id,i,e)=>{
-        let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.changedTouches[0]:e; 
+    itemUp=(id,i,bgColor,e)=>{
         const {motion,motionDispatch}=this.props;
-        const {offsetX,eleWidth,wrapperPd,itemPd,startX}=motion;
-        const distance=startX-event.pageX;
-        if(Math.abs(distance) < 20){
+        const {offsetX}=motion;
             motionDispatch.motionActions({
                 motions:{
                     active:i,
-                    offsetX:offsetX
+                    offsetX:offsetX,
+                    bgColor:bgColor
                 }
             });
-            this.setState({
-                menuOpen:false
-            })
             this.props.history.push(`/posts/motionlab/${id}`);            
-        }       
     }
     handleTouchUp=(e)=>{
         this.handleUp();
@@ -398,9 +391,8 @@ class Main extends Component {
     }
     getStyles=(prev)=>{
         const{data,motion,dataState}=this.props;
+        const {detailView}=this.state;
         const{eleWidth,active,isPressed,offsetX,deltaX}=motion;
-        const {detailView} = motion;
-        
         if(dataState==="success"){
             return data.map((item, i) => {
                 if(i===0){
@@ -409,7 +401,7 @@ class Main extends Component {
                         data:item,
                         style: {
                             size:eleWidth*i,
-                            opacity:spring((i===active)?1:0.9),
+                            opacity:spring(1),
                             scale:spring((i===active)?1.07:1),
                             sizeX:spring(0),
                             sizeY:spring(0),
@@ -425,11 +417,11 @@ class Main extends Component {
                         data:item,
                         style: {
                             size:eleWidth*i,
-                            opacity:spring((i===active)?1:0.9),
+                            opacity:spring(1),
                             scale:spring((i===active)?1.07:1),
-                            sizeX:spring((typeof prev==="undefined")?0:(typeof prev[i]!=="undefined")?prev[i-1].style.sizeX:0),
-                            sizeY:spring((typeof prev==="undefined")?0:(typeof prev[i]!=="undefined")?prev[i-1].style.sizeY:0),
-                            rotate:spring((typeof prev==="undefined")?0:(typeof prev[i]!=="undefined")?prev[i-1].style.rotate:0),
+                            sizeX:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.sizeX),
+                            sizeY:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.sizeY),
+                            rotate:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.rotate),
                             shadowSize1:spring((i===active)?20:10),
                             shadowSize2:spring((i===active)?70:50),
                             shadowColor:spring((i===active)?0.25:0.2),
@@ -477,7 +469,7 @@ class Main extends Component {
         }
     }
     render() {   
-        const {menuOpen,favActive,mainIndex}=this.state;
+        const {menuOpen,favActive,mainIndex,detailView}=this.state;
         const {motion,authUser,data,loading,total,oldLoading,starLoading,common}=this.props;
         const {isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
         const style=(isPressed)?{
@@ -561,7 +553,7 @@ class Main extends Component {
                                         const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
                                         return(
                                         <CardItem key={config.key} 
-                                            onMouseUp={this.itemUp.bind(this,config.data._id,i)}
+                                            onMouseUp={this.itemUp.bind(this,config.data._id,i,config.data.bgColor)}
                                             favClick={this.favClick.bind(this,config.data._id,i)}
                                             fav={isFav}
                                             favLoading={favActive===i?starLoading?true:false:false}
@@ -584,19 +576,21 @@ class Main extends Component {
                                                 padding:`${itemPd}px`, 
                                                 left:`${config.style.size}px`,
                                                 transform:`perspective(600px) rotateY(${config.style.rotate}deg) matrix(${config.style.scale},0.00,0.00,${config.style.scale},${config.style.sizeX},${config.style.sizeY})`,
+                                                zIndex:detailView===i?10:1,
                                                 opacity:config.style.opacity
                                             }}
+                                            style={{
+                                                width:`100%`,
+                                                height:`100%`,
+                                                borderRadius:`10px`,
+                                                boxShadow: `0 ${config.style.shadowSize1}px ${config.style.shadowSize2}px rgba(52, 73, 94, ${config.style.shadowColor})`,
+                                                
+                                            }} 
                                             responseFont={(eleWidth-itemPd*2)/21}
                                             imgHeight={(eleWidth-itemPd*2)*3/4}
                                             bottomHeight={(eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4}
                                             thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}
                                             gifSrc={(config.data.gif.data.path)?`${urlConfig.url}/api/${config.data.gif.data.path}`:''}
-                                            style={{
-                                                width:`${eleWidth-itemPd*2}px`,
-                                                height:`${eleHeight-itemPd*2}px`,
-                                                borderRadius:`10px`,
-                                                boxShadow: `0 ${config.style.shadowSize1}px ${config.style.shadowSize2}px rgba(52, 73, 94, ${config.style.shadowColor})`,
-                                            }} 
                                             bgColor={(typeof config.data.bgColor!=='undefined')?config.data.bgColor:null}
                                         />
                                         )}

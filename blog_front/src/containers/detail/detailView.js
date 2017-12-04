@@ -18,6 +18,7 @@ class DetailView extends Component {
     constructor(props){
         super(props);
         this.state={
+            iframeLoad:false,
             commentsData:[//임시 테스트
                 {
                     "postId": 1,
@@ -45,9 +46,6 @@ class DetailView extends Component {
                     "userName": "JOO",
                     "body": "댓글 내용이다아"
                 },
-                
-
-
             ]
         }
     }
@@ -56,19 +54,22 @@ class DetailView extends Component {
         window.addEventListener('resize',this.dimentions);
         const {get,data,motion,motionDispatch}=this.props; 
         window.addEventListener('click',this.outHide);
-        get.getSinglePost('POSTS/SINGLE_GET',this.props.match.params.category,this.props.match.params.postId);
+        setTimeout(()=>{
+            get.getSinglePost('POSTS/SINGLE_GET',this.props.match.params.category,this.props.match.params.postId);
+        },300)
+        
         
     }
     componentWillUnmount(){
         window.removeEventListener("resize", this.dimentions);  
  
     }
-    
     componentWillReceiveProps(nextProps) {
-        
         const {get}=this.props;
         const locationChanged = nextProps.location !== this.props.location;
         if(locationChanged){
+            
+            
             get.getSinglePost('POSTS/SINGLE_GET',nextProps.match.params.category,nextProps.match.params.postId);
         }
 
@@ -112,44 +113,70 @@ class DetailView extends Component {
         this.props.history.goBack();
         
     }
+    iframeLoad=()=>{
+        this.setState({
+            iframeLoad:true
+        })
+    }
     render() {
         const {data,modal,motion}=this.props;
+        const {iframeLoad} = this.state;
         return (
-            <Scrollbars
-            style={{
-                height:`${motion.innerHeight}px`,
-            }}>
+            <div className="detail-frame">
+                <Scrollbars
+                className="detail-contents-wrap"
+                style={{
+                    height:`${motion.innerHeight}px`,
+                }}>
+                    <button onClick={this.layerclose}>close</button>
+                        {data.map((item,i)=>{
+                            return  <div key="i"
+                                        className="detail-contents"
+                                    >
+                                        <Link to="/posts/motionlab/59d3423f455c61032eb5b4b0">다음페이지</Link>
+                                        <h1 className="title">{item.title}</h1>
+                                        <div className="body">    
+                                            <MarkdownView source={item.body}/>
+                                        </div>
+                                        <Comments
+                                            header={<AuthLogin open={modal['postAuth'].open} dropdown={this.dropdown}/>}
+                                            commentsData={this.state.commentsData}
+                                        />
+                                    </div>
+                            
+                        })}
+                </Scrollbars>
                 <Motion defaultStyle={{x: 0}} style={{x: spring(10)}}>
                     {({x})=>
                         <div className="detail-main"
-                        style={{
-                            height:`${motion.innerHeight*0.6}px`,
-                        }}
-                        >
-                            <div className="iframe-wrap">
-                            
+                            style={{
+                                height:`${motion.innerHeight}px`,
+                                backgroundColor:motion.bgColor
+                            }}
+                            >
+                            <div className="device-controll-wrap">
+                                <div className="device-controll">
+                                    <div className="dic">
+                                        <span className="icon-device"></span>
+                                        <span className="icon-text">Phone</span>
+                                    </div>
+                                    <div className="dic">
+                                        <span className="icon-device"></span>
+                                        <span className="icon-text">Desktop</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={`iframe-wrap ${iframeLoad?'load':''}`}>
+                            {data.map((item,i)=>{
+                                return <iframe src={item.iframeUrl}
+                                onLoad={this.iframeLoad} 
+                                frameBorder="0" width="100%" height="100%"></iframe>
+                            })}
                             </div>   
                         </div>
                     }
                 </Motion>
-                <button onClick={this.layerclose}>close</button>
-                    {data.map((item,i)=>{
-                        return  <div key="i" className="detail-wrap" style={{
-                                    
-                                }}>
-                                    <Link to="/posts/motionlab/59d3423f455c61032eb5b4b0">다음페이지</Link>
-                                    <h1 className="title">{item.title}</h1>
-                                    <div className="body">    
-                                        <MarkdownView source={item.body}/>
-                                    </div>
-                                    <Comments
-                                        header={<AuthLogin open={modal['postAuth'].open} dropdown={this.dropdown}/>}
-                                        commentsData={this.state.commentsData}
-                                    />
-                                </div>
-                        
-                    })}
-            </Scrollbars>
+            </div>
                          
         );
     }
@@ -160,7 +187,7 @@ export default connect(
     (state)=>({
         motion:state.main.toJS().motions,
         modal:state.modal.toJS(),
-        data:state.posts.toJS().itemData.data
+        data:state.posts.toJS().itemData.data,
     }),
     (dispatch)=>({
         get:bindActionCreators(httpRequest,dispatch),
