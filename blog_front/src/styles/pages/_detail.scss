@@ -6,14 +6,29 @@
     }
 
 }
+.detail-loading{
+    width: 100vw;
+    height:100vh;
+}
 .detail-frame{
-    display: flex;
+    position: relative;
+    width: 100vw;
+    height:100vh;
 }
 .detail-main{
-    position: relative;
-    flex:1.2;
-    padding:100px 20px 20px;
+    position: absolute;
+    top:0;
+    right:0;
+    padding:100px 0;
     background-color:#ccc; 
+    
+    &.animate{
+        transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),background-color 500ms;
+        -webkit-transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),background-color 500ms;
+        -moz-transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),background-color 500ms;
+         -ms-transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),background-color 500ms;
+          -o-transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),background-color 500ms;
+    }
     .device-controll-wrap{
         .device-controll{
             text-align: center;
@@ -30,30 +45,44 @@
         }
     } 
     .iframe-wrap{
-        &.load{
-            height:700px;
-            border-radius: 20px;
-            width:calc(100% - 40px);
-            
-        }
         position: absolute;
         top:0;
         bottom:0;
-        left:20px;
-        right:20px;
+        left:0px;
+        right:0px;
         margin:auto;
-        width:100px;
-        height:100px;
-        border-radius: 50px;
-        border:1px solid $t-white-10;
+        height:700px;
+        border-radius: 20px;
         overflow:hidden;
-        transition: all 0.4s ease-out;
-        iframe{
+        transition: width 0.4s,height 0.4s;
+        .iframe-border{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right:0;
+            bottom:0;
+            margin:auto;
+            transition: width 0.4s,height 0.4s;
+            svg,rect{
+                position: absolute;
+                top: 0;
+                left: 0;
+                right:0;
+                bottom:0;
+                margin:auto;
+                transition: width 0.4s,height 0.4s;
+            }
         }
     }
   }
 .detail-contents-wrap{
-    flex:1;
+    opacity: 0;
+    transition: opacity 0.5s;
+    &.animate{
+        opacity: 1;   
+    }
     .detail-contents{
         padding:100px 20px 20px;
     }

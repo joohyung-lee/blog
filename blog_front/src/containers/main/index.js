@@ -50,7 +50,7 @@ class Main extends Component {
         
     }
     componentWillMount(){
-        const url=this.props.location.pathname.replace('/','');
+        const url=this.props.location.pathname.split('/')[1];
         this.state.mainText.map((item,i)=>{
             if(url===item.key){
                 this.setState({
@@ -61,7 +61,7 @@ class Main extends Component {
     }
     componentDidMount(){     
         const{get,data,motion,common,handleHeader}=this.props;
-        const url=this.props.location.pathname.replace('/','');
+        const url=this.props.location.pathname.split('/')[1];
         if(!common.mainLoad){
             get.getCategoryPost('POSTS/CATEGORY_GET',url);
         }
@@ -86,11 +86,10 @@ class Main extends Component {
         }
         
     }
-
-    componentDidUpdate(prevProps,prevState){
+    componentWillReceiveProps(nextProps) {
         const{get,motionDispatch}=this.props;
         const{starState}=this.state;
-        const locationChanged = prevProps.location !== this.props.location;   
+        const locationChanged = nextProps.location !== this.props.location;   
         if(locationChanged){        
             motionDispatch.motionActions({
                 motions:{
@@ -98,7 +97,7 @@ class Main extends Component {
                     active:0,
                 }
             });    
-            const url=this.props.location.pathname.replace('/','');
+            const url=nextProps.location.pathname.split('/')[1];
             get.getCategoryPost('POSTS/CATEGORY_GET',url);   
             this.state.mainText.map((item,i)=>{
                 if(url===item.key){
@@ -108,10 +107,11 @@ class Main extends Component {
                 }
             })
         }
-        if(prevProps.data.length!==this.props.data.length){
+        if(nextProps.data.length!==this.props.data.length){
             this.dimensions();    
         }
-    }
+    }        
+
     //setting response size
     dimensions=()=>{     
         const {motion,data,motionDispatch}=this.props;
@@ -274,7 +274,7 @@ class Main extends Component {
     }
     loadOldPosts=()=>{
         const {isLast,get,data,dataState}=this.props;
-        const url=this.props.location.pathname.replace('/','');
+        const url=this.props.location.pathname.split('/')[1];
         if(dataState==='success'){
             if(isLast) {
                 return new Promise(
@@ -319,17 +319,18 @@ class Main extends Component {
 
     }
 
-    itemUp=(id,i,bgColor,e)=>{
+    itemUp=(id,i,bgColor,category,e)=>{
         const {motion,motionDispatch}=this.props;
         const {offsetX}=motion;
             motionDispatch.motionActions({
                 motions:{
                     active:i,
                     offsetX:offsetX,
-                    bgColor:bgColor
+                    bgColor:bgColor,
+                    detailLoad:false
                 }
             });
-            this.props.history.push(`/posts/motionlab/${id}`);            
+            this.props.history.push(`/posts/${category}/${id}`);            
     }
     handleTouchUp=(e)=>{
         this.handleUp();
@@ -553,7 +554,7 @@ class Main extends Component {
                                         const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
                                         return(
                                         <CardItem key={config.key} 
-                                            onMouseUp={this.itemUp.bind(this,config.data._id,i,config.data.bgColor)}
+                                            onMouseUp={this.itemUp.bind(this,config.data._id,i,config.data.bgColor,config.data.category)}
                                             favClick={this.favClick.bind(this,config.data._id,i)}
                                             fav={isFav}
                                             favLoading={favActive===i?starLoading?true:false:false}

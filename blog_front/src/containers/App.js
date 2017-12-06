@@ -126,12 +126,7 @@ class App extends Component {
       modalName:'login'
     });
   }
-  isEmpty = (obj)=>{
-    for (let key in obj)
-      if(obj.hasOwnProperty(key))
-        return false;
-    return true;
-  }
+
   render() {
     const {adminError,adminLoading,postsError,postsLoading,header,motion,modal}=this.props;
     
