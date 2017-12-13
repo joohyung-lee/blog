@@ -1,5 +1,4 @@
 import { handleActions, createAction } from 'redux-actions';
-import {pending} from 'redux/helper/pending'
 import {Map} from 'immutable';
 //액션
 const MOTION= 'MAIN/MOTION';
@@ -16,7 +15,8 @@ const initialState=Map({
         offsetX:0,
         active:0,
         locationState:false,
-        scale:false
+        scale:false,
+        bgColor:'#ffffff'
     })
 })
 

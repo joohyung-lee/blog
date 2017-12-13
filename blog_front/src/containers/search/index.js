@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {Motion,TransitionMotion,StaggeredMotion,spring} from 'react-motion';
+import {TransitionMotion,spring} from 'react-motion';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 //config
@@ -39,9 +38,7 @@ class Search extends Component{
         }
     }
     componentWillMount(){
-        const{searchValue}=this.props.common;
-        const {get,handleHeader}=this.props;
-        
+        const {handleHeader}=this.props;
         if(typeof this.props.match.params.keyword!=="undefined"){
             handleHeader.searchValue({
                 searchValue:this.props.match.params.keyword
@@ -69,7 +66,7 @@ class Search extends Component{
         
     }
     componentDidMount(){
-        const {get,handleHeader,common}=this.props;
+        const {get}=this.props;
         this.dimensions();
         
         window.addEventListener('resize',this.dimensions); 
@@ -109,9 +106,8 @@ class Search extends Component{
         }
     }
     componentDidUpdate(prevProps,prevState){
-        const{postsState,postsScroll}=this.props;
+        const{postsScroll}=this.props;
         const{scrollLoad}=this.state
-        const locationChanged = prevProps.location !== this.props.location;   
         if(!scrollLoad){    
             this.refs.scrollbars.scrollTop(postsScroll);
             this.setState({
@@ -120,7 +116,7 @@ class Search extends Component{
         }
     }
     componentWillReceiveProps(nextProps){
-        const {get,postAction,postsLoading,handleHeader}=this.props; 
+        const {get,postAction,handleHeader}=this.props; 
         const{searchValue}=nextProps.common;
         const paramsChanged = nextProps.match.params.keyword !== this.props.match.params.keyword;
         const pathChanged=nextProps.match.path!==this.props.match.path;
@@ -269,13 +265,18 @@ class Search extends Component{
         window.removeEventListener("resize", this.dimensions);
     }
     dimensions=()=>{
-        const eleWidth=window.innerWidth>1200?
-        this.searchContents.clientWidth/4:
-        window.innerWidth<900?
-        window.innerWidth<670?
-        this.searchContents.clientWidth:
-        this.searchContents.clientWidth/2:
-        this.searchContents.clientWidth/3;
+        let eleWidth;
+        if(this.searchContents.clientWidth!==null || typeof this.searchContents.clientWidth!=='undefined'){
+            eleWidth=window.innerWidth>1200?
+            this.searchContents.clientWidth/4:
+            window.innerWidth<900?
+            window.innerWidth<670?
+            this.searchContents.clientWidth:
+            this.searchContents.clientWidth/2:
+            this.searchContents.clientWidth/3;
+        }else{
+            eleWidth=0;
+        }
         this.setState({
             eleWidth:eleWidth,
             itemPd:10,
@@ -380,12 +381,14 @@ class Search extends Component{
                     size:7*textSize.length+35,
                     data:text,
                 })
+            }else{
+                return [];
             }
         })
         return tagData;
     }
     handleScroll=(value)=>{
-        const {postAction,postsScroll}=this.props;
+        const {postAction}=this.props;
         postAction.postScroll({
             scroll:value.scrollTop
         })
@@ -476,7 +479,6 @@ class Search extends Component{
         }
     }
     handleMouseOut=(i,e)=>{
-        const{active}=this.state;
         this.setState({
             active:null
         })
@@ -487,7 +489,7 @@ class Search extends Component{
  
     }
     render(){
-        const {common,tags,postsData,postsLoading,authUser,starLoading} = this.props;
+        const {postsData,postsLoading,authUser,starLoading} = this.props;
         const {hash,eleWidth,itemPd,tagUrl,windowHeight,tagLeftScroll,tagRightScroll,searchScroll,initial,favActive,active} =this.state;
         return (
             <Scrollbars
@@ -504,54 +506,56 @@ class Search extends Component{
                         <div className="search-contents">
                             <div className="search-result">
                                 {initial?<div className="no-data">
-                                    <span>Search text or tag</span>
-                                </div>:
-                                <div className="search-result-title">
-                                    <span className="count">{postsData.length} Posts</span>
-                                    <span>results for {tagUrl?`tag`:`title/body`}</span>
-                                </div>
-                                }
+                                            <span>Search text or tag</span>
+                                        </div>:
+                                <div>
+                                    <div className="search-result-title">
+                                        <span className="count">{postsData.length} Posts</span>
+                                        <span>results for {tagUrl?`tag`:`title/body`}</span>
+                                    </div>
                                 {!initial && !postsLoading && postsData.length===0?
                                 <div className="no-data">
                                     <span>No matches found for</span>
                                     <b> "{this.props.match.params.keyword}"</b>
                                 </div>
                                 :null}
-                                <div className="search-result-contents" ref={(ref)=>{this.searchContents=ref}} >
-                                    {
-                                        postsData.map((item,i)=>{
-                                            let isFav = (item.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
-                                            const isGif=(typeof item.gif.data.path!=='undefined')?true:false;
-                                            return <CardItem key={item._id} 
-                                                className={`card-item ${active===i?'hover':''}`}
-                                                onMouseUp={this.itemUp.bind(this,item._id,i)}                                            
-                                                onMouseOver={this.handleMouseOver.bind(this,i)}
-                                                onMouseOut={this.handleMouseOut.bind(this,i)}
-                                                favOver={this.handleMouseOver.bind(this,i)}
-                                                favClick={this.favClick.bind(this,item._id,i)}
-                                                fav={isFav}
-                                                favLoading={favActive===i?starLoading?true:false:false}
-                                                favCount={(item.starred.length==='')?0:item.starred.length}
-                                                thumbSrc={(item.thumbnail.data.path)?`${urlConfig.url}/api/${item.thumbnail.data.path}`:''}
-                                                isGif={isGif}
-                                                gifLoad={(active===i && isGif)?true:false}
-                                                gifSrc={(item.gif.data.path)?`${urlConfig.url}/api/${item.gif.data.path}`:''}
-                                                category={item.category}
-                                                userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}                                            
-                                                postDate={item.postDate}
-                                                title={item.title}
-                                                author={item.author}
-                                                summary={item.summary}
-                                                wrapStyle={{
-                                                    width:`${eleWidth}px`,   
-                                                    padding:`${itemPd}px`,                         
-                                                }} 
-                                                bgColor={(typeof item.bgColor!=='undefined')?item.bgColor:null}
-                                                imgHeight={(eleWidth-itemPd*2)*3/4}
-                                            />
-                                        })
-                                    }
+                                    <div className="search-result-contents" ref={(ref)=>{this.searchContents=ref}} >
+                                        {
+                                            postsData.map((item,i)=>{
+                                                let isFav = (item.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
+                                                const isGif=(typeof item.gif.data.path!=='undefined')?true:false;
+                                                return <CardItem key={item._id} 
+                                                    className={`card-item ${active===i?'hover':''}`}
+                                                    onMouseUp={this.itemUp.bind(this,item._id,i)}                                            
+                                                    onMouseOver={this.handleMouseOver.bind(this,i)}
+                                                    onMouseOut={this.handleMouseOut.bind(this,i)}
+                                                    favOver={this.handleMouseOver.bind(this,i)}
+                                                    favClick={this.favClick.bind(this,item._id,i)}
+                                                    fav={isFav}
+                                                    favLoading={favActive===i?starLoading?true:false:false}
+                                                    favCount={(item.starred.length==='')?0:item.starred.length}
+                                                    thumbSrc={(item.thumbnail.data.path)?`${urlConfig.url}/api/${item.thumbnail.data.path}`:''}
+                                                    isGif={isGif}
+                                                    gifLoad={(active===i && isGif)?true:false}
+                                                    gifSrc={(item.gif.data.path)?`${urlConfig.url}/api/${item.gif.data.path}`:''}
+                                                    category={item.category}
+                                                    userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}                                            
+                                                    postDate={item.postDate}
+                                                    title={item.title}
+                                                    author={item.author}
+                                                    summary={item.summary}
+                                                    wrapStyle={{
+                                                        width:`${eleWidth}px`,   
+                                                        padding:`${itemPd}px`,                         
+                                                    }} 
+                                                    bgColor={(typeof item.bgColor!=='undefined')?item.bgColor:null}
+                                                    imgHeight={(eleWidth-itemPd*2)*3/4}
+                                                />
+                                            })
+                                        }
+                                    </div>
                                 </div>
+                            }
                             </div>
                             
                         </div>
@@ -615,10 +619,6 @@ class Search extends Component{
             </Scrollbars>
         );
     }
-};
-
-Search.propTypes = {
-    
 };
 
 export default connect(

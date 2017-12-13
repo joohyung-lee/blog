@@ -1,6 +1,9 @@
 .search-contents-wrap{
-    position: relative;
+    position: absolute;
     width: 100%;
+    top:0;
+    left:0;
+    right:0;
     max-width:1600px;
     padding:0px 0 0;
     margin: 0px auto;
@@ -157,7 +160,7 @@
     }
     .search-contents{
         
-        margin:150px auto 0;
+        padding:150px 0 0;
         transition: padding 0.2s ease;
         
     }
@@ -180,8 +183,7 @@
             
             .card-item{
                 position: relative;
-                float:left;
-                width:33%;
+                display:inline-block;
                 padding:20px;
                 transition: transform 0.3s ease,opacity 0.3s ease;
                 &.hover{
@@ -210,9 +212,7 @@
                 }  
             }
         &:after{
-            content:'';
-            display: block;
-            clear: both;
+            
         }
         }
     }

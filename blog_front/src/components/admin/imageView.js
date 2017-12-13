@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 class ImageView extends Component {
     handleClick=(e)=>{
@@ -21,9 +20,5 @@ class ImageView extends Component {
         );
     }
 }
-
-ImageView.propTypes = {
-
-};
 
 export default ImageView;

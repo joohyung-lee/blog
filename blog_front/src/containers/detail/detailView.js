@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import {Motion,spring} from 'react-motion';
 import { Scrollbars } from 'react-custom-scrollbars';
 //components
 import MarkdownView from 'components/common/markdown'
 import {Comments} from 'components/detail' 
 //containers
-import {AuthLogin} from 'containers/auth'
+
 //redux
+import * as commonAction from 'redux/common';
 import * as httpRequest from 'redux/helper/httpRequest';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -16,7 +15,6 @@ import * as modalActions from 'redux/modal';
 import * as motionActions from 'redux/main';
 import { setTimeout } from 'timers';
 //svg&images
-import IframeBorder from 'images/iframeBorder';
 
 class DetailView extends Component {
     constructor(props){
@@ -62,22 +60,18 @@ class DetailView extends Component {
     componentDidMount(){   
         this.dimentions();
         window.addEventListener('resize',this.dimentions);
-        const {get,data,motion,motionDispatch}=this.props; 
+        const {get}=this.props; 
         window.addEventListener('click',this.outHide);
-
         setTimeout(()=>{
             get.getSinglePost('POSTS/SINGLE_GET',this.props.match.params.category,this.props.match.params.postId);
         },400)
-        
-        
     }
     componentWillUnmount(){
         window.removeEventListener("resize", this.dimentions);  
  
     }
     componentWillReceiveProps(nextProps) {
-        const {get,data,motionDispatch,dataState,motion}=nextProps;
-        
+        const {get,data,motionDispatch,handleHeader,motion}=nextProps;
         const locationChanged = nextProps.location !== this.props.location;
         if(locationChanged){
             setTimeout(()=>{
@@ -89,12 +83,16 @@ class DetailView extends Component {
                 iframeLoad:false
             })
             if(this.props.data[0]!==data[0]){
+                let isBright = (parseInt(this.get_brightness(data[0].bgColor),10) > 160);                
                 motionDispatch.motionActions({
                     motions:{
                         bgColor:data[0].bgColor,
                         detailLoad:true
                     }
                 });  
+                handleHeader.isBrightness({
+                    isBright:isBright
+                });
             }
         }
 
@@ -103,28 +101,29 @@ class DetailView extends Component {
     //window resize width
     dimentions=()=>{
         const{motionDispatch}=this.props;
-        const {mobileMode,deskMode} = this.state
+        const {mobileMode} = this.state
         motionDispatch.motionActions({
             motions:{
-                innerWidth:window.innerWidth,
-                innerHeight:window.innerHeight
+                innerWidth:document.documentElement.clientWidth,
+                innerHeight:document.documentElement.clientHeight
             }
         });
         let sizeX;
         let sizeY;
-        const frameWrap=window.innerWidth<1900?
-        window.innerWidth<1600?
-        window.innerWidth<1400?
-        window.innerWidth:
+        const frameWrap=document.documentElement.clientWidth<1900?
+        document.documentElement.clientWidth<1600?
+        document.documentElement.clientWidth<1400?
+        document.documentElement.clientWidth:
         900:
         900:
-        window.innerWidth*0.6;
+        document.documentElement.clientWidth*0.6;
+        
         if(mobileMode){
             sizeX=375;
             sizeY=600;
         }else{
             sizeX=frameWrap;
-            sizeY=frameWrap*0.6;
+            sizeY=Math.floor(frameWrap*0.6);
         }
         this.setState({
             frameSizeX:sizeX,
@@ -157,7 +156,6 @@ class DetailView extends Component {
         }      
     }
     layerclose=()=>{
-        const{motionDispatch}=this.props;
         this.props.history.goBack();
         
     }
@@ -186,12 +184,19 @@ class DetailView extends Component {
                 mobileMode:false,
                 deskMode:true,
                 frameSizeX:sizeX,
-                frameSizeY:sizeX*0.6
+                frameSizeY:Math.floor(sizeX*0.6)
             })
         }
     }
+   get_brightness=(hexCode)=>{
+        hexCode = hexCode.replace('#', '');
+        var c_r = parseInt(hexCode.substr(0, 2),16);
+        var c_g = parseInt(hexCode.substr(2, 2),16);
+        var c_b = parseInt(hexCode.substr(4, 2),16);
+        return ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+      }
     render() {
-        const {data,modal,motion,dataState}=this.props;
+        const {data,motion}=this.props;
         const {iframeLoad,frameWrap,frameSizeX,frameSizeY} = this.state;
         return (
             <div className={`detail-frame`}>
@@ -202,32 +207,49 @@ class DetailView extends Component {
                         width:`calc(100% - ${frameWrap}px)`,
                         height:`${motion.innerHeight}px`,
                     }}>
-                        <button onClick={this.layerclose}>close</button>
-                            {data.map((item,i)=>{
-                                return  <div key="i"
-                                            className="detail-contents"
-                                        >
-                                            <Link to="/posts/motionlab/59d3423f455c61032eb5b4b0">다음페이지</Link>
-                                            <h1 className="title">{item.title}</h1>
-                                            <div className="body">    
-                                                <MarkdownView source={item.body}/>
-                                            </div>
-                                            <Comments
-                                                header={<AuthLogin open={modal['postAuth'].open} dropdown={this.dropdown}/>}
-                                                commentsData={this.state.commentsData}
-                                            />
+                        {data.map((item,i)=>{
+                            return  <div key="i"
+                                        className="detail-contents"
+                                    >
+                                        <div className="header">
+                                            <span>{item.category}</span>
+                                            <h2>{item.title}</h2>
+                                            <span>{item.postDate}</span>
+                                            <p>{item.summary}</p>
                                         </div>
-                                
-                            })}
+                                        <div className="tags-wrap">
+                                        <ul>
+                                            {item.tags.map((tagsItem,i)=>{
+                                                return (
+                                                    <li key={i}>
+                                                    <Link to={`/search/tags/${tagsItem}`}>{tagsItem}</Link>
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
+                                        </div>
+                                        <div className="body">   
+                                            <h3 className="title">Documentation</h3> 
+                                            <MarkdownView source={item.body}/>
+                                        </div>
+                                        <Comments
+                                            commentsData={this.state.commentsData}
+                                        />
+                                    </div>
+                            
+                        })}
                     </Scrollbars>
                     :null
                 }
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
                     style={{
-                        width:`${motion.detailLoad?`${frameWrap}px`:'100%'}`,
+                        width:motion.detailLoad?`${frameWrap}px`:`${motion.innerWidth}px`,
                         height:`${motion.innerHeight}px`,
                         backgroundColor:motion.bgColor
                     }}>
+                    <div className={`loading-text`}>
+                        <h3>Loading...</h3>
+                    </div>
                     {motion.detailLoad?
                         <div className="detail-simulate">
                             <div className="device-controll-wrap">
@@ -244,16 +266,15 @@ class DetailView extends Component {
                             </div>
                             {data.map((item,i)=>{
                                 return( 
-                                    <div key={item._id} className={`iframe-wrap`}
+                                    <div key={item._id} className={`iframe-wrap ${iframeLoad?'animate':''}`}
                                         style={{
-                                            width:`${frameSizeX-40}px`,
-                                            height:`${frameSizeY-40}px`
+                                            width:`${frameSizeX-60}px`,
+                                            height:`${iframeLoad?frameSizeY-60:0}px`
                                         }}
                                     >
-                                        <iframe key="i" src={item.iframeUrl}
+                                        <iframe title="This is a detailView" key="i" src={item.iframeUrl}
                                             onLoad={this.iframeLoad} 
                                             frameBorder="0" width={"100%"} height="100%"></iframe>
-                                        <IframeBorder width={frameSizeX-40} height={frameSizeY-40}/>
                                     </div>  
                                 )
                             })} 
@@ -268,6 +289,7 @@ class DetailView extends Component {
 
 export default connect(
     (state)=>({
+        common:state.common.toJS(),        
         motion:state.main.toJS().motions,
         modal:state.modal.toJS(),
         data:state.posts.toJS().itemData.data,
@@ -277,5 +299,7 @@ export default connect(
         get:bindActionCreators(httpRequest,dispatch),
         modalView: bindActionCreators(modalActions, dispatch),
         motionDispatch:bindActionCreators(motionActions,dispatch),
+        handleHeader:bindActionCreators(commonAction,dispatch),
+        
     })
 )(DetailView);

@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {Motion,TransitionMotion,spring} from 'react-motion';
-
 import {Link} from 'react-router-dom';
 class Menu extends Component {   
     render() {
@@ -29,9 +26,5 @@ class Menu extends Component {
         );
     }
 }
-
-Menu.propTypes = {
-
-};
 
 export default Menu;

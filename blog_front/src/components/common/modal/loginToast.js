@@ -90,7 +90,7 @@ class LoginToast extends Component {
 }
 
 LoginToast.propTypes = {
-    open:React.PropTypes.bool,
+    open:PropTypes.bool,
 };
 
 export default LoginToast;

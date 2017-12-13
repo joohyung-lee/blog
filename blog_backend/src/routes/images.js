@@ -23,6 +23,12 @@ const thumbstorage = multer.diskStorage({
       cb(null, `${getFileDate(new Date())}-${file.originalname}`);
     },
   });
+const videostorage = multer.diskStorage({
+    destination: './videos',
+    filename(req, file, cb) {
+        cb(null, `${getFileDate(new Date())}-${file.originalname}`);
+    },
+});
 const storage = multer.diskStorage({
   destination: './images',
   filename(req, file, cb) {
@@ -30,6 +36,7 @@ const storage = multer.diskStorage({
   },
 });
 const thumbUpload = multer({ storage : thumbstorage })
+const videoUpload = multer({ storage : videostorage })
 const upload = multer({ storage : storage })
 
 router.post('/thumb', thumbUpload.single('thumb'), (req, res) => {
@@ -43,27 +50,38 @@ router.post('/thumb', thumbUpload.single('thumb'), (req, res) => {
     }
     const file = req.file;
     const meta = req.body; 
-    // gm(file.path)
-    // .gravity('Center')
-    // .resize(350, 350, file.path, function (err) {
-    //     if (err){
-    //         console.error(err)
-    //     }else{
-    //         console.log('done - thumb');
-    //         res.json(file);
-    //     }
-    //   });
-    gm(file.path)
-    .write(file.path, function (err) {
-    if (err){
-    console.error(err)
-    }else{
-        console.log('done - thumb');
-        
-        res.json(file);
+    res.json(file);
+});
+
+router.post('/videos', videoUpload.single('video'), (req, res) => {
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
+    || req.session.passport.user.email!=="joomation@gmail.com"
+    ) {
+        return res.status(403).json({
+            error: "NOT ADMIN LOGGED IN",
+            code: 403
+        });
     }
+    const file = req.file;
+    const meta = req.body; 
+    res.json(file);
+});
+router.delete('/videos/:name', function (req, res) {
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
+    || req.session.passport.user.email!=="joomation@gmail.com"
+    ) {
+        return res.status(403).json({
+            error: "NOT ADMIN LOGGED IN",
+            code: 403
+        });
+    }
+    const filename = req.params.name;
+    fs.unlink(path.join(__dirname,'../../videos/'+filename), function (err,data) { 
+        if (err) return res.status(500).json({
+            error: "video delete fail"
+        });
+        res.end(data)
     });
-    
 });
 
 router.post('/', upload.any(), (req, res) => {
@@ -110,23 +128,7 @@ router.delete('/thumb/:name', function (req, res) {
         res.end(data)
     });
 });
-router.delete('/thumb/:name', function (req, res) {
-    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
-    || req.session.passport.user.email!=="joomation@gmail.com"
-    ) {
-        return res.status(403).json({
-            error: "NOT ADMIN LOGGED IN",
-            code: 403
-        });
-    }
-    const filename = req.params.name;
-    fs.unlink(path.join(__dirname,'../../images/thumb/'+filename), function (err,data) { 
-        if (err) return res.status(500).json({
-            error: "images delete fail"
-        });
-        res.end(data)
-    });
-});
+
 router.get('/:name',function (req,res){     
     const filename = req.params.name;
     fs.exists(path.join(__dirname,'../../images/'+filename), function (exists) {

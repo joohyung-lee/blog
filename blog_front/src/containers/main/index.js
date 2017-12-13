@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Motion,TransitionMotion,StaggeredMotion,spring} from 'react-motion';
+import {Motion,TransitionMotion,spring} from 'react-motion';
 import MobileDetect from 'mobile-detect'
 //config
 import urlConfig from 'config/urlConfig'
@@ -15,13 +15,11 @@ import * as postsActions from 'redux/posts';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import defaultAvatar from 'images/defaultAvatar.svg';
-const springSetting = {stiffness: 300, damping: 30};
 const springSetting2 = {stiffness: 230, damping: 15};
 
 class Main extends Component {
     constructor(props){
         super(props);
-        const{motion}=this.props;
         this.state = {
             loadingState: false,
             menuOpen:false,
@@ -53,16 +51,19 @@ class Main extends Component {
         const url=this.props.location.pathname.split('/')[1];
         this.state.mainText.map((item,i)=>{
             if(url===item.key){
-                this.setState({
+                return this.setState({
                     mainIndex:i
                 })
+            }else{
+                return []
             }
         })
     }
     componentDidMount(){     
-        const{get,data,motion,common,handleHeader}=this.props;
+        const{get,common,handleHeader}=this.props;
         const url=this.props.location.pathname.split('/')[1];
         if(!common.mainLoad){
+            console.log('mainload')
             get.getCategoryPost('POSTS/CATEGORY_GET',url);
         }
         handleHeader.mainLoad({
@@ -74,7 +75,6 @@ class Main extends Component {
     }
     
     componentWillUnmount(){
-        const{motionDispatch,motion}=this.props;
         window.removeEventListener("resize", this.dimensions);
         let md = new MobileDetect(window.navigator.userAgent);
         if(md.mobile()){
@@ -86,10 +86,9 @@ class Main extends Component {
         }
         
     }
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps,prevState){
         const{get,motionDispatch}=this.props;
-        const{starState}=this.state;
-        const locationChanged = nextProps.location !== this.props.location;   
+        const locationChanged = prevProps.location !== this.props.location;   
         if(locationChanged){        
             motionDispatch.motionActions({
                 motions:{
@@ -97,20 +96,22 @@ class Main extends Component {
                     active:0,
                 }
             });    
-            const url=nextProps.location.pathname.split('/')[1];
+            const url=this.props.location.pathname.replace('/','');
             get.getCategoryPost('POSTS/CATEGORY_GET',url);   
             this.state.mainText.map((item,i)=>{
                 if(url===item.key){
-                    this.setState({
+                    return this.setState({
                         mainIndex:i
                     })
+                }else{
+                    return []
                 }
             })
         }
-        if(nextProps.data.length!==this.props.data.length){
+        if(prevProps.data.length!==this.props.data.length){
             this.dimensions();    
         }
-    }        
+    } 
 
     //setting response size
     dimensions=()=>{     
@@ -224,7 +225,7 @@ class Main extends Component {
     }
     handleDown=(pos,e)=>{
         const{motionDispatch}=this.props; 
-        let event=(e.type=='mousedown')?e:(e.type=='touchstart')?e.touches[0]:e;
+        let event=(e.type==='mousedown')?e:(e.type==='touchstart')?e.touches[0]:e;
         motionDispatch.motionActions({
             motions:{
                 isPressed:true,
@@ -237,8 +238,8 @@ class Main extends Component {
     }
     
     handleMove=(e)=>{  
-        let event=(e.type=='mousemove')?e:(e.type=='touchmove')?e.touches[0]:e; 
-        const{motion,data,motionDispatch}=this.props;   
+        let event=(e.type==='mousemove')?e:(e.type==='touchmove')?e.touches[0]:e; 
+        const{motion,motionDispatch}=this.props;   
         const {max,posX,isPressed,eleWidth,offsetX,startX,active} = motion;       
         const distance=startX-event.pageX;
         if(isPressed){
@@ -347,14 +348,11 @@ class Main extends Component {
         }
     }
     handleMouseOut=()=>{
-        const {motion}=this.props;
-        const {eleWidth,offsetX} = motion;
     }
     
     favClick=(postId,i,e)=>{
         e.stopPropagation();
-        const {starState}=this.state;
-        const {motionDispatch,postAction,get,authUser,modalView}=this.props;        
+        const {motionDispatch,get,authUser,modalView}=this.props;        
         motionDispatch.motionActions({
             motions:{
                 active:i,
@@ -379,7 +377,7 @@ class Main extends Component {
     menuOpen=()=>{     
         const {menuOpen}=this.state;
         this.setState({
-            menuOpen:!this.state.menuOpen
+            menuOpen:!menuOpen
         });
         setTimeout(()=>{ 
             this.dimensions();
@@ -392,8 +390,7 @@ class Main extends Component {
     }
     getStyles=(prev)=>{
         const{data,motion,dataState}=this.props;
-        const {detailView}=this.state;
-        const{eleWidth,active,isPressed,offsetX,deltaX}=motion;
+        const{eleWidth,active}=motion;
         if(dataState==="success"){
             return data.map((item, i) => {
                 if(i===0){
@@ -471,7 +468,7 @@ class Main extends Component {
     }
     render() {   
         const {menuOpen,favActive,mainIndex,detailView}=this.state;
-        const {motion,authUser,data,loading,total,oldLoading,starLoading,common}=this.props;
+        const {motion,authUser,data,loading,total,oldLoading,starLoading}=this.props;
         const {isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
         const style=(isPressed)?{
                 x:offsetX,

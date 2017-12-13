@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {TransitionMotion,spring} from 'react-motion';
-import * as httpRequest from 'redux/helper/httpRequest';
 //svg
 import DefaultAvatar from 'images/default-avatar';
 //router
@@ -153,8 +151,4 @@ class LoginState extends Component {
         );
     }
 }
-
-LoginState.propTypes = {
-
-};
 export default LoginState;

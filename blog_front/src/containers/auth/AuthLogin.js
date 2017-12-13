@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 //components
 import {LoginState} from 'components/auth';
 import LoginToast from 'components/common/modal/loginToast';
@@ -13,11 +12,13 @@ import { bindActionCreators } from 'redux';
 import defaultAvatar from 'images/defaultAvatar.svg';
 class AuthLogin extends Component {
     componentWillMount(){
+        console.log('adf')
         const {request} =this.props;
         request.getAuth({
             type:'AUTH/PROFILE'
         })
     }
+
     componentDidUpdate(prevProps, prevState){
         if(prevProps.authUser.isLogin !== this.props.authUser.isLogin) {
             const {authUser,modalView} =this.props;  
@@ -91,10 +92,6 @@ class AuthLogin extends Component {
         );
     }
 }
-
-AuthLogin.propTypes = {
-
-};
 export default connect(
     (state)=>({
         modal:state.modal.toJS(),

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import * as commonAction from 'redux/common';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -20,11 +19,6 @@ class Forbidden extends Component {
         );
     }
 }
-
-Forbidden.propTypes = {
-
-};
-
 export default connect(
     (state)=>({
         header:state.common.toJS()

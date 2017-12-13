@@ -1,5 +1,4 @@
 import { handleActions, createAction } from 'redux-actions';
-import axios from 'axios';
 import {pending} from 'redux/helper/pending'
 import { Map,List,fromJS } from 'immutable';
 
@@ -15,7 +14,6 @@ const ADMIN_TAGS_DELETE = 'ADMIN/ADMIN_TAGS_DELETE';
 
 const ADMIN_SINGLE_GET='ADMIN/ADMIN_SINGLE_GET';
 const ADMIN_MODIFY = 'ADMIN/ADMIN_MODIFY';
-const ADMIN_DELETE = 'ADMIN/ADMIN_DELETE';
 const ADMIN_POST='ADMIN/POST';
 
 //이미지 업로드 액션
@@ -265,7 +263,7 @@ export default handleActions({
         type:ADMIN_FILE_DELETE,
         name:['imageLoading','files'],
         successResult:(state,action)=>{
-            const {data,index}=action.payload;
+            const {index}=action.payload;
             if(action.writeType==="write"){
                 const fileArr = state.getIn(['createData','data','files','data']);
                 return state.setIn(['createData','data','files','data'],fileArr.splice(index,1));

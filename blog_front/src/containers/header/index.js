@@ -1,5 +1,6 @@
-import React, { Component, propTypes } from 'react';
-import {Link,withRouter} from 'react-router-dom';
+import React,{ Component } from 'react';
+import PropTypes from 'prop-types';
+import {withRouter} from 'react-router-dom';
 //components
 import {AuthLogin} from 'containers/auth'
 
@@ -21,6 +22,7 @@ class Header extends Component {
         }
     }
     componentDidMount(){
+        
         window.addEventListener('click',this.outHide);
         let re = /(search)/;
         let isSearch = re.test(this.props.location.pathname);
@@ -104,7 +106,6 @@ class Header extends Component {
     }
     backSearch=(e)=>{
         e.stopPropagation();
-        const {handleHeader}=this.props;
         this.setState({
             searchView:false
         });
@@ -118,7 +119,7 @@ class Header extends Component {
         }
     }
     handleSearch=(e)=>{
-        const{common,get}=this.props;
+        const{common}=this.props;
         if(e.keyCode === 13){
             if(this.props.location.pathname===`/search/${common.searchValue.toLowerCase()}`){
                 return false;
@@ -146,11 +147,13 @@ class Header extends Component {
                     </div>
                     <div className="right-contents">
                         <SearchIcon open={searchView} 
+                        isBright={common.isBright}
                         onClick={this.searchClick}
                         onChange={this.handleChange} 
                         value={common.searchValue} 
                         onKeyDown={this.handleSearch}
                         searchClose={this.backSearch}/>
+
                         <AuthLogin open={modal['mymenu'].open} header={false} dropdown={this.dropdown} avatarFace={modal['mymenu'].open}/>
                     </div>
                     
@@ -162,7 +165,7 @@ class Header extends Component {
     }
 };
 Header.propTypes = {
-    mode: React.PropTypes.bool,
+    mode: PropTypes.bool,
 };
 Header.defaultProps={
     mode: true,

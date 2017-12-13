@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import MarkdownView from 'components/common/markdown'
 class MarkdownEdit extends Component {  
     constructor(props){
@@ -71,9 +70,5 @@ class MarkdownEdit extends Component {
         );
     }
 }
-
-MarkdownEdit.propTypes = {
-
-};
 
 export default MarkdownEdit;

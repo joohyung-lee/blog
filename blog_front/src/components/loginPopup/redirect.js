@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {StaticLoading} from 'components/common/loading';
 import urlConfig from 'config/urlConfig';
 class RedirectLogin extends Component {
     componentDidMount(){
-        
         switch (this.props.match.params.name) {
             case 'google':                  
                 window.location.href=urlConfig.GOOGLE_LOGIN_URL;                    
@@ -31,9 +29,4 @@ class RedirectLogin extends Component {
         );
     }
 }
-
-RedirectLogin.propTypes = {
-
-};
-
 export default RedirectLogin;

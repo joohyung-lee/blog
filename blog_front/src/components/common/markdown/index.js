@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Remarkable from 'remarkable';
 import hljs from 'highlight.js';
 class MarkdownView extends Component {
-    constructor(props){
-        super(props);
-    }
-    
     rawMarkup=()=>{
         const { source } = this.props;
          var md = new Remarkable('full', {
@@ -54,9 +49,5 @@ class MarkdownView extends Component {
         );
     }
 }
-
-MarkdownView.propTypes = {
-
-};
 
 export default MarkdownView;

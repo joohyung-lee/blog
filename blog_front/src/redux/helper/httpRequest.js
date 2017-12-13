@@ -1,28 +1,4 @@
 import axios from 'axios';
-//loading progress
-let config = {
-    onUploadProgress: progressEvent => {
-        /* CONSTANTS */
-        let initial = 0; 
-        let delta = 1;
-        let speed=0.3; 
-        let percent=initial
-        let requestAnimationFrameID = requestAnimationFrame(doAnim); // Start the loop.        
-        let percentCompleted = Math.floor((progressEvent.loaded * 100) / progressEvent.total);
-        function doAnim(percentCompleted) {
-            if(percent>=80){
-                cancelAnimationFrame(requestAnimationFrameID);
-                return
-            }
-            if(percentCompleted){
-                percent=100;
-            }
-            percent += delta*speed; 
-            requestAnimationFrameID = requestAnimationFrame(doAnim); 
-            //console.log(Math.floor(percent))  
-        }  
-    }
-  }
 //auth -v admin  
 function getAdminAuthAPI() {
     return axios.get(`/auth/admin/account`);
@@ -57,11 +33,11 @@ function thumbDelete(filename){
 }
 // save gif -v admin
 function gifUpload(data){
-    return axios.post('/api/images/thumb',data)
+    return axios.post('/api/images/videos',data)
 }
 //delete gif -v admin
 function gifDelete(filename){
-    return axios.delete(`/api/images/thumb/${filename}`);
+    return axios.delete(`/api/images/videos/${filename}`);
 }
 // save files -v admin
 function fileUpload(data){
@@ -292,7 +268,7 @@ export const deleteThumb=({filename,type,writeType})=>dispatch=>{
 //save gif -v admin
 export const postGif=({file,name,type,writeType})=>dispatch=>{
     let data = new FormData();
-        data.append("thumb",file);
+        data.append("video",file);
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
     return gifUpload(data).then(

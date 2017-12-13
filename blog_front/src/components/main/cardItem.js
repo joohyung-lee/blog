@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import IconFav from 'images/iconFav';
 import GifLoading from 'images/gifLoading';
 import DefaultLoading from 'images/defaultLoading';
+import MobileDetect from 'mobile-detect';
 class CardItem extends Component {
     constructor(props) {
         super(props);
@@ -10,17 +11,20 @@ class CardItem extends Component {
         this.state={
             thumbLoading:false,
             gifLoading:false,
-            imgSrc:null,
+            imgSrc:'',
+            videoSrc:'',
             imgLoadState:'wating',
-            startX:0
+            startX:0,
         }
       }
     componentDidMount() {
+       
         this.setState({
             thumbLoading: true,
             itemPress:false
         });
-        const imagePath = (this.props.gifLoad)?this.props.gifSrc:this.props.thumbSrc;
+        const imagePath = this.props.thumbSrc;
+        const videoSrc=this.props.gifSrc;
         const img = new Image();
         img.src = imagePath;
         img.onload = () => {
@@ -28,28 +32,41 @@ class CardItem extends Component {
               thumbLoading: false,
               gifLoading:false,
               imgLoadState:'success',
-              imgSrc:imagePath
+              imgSrc:imagePath,
+              videoSrc:videoSrc
             });
         };
       }
     componentWillReceiveProps(nextProps){
+        
         const gifChange=nextProps.gifLoad!==this.props.gifLoad;
-        if(gifChange){  
-            this.setState({
-                gifLoading:true,
-            });           
-            const imagePath = (nextProps.gifLoad)?this.props.gifSrc:this.props.thumbSrc;
-            const img = new Image();
-            img.src = imagePath;
-            img.onload = () => {
-                this.setState({
-                  thumbLoading: false,
-                  gifLoading:false,
-                  imgSrc:imagePath
-                });
-            };
+        if(gifChange){
+            //this.playVideo(nextProps.gifLoad);
+            
         }
     }      
+    playVideo=(active)=>{
+        if(active){
+            let myVideo = this.videoSource;
+            myVideo.currentTime = '0';
+            myVideo.onloadstart=()=>{
+                this.setState({
+                    gifLoading:true,
+                });  
+            }
+            myVideo.oncanplay=()=>{
+                this.setState({
+                    gifLoading:false,
+                });  
+            }
+            myVideo.play();
+        }else{
+            // let myVideoOther = this.videoSource;
+            // console.log(myVideoOther)
+            // myVideoOther.pause();
+            
+        }
+    }
     handleMouseOut=(e)=>{
         this.setState({
             itemPress:false
@@ -57,7 +74,7 @@ class CardItem extends Component {
         return this.props.onMouseOut(e);        
     }
     handleDown=(e)=>{
-        let event=(e.type=='mouseup')?e:(e.type=='touchstart')?e.touches[0]:e;  
+        let event=(e.type==='mouseup')?e:(e.type==='touchstart')?e.touches[0]:e;  
         this.setState({
             itemPress:true,
             startX:event.pageX,
@@ -65,29 +82,30 @@ class CardItem extends Component {
     }  
     handleMove=(e)=>{
         const {startX,itemPress} = this.state;
-        let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.changedTouches[0]:e;     
+        let event=(e.type==='mouseup')?e:(e.type==='touchend')?e.changedTouches[0]:e;     
         
         if(itemPress){
             const distance=startX-event.pageX;
-            if(Math.abs(distance)>1){
+            let md = new MobileDetect(window.navigator.userAgent);            
+            if(md.mobile()){
                 this.setState({
                     itemPress:false
                 })
+            }else{
+                if(Math.abs(distance)>2){
+                    this.setState({
+                        itemPress:false
+                    })
+                }
             }
-             
         }
-        
-        
     }
-    handleUp=(e)=>{
-        const {startX} = this.state;
-        let event=(e.type=='mouseup')?e:(e.type=='touchend')?e.changedTouches[0]:e;     
-        const distance=startX-event.pageX;
+    handleUp=(e)=>{   
         return (this.state.itemPress)?this.props.onMouseUp(e):false;
         
     } 
     render() {
-        const {thumbLoading,gifLoading,imgSrc,imgLoadState,itemPress}=this.state;
+        const {thumbLoading,gifLoading,imgSrc,videoSrc,imgLoadState,itemPress}=this.state;
         return (
             <div className={(itemPress)?`scale ${this.props.className}`:this.props.className} 
                 style={this.props.wrapStyle}
@@ -110,14 +128,19 @@ class CardItem extends Component {
                             height:`${this.props.imgHeight}px`,
                             backgroundColor:this.props.bgColor
                             }}>
-                            <img className={`${(imgLoadState==='success')?`fade-in`:`fade-out`}`} src={imgSrc}/>
+                            <img className={`${(imgLoadState==='success')?`fade-in`:`fade-out`}`} src={imgSrc} alt={imgSrc}/>
                             {
                                 thumbLoading?<DefaultLoading color="white"/>:null
                             }
-
+                            <video className="video-wrap" playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
+                            style={{
+                                visibility:this.props.gifLoad?'visible':'hidden'
+                            }}></video>
                             {(this.props.isGif)?
-                            <div className={`gif-loading-wrap ${(this.props.gifLoad)?(!gifLoading)?`out`:`in`:``}`}>
-                                <GifLoading open={gifLoading && this.props.gifLoad}/>
+                            <div>
+                                <div className={`gif-loading-wrap ${(this.props.gifLoad)?(!gifLoading)?`out`:`in`:``}`}>
+                                    <GifLoading open={gifLoading && this.props.gifLoad}/>
+                                </div>
                             </div>:null
                             }
                         </div>

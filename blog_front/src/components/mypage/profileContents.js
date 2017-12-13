@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 
 class ProfileContents extends Component {
@@ -70,9 +69,5 @@ class ProfileContents extends Component {
         );
     }
 }
-
-ProfileContents.propTypes = {
-
-};
 
 export default ProfileContents;

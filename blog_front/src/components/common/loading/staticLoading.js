@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
 class StaticLoading extends Component {
     render() {
         return (
@@ -17,9 +15,4 @@ class StaticLoading extends Component {
         );
     }
 }
-
-StaticLoading.propTypes = {
-
-};
-
 export default StaticLoading;

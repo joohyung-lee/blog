@@ -1,0 +1,12 @@
+{
+    "videos": {
+      "mode": "development",
+      "forceDownload": false,
+      "random": false,
+      "rootFolder": "videos/",
+      "rootPath": "",
+      "server": "VidStreamer.js/0.1.4",
+      "maxAge": "3600",
+      "throttle": false
+    }
+  }

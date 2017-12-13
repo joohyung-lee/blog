@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import * as commonAction from 'redux/common';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -21,11 +20,6 @@ class NotFound extends Component {
         );
     }
 }
-
-NotFound.propTypes = {
-
-};
-
 export default connect(
     (state)=>({
         header:state.common.toJS()

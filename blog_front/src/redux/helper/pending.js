@@ -1,4 +1,3 @@
-import { Map,List } from 'immutable';
 //액션
 const actions=(type)=>{
     return {

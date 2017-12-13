@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {withRouter,Route,Switch,Redirect} from 'react-router-dom'
+import {Route,Switch} from 'react-router-dom'
 import Main from 'containers/main';
 //error
 import {NotFound} from 'components/common/error';
@@ -17,9 +16,5 @@ class MainRoute extends Component {
         );
     }
 }
-
-MainRoute.propTypes = {
-
-};
 
 export default MainRoute;

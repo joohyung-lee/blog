@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter,Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as httpRequest from 'redux/helper/httpRequest';
 import { Scrollbars } from 'react-custom-scrollbars';
 import DefaultLoading from 'images/defaultLoading';
 //config
 import urlConfig from 'config/urlConfig'
 //redux
-import * as adminAction from 'redux/admin';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 //error
-import {Forbidden} from 'components/common/error'
 class AdminMain extends Component { 
     constructor(props){
         super(props);
@@ -176,7 +173,6 @@ class AdminMain extends Component {
         });
     }
     handleSearch=(e)=>{    
-        const{get}=this.props;
         if(e.keyCode === 13){
             this.handleSearchResult();
         }
@@ -206,7 +202,7 @@ class AdminMain extends Component {
         });
     }
     render() {
-        const {data,loading,total,page,pages,delLoading,prev,first,next,last}=this.props;
+        const {data,loading,total,pages,delLoading,prev,first,next,last}=this.props;
         const {delActive}=this.state;
         return (
             <Scrollbars
@@ -284,11 +280,6 @@ class AdminMain extends Component {
         );
     }
 }
-
-AdminMain.propTypes = {
-
-};
-
 export default connect(
     (state)=>({
         loading:state.posts.toJS().listData.pending,

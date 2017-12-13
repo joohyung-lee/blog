@@ -106,7 +106,7 @@ class LoginModal extends Component {
 }
 
 LoginModal.propTypes = {
-    open:React.PropTypes.bool,
+    open:PropTypes.bool,
 };
 
 export default LoginModal;

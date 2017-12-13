@@ -17,7 +17,7 @@ class SearchIcon extends Component {
   }
   }
   render() {
-    const{open}=this.props;
+    const{open,isBright}=this.props;
     return (
       <Motion 
       
@@ -40,7 +40,7 @@ class SearchIcon extends Component {
         }}>
           <div className="search-svg" >
             <svg x="0px" y="0px" width={250}  viewBox={`0 0 300 26`}fill={`none`} 
-            stroke={`#333`} 
+            stroke={isBright?`#333`:'#fff'} 
             strokeWidth={1.2}
             strokeDasharray={`${value.array},${value.array}`}
             strokeDashoffset={`${value.offset}`}

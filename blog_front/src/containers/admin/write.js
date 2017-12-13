@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withRouter} from 'react-router-dom';
 import * as httpRequest from 'redux/helper/httpRequest'
 import dateFormat from 'dateformat';
@@ -15,7 +14,6 @@ import { bindActionCreators } from 'redux';
 //components
 import {MarkdownEdit,ImageView} from 'components/admin';
 //error
-import {Forbidden} from 'components/common/error'
 class Write extends Component { 
     constructor(props){
         super(props);
@@ -192,8 +190,8 @@ class Write extends Component {
     }
     bytesToSize=(bytes)=>{
         let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-        if (bytes == 0) return '0 Byte';
-        let i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        if (bytes === 0) return '0 Byte';
+        let i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)),10);
         return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
      };
     handleSubmit=(e)=>{      
@@ -218,7 +216,7 @@ class Write extends Component {
         }
     }
     render() {
-        const {writePost,thumb,gif,files,writeLoading,imageLoading,error,isAuth}=this.props;
+        const {writePost,thumb,gif,files,writeLoading,imageLoading}=this.props;
         return (
             <Scrollbars
             style={{
@@ -325,10 +323,6 @@ class Write extends Component {
         );
     }
 }
-
-Write.propTypes = {
-
-};
 export default withRouter(connect(
     (state,props)=>{
         const{id}=props.match.params; 

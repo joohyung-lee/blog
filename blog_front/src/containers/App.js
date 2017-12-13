@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { AnimatedSwitch,AnimatedRoute } from 'react-router-transition/lib/react-router-transition';
 import{spring} from 'react-motion';
-import {withRouter,Route,Switch,Redirect} from 'react-router-dom'
+import {withRouter,Route,Redirect} from 'react-router-dom'
 //joomation style
 import 'styles/joomation.scss';
 //components
 import LoginModal from 'components/common/modal/loginModal';
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import {MainRoute,SearchRoute} from 'components/route';
 
 //containers
@@ -19,7 +18,6 @@ import {DetailView} from 'containers/detail';
 
 //redux
 import * as modalActions from 'redux/modal';
-import * as authActions from 'redux/auth';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as commonAction from 'redux/common';
@@ -37,10 +35,6 @@ font.load().then(function () {
 });
 
 class App extends Component {
-  constructor(props){
-    super(props);
-
-  }
   componentDidMount(){  
     const {handleHeader}=this.props;
 
@@ -55,9 +49,10 @@ class App extends Component {
   componentWillReceiveProps(nextProps) {
     // will be true
     const locationChanged = nextProps.location !== this.props.location;
-    const {modalView,motionDispatch,motion}=this.props;
+    const {modalView,motionDispatch,handleHeader}=this.props;
     const nextUrl=nextProps.location.pathname.split('/');
     const thisUrl=this.props.location.pathname.split('/');
+    let isBright = (this.get_brightness(nextProps.motion.bgColor) > 160);
     if(locationChanged){    
       if(nextUrl[1]==='posts'){
         motionDispatch.motionActions({
@@ -66,7 +61,13 @@ class App extends Component {
               detailView:true
           }
         });
+        handleHeader.isBrightness({
+            isBright:isBright
+        });
       }else{
+        handleHeader.isBrightness({
+          isBright:true
+        });  
         if(thisUrl[1]==='posts'){
             motionDispatch.motionActions({
               motions:{
@@ -99,8 +100,8 @@ class App extends Component {
   }
   move=(val)=>{
     return spring(val, {
-      stiffness: 120,
-      damping: 15,
+      stiffness: 150,
+      damping: 24,
     });
   }
   mainMapStyles(styles) {
@@ -116,7 +117,7 @@ class App extends Component {
   }
   detailMapStyles(styles) {
     return {
-      transform: `translateY(${styles.offsetY}%)`,
+      transform: `translateX(${styles.offsetX}%)`,
       width:`100%`,
     };
   }
@@ -126,13 +127,21 @@ class App extends Component {
       modalName:'login'
     });
   }
-
+  get_brightness=(hexCode)=>{
+    // strip off any leading #
+    hexCode = hexCode.replace('#', '');
+  
+    var c_r = parseInt(hexCode.substr(0, 2),16);
+    var c_g = parseInt(hexCode.substr(2, 2),16);
+    var c_b = parseInt(hexCode.substr(4, 2),16);
+    return ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+  }
   render() {
-    const {adminError,adminLoading,postsError,postsLoading,header,motion,modal}=this.props;
+    const {adminError,postsError,header,motion,modal}=this.props;
     
     const pageTransitions = {
       atEnter: {
-        opacity :0,
+        opacity :1,
         offsetY: 5,
         scale:0.92
       },
@@ -149,13 +158,13 @@ class App extends Component {
     };
     const detailLayer = {
       atEnter: {
-        offsetY: 100,
+        offsetX: 100,
       },
       atLeave: {
-        offsetY: this.move(100)
+        offsetX: this.move(100)
       },
       atActive: {
-        offsetY: this.move(0),
+        offsetX: this.move(0),
       },
     }
     return (
@@ -169,36 +178,38 @@ class App extends Component {
                 if(postsError===404){
                   return <Route component={NotFound}/>
                 }
-                return <div>
-                  <Route exact path="/" render={() => (
-                    <Redirect to="/home"/>
-                  )}/>
-                  
-                  <AnimatedSwitch
-                    className={`page-wrap ${motion.scale?'scale':''}`}
-                    {...pageTransitions}             
-                    mapStyles={(motion.detailView)?this.mainMapStyles:this.pageMapStyles}
-                  >  
-                    <Route exact path="/"/> 
-                    <Route path="/search" component={SearchRoute}/>
-                    <Route exact path="/:category" component={MainRoute}/> 
-                     
-                    <Route exact path="/posts/:category/:postId"/> 
-                    <Route path="/auth/loginPopup/:name" component={RedirectLogin}/>
-                    <Route path="/mypage/profile" component={Profile}/>
-                    <Route exact path="/admin/read" component={AdminMain}/>
-                    <Route exact path="/admin/write" component={Write}/>
-                    <Route path="/admin/write/:id" component={Write}/>
-                    <Route component={NotFound}/>   
-                  </AnimatedSwitch>
-                  <AnimatedRoute
-                    className={`detail-page-wrap`}
-                    path="/posts/:category/:postId"
-                    component={DetailView}
-                    {...detailLayer}
-                    mapStyles={this.detailMapStyles}
-                  />
-              </div>
+                return (
+                  <div className="container">
+                    <Route exact path="/" render={() => (
+                      <Redirect to="/home"/>
+                    )}/>
+                    
+                    <AnimatedSwitch
+                      className={`page-wrap ${motion.scale?'scale':''}`}
+                      {...pageTransitions}             
+                      mapStyles={(motion.detailView)?this.mainMapStyles:this.pageMapStyles}
+                    >  
+                      <Route exact path="/"/> 
+                      <Route path="/search" component={SearchRoute}/>
+                      <Route exact path="/:category" component={MainRoute}/> 
+                      
+                      <Route exact path="/posts/:category/:postId"/> 
+                      <Route path="/auth/loginPopup/:name" component={RedirectLogin}/>
+                      <Route path="/mypage/profile" component={Profile}/>
+                      <Route exact path="/admin/read" component={AdminMain}/>
+                      <Route exact path="/admin/write" component={Write}/>
+                      <Route path="/admin/write/:id" component={Write}/>
+                      <Route component={NotFound}/>   
+                    </AnimatedSwitch>
+                    <AnimatedRoute
+                      className={`detail-page-wrap`}
+                      path="/posts/:category/:postId"
+                      component={DetailView}
+                      {...detailLayer}
+                      mapStyles={this.detailMapStyles}
+                    />
+                </div>
+                )
             }}/>
         </div>
     );
@@ -222,5 +233,4 @@ export default withRouter(connect(
     motionDispatch:bindActionCreators(motionActions,dispatch),
     
   })
-)
-(App));
+)(App));

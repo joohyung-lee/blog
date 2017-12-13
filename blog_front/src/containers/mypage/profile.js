@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter,Link } from 'react-router-dom';
 
 //components
 import {ProfileContents} from 'components/mypage';
@@ -21,11 +19,6 @@ class Profile extends Component {
         );
     }
 }
-
-Profile.propTypes = {
-
-};
-
 export default connect(
     (state)=>({
         user:state.auth.toJS().profile.user,

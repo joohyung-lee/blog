@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 class Comments extends Component {  
     render() {
         
@@ -65,9 +64,5 @@ class Comments extends Component {
         );
     }
 }
-
-Comments.propTypes = {
-
-};
 
 export default Comments;

@@ -1,5 +1,4 @@
 import { handleActions, createAction } from 'redux-actions';
-import axios from 'axios';
 import {pending} from 'redux/helper/pending'
 import { Map,List ,fromJS} from 'immutable';
 
@@ -98,7 +97,7 @@ export default handleActions({
             let prevPages=false;
             let nextPages=false;
             let lastPages=false;
-            let pages=new Array();
+            let pages=[];
             let n=Math.floor(Number(data.page)/10);
             n=(Number(data.page)===10*n)?n-1:n;
             let start=10*n;
@@ -227,16 +226,13 @@ export default handleActions({
             const {data}=action.payload;
             let tagsArray=[];
             data.posts.map((item,i)=>{
-                tagsArray=tagsArray.concat(item.tags);
+                return tagsArray=tagsArray.concat(item.tags);
             });
             if(state.getIn(['tags','vacuum'])){
                 return state.setIn(['tags','data'],[])
             }else{
                 return state.setIn(['tags','data'],tagsArray)
             }
-            
-                        
-            
         }
     }),
     [POSTS_SEARCH_VACUUM]:(state,action)=>{

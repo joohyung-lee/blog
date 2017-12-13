@@ -90,9 +90,14 @@
         position: relative;
         width:100%;
         background-color:#222;
-       
         img{
             display: inline-block;
+            width: 100%;
+        }
+        .video-wrap{
+            position: absolute;
+            top:0;
+            left:0;
             width: 100%;
         }
     }

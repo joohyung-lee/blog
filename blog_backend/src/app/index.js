@@ -9,9 +9,11 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import http from 'http';
+import fs from 'fs';
 
 //set express
 var app = express();
+
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json()); 
 app.use(logger('dev'));
@@ -61,8 +63,6 @@ app.use(express.static(path.join(__dirname, '../../../blog_front/build/')));
 app.get('*', function (req, res) { 
   res.sendFile(path.join(__dirname, '../../../blog_front/build/', 'index.html'));
 });
-
-
 var port = process.env.PORT || 4000;
 var server= http.createServer(app).listen(port,function(){
     console.log("Express server has started on port " + port)

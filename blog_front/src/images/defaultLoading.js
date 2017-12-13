@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import {Motion,spring} from 'react-motion';
-  
+import React, { Component } from 'react';  
 class DefaultLoading extends Component {
   constructor(props){
     super(props);
