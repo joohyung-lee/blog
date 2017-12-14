@@ -9,10 +9,11 @@ const urlConfig=()=>{
         }      
     }else{
         return{
-            url: 'http://localhost:4000',
-            proxied_url: 'http://localhost:4000',
-            GOOGLE_LOGIN_URL:"http://localhost:4000/auth/google",
-            FACEBOOK_LOGIN_URL:"http://localhost:4000/auth/facebook"
+            url: 'http://108.61.180.96:4000',
+            proxied_url: 'http://108.61.180.96:4000',
+            GOOGLE_LOGIN_URL:"http://108.61.180.96:4000/auth/google",
+            FACEBOOK_LOGIN_URL:"http://108.61.180.96:4000/auth/facebook",
+            GITHUB_LOGIN_URL:"http://108.61.180.96:4000/auth/github"
         }
     }
 }

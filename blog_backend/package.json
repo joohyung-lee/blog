@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=production node build/app",
+    "start": "node build/app",
     "dev": "nodemon scripts/development.js",
     "build": "babel src -d build -w"
   },

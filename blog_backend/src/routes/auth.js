@@ -4,8 +4,7 @@ let router = express.Router();
 let passport = require('passport');
 let Account = require('../model/account');
 let urlConfig = require('../../config/urlConfig');
-let proxied_url = urlConfig[process.env.NODE_ENV].proxied_url;
-
+let proxied_url = urlConfig.proxied_url;
 let passportGoogle = require('../passport/google');
 let passportFacebook = require('../passport/facebook');
 let passportGithub=require('../passport/github');
