@@ -41,7 +41,7 @@ class CardItem extends Component {
         
         const gifChange=nextProps.gifLoad!==this.props.gifLoad;
         if(gifChange){
-            //this.playVideo(nextProps.gifLoad);
+            this.playVideo(nextProps.gifLoad);
             
         }
     }      
@@ -132,7 +132,7 @@ class CardItem extends Component {
                             {
                                 thumbLoading?<DefaultLoading color="white"/>:null
                             }
-                            <video className="video-wrap" playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
+                            <video className="video-wrap" loop playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
                             style={{
                                 visibility:this.props.gifLoad?'visible':'hidden'
                             }}></video>
