@@ -84,6 +84,7 @@
     .card-item-box{
         position: relative;
         cursor: pointer;   
+        will-change: box-shadow;
        
     }
     .card-item-image{

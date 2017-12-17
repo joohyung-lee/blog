@@ -113,6 +113,7 @@ html,body{
     left:0;
     width: 100vw;
     transform: translateZ(0);
+    will-change: transform,opacity;
 }
 
 .page-size{

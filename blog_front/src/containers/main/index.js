@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {Motion,TransitionMotion,spring} from 'react-motion';
-import MobileDetect from 'mobile-detect'
+import MobileDetect from 'mobile-detect';
+import { Scrollbars } from 'react-custom-scrollbars';
+
 //config
 import urlConfig from 'config/urlConfig'
 // components
@@ -119,13 +121,16 @@ class Main extends Component {
         const{active,offsetX}=motion;
         let offset=offsetX; 
         const activeItem=active;
+        let mobileVersion=false;
         let md = new MobileDetect(window.navigator.userAgent);
         if(md.mobile()){
             window.addEventListener('touchmove',this.handleMove);
             window.addEventListener('touchend',this.handleTouchUp);
+            mobileVersion=true
         }else{
             window.addEventListener('mousemove',this.handleMove);
             window.addEventListener('mouseup',this.handleUp);
+            mobileVersion=false
         }
         const eleResponse=window.innerWidth/3.5;
         const mobileSize=window.innerWidth/1.2;
@@ -161,16 +166,17 @@ class Main extends Component {
         //card item height 
         const eleHeight=eleWidth*1.2;
         //full width
-        let wrapperWidth=this.wrapperWidth.clientWidth-wrapperPd*2;
+        let wrapperWidth=Math.floor(this.wrapperWidth.clientWidth-wrapperPd*2);
         
         //contents width
-        const blockWidth=data.length*eleWidth;  
+        const blockWidth=Math.floor(data.length*eleWidth);  
+        //scroll width
+        const scrollWidth=Math.floor(this.scrollWidth.clientWidth);
         //possible width to scroll
         const maxScrollWidth=(blockWidth-wrapperWidth<0)?0:blockWidth-wrapperWidth;   
-        
         offset=offset>maxScrollWidth?maxScrollWidth:offset<0?0:offset
         //dispatch motions to redux
-        const indicator=(maxScrollWidth<this.scrollWidth.clientWidth)?this.scrollWidth.clientWidth-maxScrollWidth:0;
+        const indicator=(maxScrollWidth<scrollWidth)?scrollWidth-maxScrollWidth:0;
         motionDispatch.motionActions({
             motions:{
                 isPressed:false,
@@ -178,13 +184,14 @@ class Main extends Component {
                 max:maxScrollWidth,//possible width to scroll
                 eleWidth:eleWidth,//card item's width
                 eleHeight:eleHeight,//card item's height
-                scrollWidth:this.scrollWidth.clientWidth,//scroll indicator's width
+                scrollWidth:scrollWidth,//scroll indicator's width
                 indicator:indicator,//scroll indicator's filled width 
-                relative:this.scrollWidth.clientWidth/(maxScrollWidth+indicator),
+                relative:(scrollWidth/(maxScrollWidth+indicator)).toFixed(2),
                 wrapperPd:wrapperPd,//full width padding
                 itemPd:itemPd,//card item padding
                 offsetX:offset,//moved scroll
-                active:activeItem
+                active:activeItem,
+                mobileVersion:mobileVersion
             }
         });
     }
@@ -222,6 +229,9 @@ class Main extends Component {
                 active:Math.round(mouseX/eleWidth)
             }
         });
+    }
+    onScroll=(e)=>{
+        console.dir(e.target.scrollLeft)
     }
     handleDown=(pos,e)=>{
         const{motionDispatch}=this.props; 
@@ -466,10 +476,11 @@ class Main extends Component {
             return num
         }
     }
+    
     render() {   
         const {menuOpen,favActive,mainIndex,detailView}=this.state;
         const {motion,authUser,data,loading,total,oldLoading,starLoading}=this.props;
-        const {isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
+        const {mobileVersion,blockWidth,isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
         const style=(isPressed)?{
                 x:offsetX,
             }:{
@@ -481,62 +492,64 @@ class Main extends Component {
                 <Motion style={style} onRest={this.onRest}>
                     {({x})=>
                     <div className="main-container"
-                        onTouchStart={this.handleDown.bind(this,x)} 
-                        onMouseDown={this.handleDown.bind(this,x)} 
-                        onWheel={this.handleWheel.bind(this,x)}
+                        onTouchStart={mobileVersion?null:this.handleDown.bind(this,x)} 
+                        onMouseDown={mobileVersion?null:this.handleDown.bind(this,x)} 
+                        onWheel={mobileVersion?null:this.handleWheel.bind(this,x)}
                     > 
+                    <div className="title-wrap">
+                        <div className="menu-title">
+                            <TransitionMotion
+                            styles={this.state.mainText.map((item,i)=>{
+                                return{
+                                    key: item.key,
+                                    data:item.data,
+                                    style: {
+                                        offset:spring(i>mainIndex?50:i<mainIndex?-50:0,springSetting2),
+                                        opacity:spring(i===mainIndex?1:0,springSetting2)
+                                    },
+                                }
+                            })}
+                            >
+                                {currentStyles=>
+                                    <div className="main-txt">
+                                        {currentStyles.map((config,i)=>{
+                                            return <h2 key={config.key} style={{
+                                                transform:`translateY(${config.style.offset}px)`,
+                                                opacity:config.style.opacity,
+                                                position:mainIndex===i?`relative`:`absolute`,
+                                                pointerEvents:mainIndex===i?``:`none`
+                                            }}>{config.data}</h2>
+                                        })}
+                                    </div>
+                                }
+                            </TransitionMotion>
+                            <div className={(menuOpen)?"menu-icon active":"menu-icon"} onClick={this.menuOpen}> 
+                                <span/><span/><span/>
+                            </div>
+                        </div>
+                        <span className="pages">{this.countZero(active+1)}</span>
+                        <div ref={(ref)=>{this.scrollWidth=ref}} className="scroll-bar">
+                            <div className="indicator"
+                                style={{
+                                    width:`${(indicator+x)*relative}px`,
+                                    minWidth:`${30}px`
+                                }}
+                            ></div>
+                        </div>
+                        <span className="total">{this.countZero(total)}</span>
+                            
+                    </div>
                     <div ref={(ref)=>{this.wrapperWidth=ref}} 
+                        onScroll={this.onScroll}    
                         className={(menuOpen)?`main-wrapper menu`:`main-wrapper`} 
                         style={{
                             padding:`0px ${wrapperPd}px`,
                         }}
                         >
-                        <div className="title-wrap">
-                            <div className="menu-title">
-                                <TransitionMotion
-                                styles={this.state.mainText.map((item,i)=>{
-                                    return{
-                                        key: item.key,
-                                        data:item.data,
-                                        style: {
-                                            offset:spring(i>mainIndex?50:i<mainIndex?-50:0,springSetting2),
-                                            opacity:spring(i===mainIndex?1:0,springSetting2)
-                                        },
-                                    }
-                                })}
-                                >
-                                    {currentStyles=>
-                                        <div className="main-txt">
-                                            {currentStyles.map((config,i)=>{
-                                                return <h2 key={config.key} style={{
-                                                    transform:`translateY(${config.style.offset}px)`,
-                                                    opacity:config.style.opacity,
-                                                    position:mainIndex===i?`relative`:`absolute`,
-                                                    pointerEvents:mainIndex===i?``:`none`
-                                                }}>{config.data}</h2>
-                                            })}
-                                        </div>
-                                    }
-                                </TransitionMotion>
-                                <div className={(menuOpen)?"menu-icon active":"menu-icon"} onClick={this.menuOpen}> 
-                                    <span/><span/><span/>
-                                </div>
-                            </div>
-                            <span className="pages">{this.countZero(active+1)}</span>
-                            <div ref={(ref)=>{this.scrollWidth=ref}} className="scroll-bar">
-                                <div className="indicator"
-                                    style={{
-                                        width:`${(indicator+x)*relative}px`,
-                                        minWidth:`${30}px`
-                                    }}
-                                ></div>
-                            </div>
-                            <span className="total">{this.countZero(total)}</span>
-                                
-                        </div>
                         <div className="card-item-wrap" 
                             style={{
                                 transform:`translate3d(${-x}px,0,0)`,
+                                width:`${blockWidth+wrapperPd}px`
                                 }}>
                                 <TransitionMotion
                                 willEnter={this.willEnter}
@@ -573,7 +586,10 @@ class Main extends Component {
                                                 height:`${eleHeight}px`,
                                                 padding:`${itemPd}px`, 
                                                 left:`${config.style.size}px`,
-                                                transform:`perspective(600px) rotateY(${config.style.rotate}deg) matrix(${config.style.scale},0.00,0.00,${config.style.scale},${config.style.sizeX},${config.style.sizeY})`,
+                                                transform:`perspective(600px) 
+                                                            rotateY(${config.style.rotate}deg) 
+                                                            scale(${config.style.scale})
+                                                            translate3d(${config.style.sizeX}px,${config.style.sizeY}px,0)`,
                                                 zIndex:detailView===i?10:1,
                                                 opacity:config.style.opacity
                                             }}
@@ -608,7 +624,7 @@ class Main extends Component {
                                 }
                                 }
                                 </TransitionMotion>
-                            
+
                         </div>
                     </div>
                     </div>
