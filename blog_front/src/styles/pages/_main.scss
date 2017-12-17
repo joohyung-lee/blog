@@ -207,7 +207,8 @@
     transform-origin: left top 0;
     transition:transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
     will-change: transform,width;
-    overflow-x: auto;
+    overflow: auto; 
+    -webkit-overflow-scrolling: touch;
     .card-item-wrap{
         position: absolute;
         top:100px;
