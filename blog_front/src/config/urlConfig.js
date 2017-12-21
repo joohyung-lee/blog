@@ -9,11 +9,11 @@ const urlConfig=()=>{
         }      
     }else{
         return{
-            url: 'http://joomation.com',
-            proxied_url: 'http://joomation.com',
-            GOOGLE_LOGIN_URL:"http://joomation.com/auth/google",
-            FACEBOOK_LOGIN_URL:"http://joomation.com/auth/facebook",
-            GITHUB_LOGIN_URL:"http://joomation.com/auth/github"
+            url: 'https://joomation.com',
+            proxied_url: 'https://joomation.com',
+            GOOGLE_LOGIN_URL:"https://joomation.com/auth/google",
+            FACEBOOK_LOGIN_URL:"https://joomation.com/auth/facebook",
+            GITHUB_LOGIN_URL:"https://joomation.com/auth/github"
         }
     }
 }
