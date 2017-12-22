@@ -487,7 +487,7 @@ class Main extends Component {
                 x:spring(offsetX),
             };
         return (     
-            <div>   
+            <div className="main-wrap">   
                 <Menu open={menuOpen} linkLoading={loading}/>
                 <Motion style={style} onRest={this.onRest}>
                     {({x})=>
