@@ -246,7 +246,9 @@ module.exports = {
   },
   plugins: [
     // CommonsChunkPlugin 도 적용하세요.
-    
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
     }),

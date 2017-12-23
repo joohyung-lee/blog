@@ -7,9 +7,9 @@ import 'styles/joomation.scss';
 //components
 import LoginModal from 'components/common/modal/loginModal';
 import {MainRoute,SearchRoute,AdminRoute} from 'components/route';
-import DetailViewWrap from 'containers/detail/detailViewWrap';
+
 //pages
-import {RedirectLogin,Profile,Header} from 'components/pages';
+import {RedirectLogin,Profile,Header,DetailView} from 'components/pages';
 
 //redux
 import * as modalActions from 'redux/modal';
@@ -195,7 +195,7 @@ class App extends Component {
                     <AnimatedRoute
                       className={`detail-page-wrap`}
                       path="/posts/:category/:postId"
-                      component={DetailViewWrap}
+                      component={DetailView}
                       {...detailLayer}
                       mapStyles={this.detailMapStyles}
                     />

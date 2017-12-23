@@ -1,8 +1,9 @@
 import asyncRoute from 'lib/asyncRoute';
-
+import DetailView from 'containers/detail/detailView';
+export {DetailView}
 //pages
 export const Main = asyncRoute(() => import('containers/main'));
-export const DetailView = asyncRoute(() => import('containers/detail/detailView'));
+//export const DetailView = asyncRoute(() => import('containers/detail/detailView'));
 export const RedirectLogin = asyncRoute(() => import('components/loginPopup/redirect'));
 export const Profile  = asyncRoute(() => import('containers/mypage/profile'));
 export const AdminMain = asyncRoute(() => import('containers/admin'));
