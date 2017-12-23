@@ -6,15 +6,10 @@ import {withRouter,Route,Redirect} from 'react-router-dom'
 import 'styles/joomation.scss';
 //components
 import LoginModal from 'components/common/modal/loginModal';
-import {MainRoute,SearchRoute} from 'components/route';
+import {MainRoute,SearchRoute,AdminRoute} from 'components/route';
 
-//containers
-import {RedirectLogin} from 'components/loginPopup';
-import {Profile} from 'containers/mypage';
-import AdminMain from 'containers/admin';
-import Write from 'containers/admin/write';
-import Header from 'containers/header';
-import {DetailView} from 'containers/detail';
+//pages
+import {RedirectLogin,Profile,Header,DetailView} from 'components/pages';
 
 //redux
 import * as modalActions from 'redux/modal';
@@ -190,16 +185,12 @@ class App extends Component {
                       mapStyles={(motion.detailView)?this.mainMapStyles:this.pageMapStyles}
                     >  
                       <Route exact path="/"/> 
-                      <Route path="/search" component={SearchRoute}/>
-                      <Route exact path="/:category" component={MainRoute}/> 
-                      
-                      <Route exact path="/posts/:category/:postId"/> 
-                      <Route path="/auth/loginPopup/:name" component={RedirectLogin}/>
+                      <Route path="/posts/:category/:postId"/>
+                      <Route path="/search" component={SearchRoute}/> 
+                      <Route path="/admin" component={AdminRoute}/> 
                       <Route path="/mypage/profile" component={Profile}/>
-                      <Route exact path="/admin/read" component={AdminMain}/>
-                      <Route exact path="/admin/write" component={Write}/>
-                      <Route path="/admin/write/:id" component={Write}/>
-                      <Route component={NotFound}/>   
+                      <Route path="/auth/loginPopup/:name" component={RedirectLogin}/>
+                      <Route path="/:category" component={MainRoute}/> 
                     </AnimatedSwitch>
                     <AnimatedRoute
                       className={`detail-page-wrap`}

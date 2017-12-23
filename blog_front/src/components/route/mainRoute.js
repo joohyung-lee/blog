@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {Route,Switch} from 'react-router-dom'
-import Main from 'containers/main';
-//error
-import {NotFound} from 'components/common/error';
+//pages
+import {Main,NotFound} from 'components/pages'
 class MainRoute extends Component {
     render() {
         return (

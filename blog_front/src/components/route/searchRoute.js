@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {Route,Switch} from 'react-router-dom'
-import Search from 'containers/search';
-//error
-import {NotFound} from 'components/common/error';
+//pages
+import {Search,NotFound} from 'components/pages/'
 class SearchRoute extends Component {
     render() {
         return (
