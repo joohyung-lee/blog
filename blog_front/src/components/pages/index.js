@@ -1,4 +1,5 @@
 import asyncRoute from 'lib/asyncRoute';
+
 //pages
 export const Main = asyncRoute(() => import('containers/main'));
 export const DetailView = asyncRoute(() => import('containers/detail/detailView'));
