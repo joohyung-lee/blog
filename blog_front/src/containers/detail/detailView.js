@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 //components
-import MarkdownView from 'components/common/markdown'
+import {MarkdownView} from 'components/pages';
 import {Comments} from 'components/detail' 
 //containers
 
@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as modalActions from 'redux/modal';
 import * as motionActions from 'redux/main';
-import { setTimeout } from 'timers';
 //svg&images
 
 class DetailView extends Component {
