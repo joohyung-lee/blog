@@ -23,6 +23,7 @@ class DetailView extends Component {
             frameWrap:0,
             frameSizeX:0,
             frameSizeY:0,
+            frameFull:false,
             mobileMode:false,
             deskMode:true,
             iframeLoad:false,
@@ -127,7 +128,8 @@ class DetailView extends Component {
         this.setState({
             frameSizeX:sizeX,
             frameSizeY:sizeY,
-            frameWrap:frameWrap
+            frameFull:document.documentElement.clientWidth<1400?true:false,
+            frameWrap:frameWrap,
         })
     }
   
@@ -196,14 +198,14 @@ class DetailView extends Component {
       }
     render() {
         const {data,motion}=this.props;
-        const {iframeLoad,frameWrap,frameSizeX,frameSizeY} = this.state;
+        const {iframeLoad,frameWrap,frameSizeX,frameSizeY,frameFull} = this.state;
         return (
             <div className={`detail-frame`}>
                 {motion.detailLoad?
                     <Scrollbars
                     className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`}
                     style={{
-                        width:`calc(100% - ${frameWrap}px)`,
+                        width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,
                         height:`${motion.innerHeight}px`,
                     }}>
                         {data.map((item,i)=>{

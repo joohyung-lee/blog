@@ -104,6 +104,10 @@
     &.animate{
         opacity: 1;   
     }
+    @media screen and (max-width: $screen-desktop) {
+        transform: translate3d(0,100%,0);
+       
+    }
     .detail-contents{
         padding:100px 60px 20px;
         .header{
