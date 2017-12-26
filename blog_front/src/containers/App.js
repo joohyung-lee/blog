@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { AnimatedSwitch,AnimatedRoute } from 'react-router-transition/lib/react-router-transition';
 import{spring} from 'react-motion';
 import {withRouter,Route,Redirect} from 'react-router-dom'
+//polyfill
+import 'lib/arrayFind';
 //joomation style
 import 'styles/joomation.scss';
 //components
