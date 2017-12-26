@@ -491,12 +491,16 @@ class Main extends Component {
                 <Menu open={menuOpen} linkLoading={loading}/>
                 <Motion style={style} onRest={this.onRest}>
                     {({x})=>
-                    <div className="main-container"
+                    <div className={`main-container ${(menuOpen?'menu':'')}`}
                         onTouchStart={mobileVersion?null:this.handleDown.bind(this,x)} 
                         onMouseDown={mobileVersion?null:this.handleDown.bind(this,x)} 
                         onWheel={mobileVersion?null:this.handleWheel.bind(this,x)}
                     > 
-                    <div className="title-wrap">
+                    <div className="title-wrap"
+                        style={{
+                            padding:`0 ${wrapperPd}px`
+                        }}
+                    >
                         <div className="menu-title">
                             <TransitionMotion
                             styles={this.state.mainText.map((item,i)=>{
@@ -541,7 +545,7 @@ class Main extends Component {
                     </div>
                     <div ref={(ref)=>{this.wrapperWidth=ref}} 
                         onScroll={this.onScroll}    
-                        className={(menuOpen)?`main-wrapper menu`:`main-wrapper`} 
+                        className={`main-wrapper`} 
                         style={{
                             padding:`0px ${wrapperPd}px`,
                         }}
