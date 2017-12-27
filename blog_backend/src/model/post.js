@@ -32,5 +32,5 @@ var postSchema = new Schema({
    
 },{ minimize: false });
 postSchema.plugin(mongoosePaginate);
-postSchema.index({title: 'text', summary: 'text',tags:1});
+postSchema.index({title: 'text', summary: 'text'});
 module.exports = mongoose.model('post',postSchema);
