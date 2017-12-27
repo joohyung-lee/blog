@@ -13,10 +13,7 @@ var postSchema = new Schema({
     iframeUrl:String,
     category:String,
     starred: [String],
-    tags:[{
-        type:String,
-        index:true
-    }],
+    tags:[String],
     thumbnail:{data:{
         type: Schema.Types.Mixed, default: {}
     }},
