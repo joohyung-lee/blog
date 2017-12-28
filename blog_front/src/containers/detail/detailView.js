@@ -203,6 +203,7 @@ class DetailView extends Component {
             <div className={`detail-frame`}>
                 {motion.detailLoad?
                     <Scrollbars
+                    autoHide
                     className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`}
                     style={{
                         width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,

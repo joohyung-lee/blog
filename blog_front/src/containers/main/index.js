@@ -29,7 +29,7 @@ class Main extends Component {
             mainText:[
                 {
                     key:'home',
-                    data:'All Posts',
+                    data:'Home',
                 },
                 {
                     key:'motionlab',

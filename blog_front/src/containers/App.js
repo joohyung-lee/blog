@@ -165,7 +165,7 @@ class App extends Component {
       },
     }
     return (
-        <div>
+        <div className="app">
             <LoginModal open={modal['login'].open} close={this.loginClose}/>
             <Header mode={header.isHeader} />
               <Route render={({location}) => {

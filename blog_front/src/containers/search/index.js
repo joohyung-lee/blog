@@ -496,8 +496,8 @@ class Search extends Component{
             ref="scrollbars"
             onScrollFrame={this.handleScroll}
             renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
-            autoHide
             style={{
+                position:'absolute',
                 height:`${windowHeight-50}px`,
                 marginTop:`50px`
                 
