@@ -13,10 +13,7 @@ var postSchema = new Schema({
     iframeUrl:String,
     category:String,
     starred: [String],
-    tags:[{
-        type:String,
-        index:true
-    }],
+    tags:[String],
     thumbnail:{data:{
         type: Schema.Types.Mixed, default: {}
     }},
@@ -35,5 +32,5 @@ var postSchema = new Schema({
    
 },{ minimize: false });
 postSchema.plugin(mongoosePaginate);
-postSchema.index({title: 'text', summary: 'text',tags:1});
+postSchema.index({title: 'text', summary: 'text'});
 module.exports = mongoose.model('post',postSchema);
