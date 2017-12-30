@@ -4,16 +4,14 @@ import Header from 'containers/header';
 import DetailView from 'containers/detail/detailView';
 import Search from 'containers/search';
 import NotFound from 'components/common/error/404';
-import MarkdownView from 'components/common/markdown'
 export {
     DetailView,
     Search,
     NotFound,
     Header,
-    MarkdownView
 }
 //components
-//export const MarkdownView = asyncRoute(() => import('components/common/markdown'));
+export const MarkdownView = asyncRoute(() => import('components/common/markdown'));
 //pages
 let md = new MobileDetect(window.navigator.userAgent);
 
