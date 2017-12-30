@@ -187,7 +187,7 @@ class DetailView extends Component {
                     height:doc?`100px`:`${windowHeight}px`,
                     backgroundColor:motion.bgColor
                 }}>
-                <div className={`loading-text ${doc?'fade-out':''}`}>
+                <div className={`loading-text ${iframeLoad?'fade-out':''}`}>
                     <h3>Loading...</h3>
                 </div>
                 {motion.detailLoad?
