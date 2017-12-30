@@ -1,4 +1,8 @@
 import Comments from './comments'
+import Documentation from './documentation'
+import SpringScrollbars from './springScrollbars'
 export{
-    Comments
+    Comments,
+    Documentation,
+    SpringScrollbars
 }

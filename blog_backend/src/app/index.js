@@ -45,14 +45,7 @@ db.on('connected', function() {
 db.once('open', function() {
   console.log('MongoDB connection opened!');
 });
-db.on('reconnected', function () {
-  console.log('MongoDB reconnected!');
-});
-db.on('disconnected', function() {
-  console.log('MongoDB disconnected!');
-  mongoose.connect(process.env.DB_URI, {server:{auto_reconnect:true}});
-});
-mongoose.connect(process.env.DB_URI, {server:{auto_reconnect:true}});
+mongoose.connect(process.env.DB_URI);
 
 //import router
 var router=require('../routes');
