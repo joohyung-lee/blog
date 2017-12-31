@@ -88,7 +88,10 @@
         right:0px;
         margin:auto;
         height:0px;
-        transition:width 0.4s cubic-bezier(0.21, 0.84, 0.4, 1.15),height 0.4s cubic-bezier(0.21, 0.84, 0.4, 1.15),transform 0.4s cubic-bezier(0.21, 0.84, 0.4, 1.15),opacity 0.3s;
+        transition:width 0.5s $spring,
+            height 0.5s $spring,
+            transform 0.5s $spring,
+            opacity 0.3s;
         will-change:width,height,transform,opacity;
         opacity: 0;
         &.animate{
