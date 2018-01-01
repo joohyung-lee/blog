@@ -219,22 +219,24 @@ class DetailView extends Component {
                                 </div>  
                             )
                         })} 
-                        
+                        <div className="scroll-doc">
+                            <span onClick={this.scrollDown}>Scroll Down</span>
+                        </div>    
                     </div>:null
                 }
-                <div className="scroll-doc">
-                    <span onClick={this.scrollDown}>Scroll Down</span>
                 </div>
-            </div>
+                <div className="fullsize">
+                    <span>+</span>
+                </div>
                 {motion.detailLoad?
-                        <Scrollbars
-                        renderView={this.renderView}
-                        style={{
-                            width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,
-                            height:frameFull?`calc(100% - 100px)`:`${windowHeight}px`,
-                        }}>
-                            <Documentation className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} data={data}/>
-                        </Scrollbars>
+                    <Scrollbars
+                    renderView={this.renderView}
+                    style={{
+                        width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,
+                        height:frameFull?`calc(100% - 100px)`:`${windowHeight}px`,
+                    }}>
+                        <Documentation className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} data={data}/>
+                    </Scrollbars>
                     :null
                 }
                 

@@ -79,6 +79,7 @@
             opacity:0;
             visibility: hidden;
         }
+        
     }
     .iframe-wrap{
         position: absolute;
@@ -120,7 +121,20 @@
             }
         }
     }
-  }
+}
+.fullsize{
+position: absolute;
+    span{
+        display: inline-block;
+        width:35px;
+        height:35px;
+        line-height: 35px;
+        text-align: center;
+        background-color:$c-black-0;
+        color:#fff;
+        border-radius: 50%;
+    }
+}
 .detail-contents-wrap{
     position: relative;
     opacity: 0;
