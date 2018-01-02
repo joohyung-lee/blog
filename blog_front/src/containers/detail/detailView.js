@@ -22,6 +22,7 @@ class DetailView extends Component {
             frameWrap:0,
             frameSizeX:0,
             frameSizeY:0,
+            frameDivide:false,
             frameFull:false,
             mobileMode:false,
             deskMode:true,
@@ -84,21 +85,23 @@ class DetailView extends Component {
         900:
         900:
         document.documentElement.clientWidth*0.6;
-        
+        const frameDivide=document.documentElement.clientWidth<1400?false:true;
         if(mobileMode){
             sizeX='375px';
             sizeY=600;
         }else{
             sizeX='100%';
-            sizeY=document.documentElement.clientHeight-250;
+            sizeY=document.documentElement.clientHeight-200;
         }
         this.setState({
             windowWidth:document.documentElement.clientWidth,
             windowHeight:document.documentElement.clientHeight,
             frameSizeX:sizeX,
             frameSizeY:sizeY,
+            frameDivide:frameDivide,
             frameFull:document.documentElement.clientWidth<1400?true:false,
             frameWrap:frameWrap,
+            doc:false
         })
     }
   
@@ -153,7 +156,7 @@ class DetailView extends Component {
                 mobileMode:false,
                 deskMode:true,
                 frameSizeX:'100%',
-                frameSizeY:document.documentElement.clientHeight-250
+                frameSizeY:document.documentElement.clientHeight-200
             })
         }
     }
@@ -169,6 +172,11 @@ class DetailView extends Component {
             <div {...props} style={{ ...style }}/>
         );
     }
+    fullSize=()=>{
+        this.setState({
+            frameFull:!this.state.frameFull
+        })
+    }
     scrollDown=()=>{
         this.setState({
             doc:!this.state.doc
@@ -176,36 +184,44 @@ class DetailView extends Component {
     }
     render() {
         const {data,motion}=this.props;
-        const {windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameFull,doc} = this.state;
+        const {windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc} = this.state;
         return (
             <div
                 className={`detail-frame`}
             >
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
-                style={{
-                    width:motion.detailLoad?`${frameWrap}px`:`${windowWidth}px`,
-                    height:doc?`100px`:`${windowHeight}px`,
-                    backgroundColor:motion.bgColor
-                }}>
-                <div className={`loading-text ${iframeLoad?'fade-out':''}`}>
-                    <h3>Loading...</h3>
-                </div>
-                {motion.detailLoad?
-                    <div className={`detail-simulate ${doc?'fade-out':''}`}>
-                        <div className="device-controll-wrap">
-                            <div className="device-controll">
-                                <div className="dic mobile" onClick={this.modeChange.bind(this,'mobile')}>
-                                    <span className="icon-device"></span>
-                                    <span className="icon-text">Phone</span>
+                    style={{
+                        width:frameFull?`${windowWidth}px`:motion.detailLoad?`${frameWrap}px`:`${windowWidth}px`,
+                        height:doc?`100px`:`${windowHeight}px`,
+                        backgroundColor:motion.bgColor
+                    }}>
+                    <div className={`loading-text ${iframeLoad?'fade-out':''}`}>
+                        <h3>Loading...</h3>
+                    </div>
+                    {motion.detailLoad?
+                        data.map((item,i)=>{
+                        return( 
+                            <div key={item._id} className={`detail-simulate ${doc?'fade-out':''}`}>
+                                <div className={`fullsize ${!frameDivide?'fade-out':''}`} onClick={this.fullSize}>
+                                    <span></span>
+                                    <span></span>
                                 </div>
-                                <div className="dic desk" onClick={this.modeChange.bind(this,'desk')}>
-                                    <span className="icon-device"></span>
-                                    <span className="icon-text">Desktop</span>
+                                <div className="device-controll-wrap">
+                                    <div className="device-controll">
+                                        <div className="dic mobile" onClick={this.modeChange.bind(this,'mobile')}>
+                                            <span className="icon-device"></span>
+                                            <span className="icon-text">Phone</span>
+                                        </div>
+                                        <div className="dic desk" onClick={this.modeChange.bind(this,'desk')}>
+                                            <span className="icon-device"></span>
+                                            <span className="icon-text">Desktop</span>
+                                        </div>
+                                        <div className="dic visit-site">
+                                            <a href={item.iframeUrl}>Visit Site</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        {data.map((item,i)=>{
-                            return( 
+                                
                                 <div key={item._id} className={`iframe-wrap ${iframeLoad?'animate':''}`}
                                     style={{
                                         width:frameSizeX,
@@ -213,27 +229,29 @@ class DetailView extends Component {
                                         transform:`scale(${iframeLoad?1:0.3})`
                                     }}
                                 >
+                                    
                                     <iframe title="This is a detailView" key="i" src={item.iframeUrl}
                                         onLoad={this.iframeLoad} 
                                         frameBorder="0" width={"100%"} height="100%"></iframe>
                                 </div>  
-                            )
-                        })} 
-                        <div className="scroll-doc">
-                            <span onClick={this.scrollDown}>Scroll Down</span>
-                        </div>    
-                    </div>:null
-                }
+                            </div>
+                    )}):null} 
+                    {motion.detailLoad?
+                    <div className={`scroll-doc ${!frameFull?'fade-out':''}`}>
+                        <span onClick={this.scrollDown}>{doc?`Preview`:`Documentation`}</span>
+                    </div> :null
+                    }
+                    
                 </div>
-                <div className="fullsize">
-                    <span>+</span>
-                </div>
+                
                 {motion.detailLoad?
                     <Scrollbars
                     renderView={this.renderView}
                     style={{
                         width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,
                         height:frameFull?`calc(100% - 100px)`:`${windowHeight}px`,
+                        transitionProperty:`width,height`,
+                        transitionDelay:frameFull?`0.4s`:`0s`
                     }}>
                         <Documentation className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} data={data}/>
                     </Scrollbars>
