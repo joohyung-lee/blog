@@ -246,12 +246,11 @@ class DetailView extends Component {
                 
                 {motion.detailLoad?
                     <Scrollbars
+                    className={`detail-doc ${frameFull?'full':'divide'} ${doc?'doc':'preview'}`}
                     renderView={this.renderView}
                     style={{
                         width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,
                         height:frameFull?`calc(100% - 100px)`:`${windowHeight}px`,
-                        transitionProperty:`width,height`,
-                        transitionDelay:frameFull?`0.4s`:`0s`
                     }}>
                         <Documentation className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} data={data}/>
                     </Scrollbars>

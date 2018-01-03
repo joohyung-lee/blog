@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {TransitionMotion,spring} from 'react-motion';
 import { Scrollbars } from 'react-custom-scrollbars';
-
 //config
 import urlConfig from 'config/urlConfig'
 //components
@@ -266,7 +265,7 @@ class Search extends Component{
     }
     dimensions=()=>{
         let eleWidth;
-        if(this.searchContents.clientWidth!==null || typeof this.searchContents.clientWidth!=='undefined'){
+        if(this.searchContents){
             eleWidth=window.innerWidth>1200?
             this.searchContents.clientWidth/4:
             window.innerWidth<900?
@@ -280,7 +279,8 @@ class Search extends Component{
         this.setState({
             eleWidth:eleWidth,
             itemPd:10,
-            windowHeight:window.innerHeight,
+            windowWidth:document.documentElement.clientWidth,
+            windowHeight:document.documentElement.clientHeight,
         })
     }
       
@@ -490,78 +490,11 @@ class Search extends Component{
     }
     render(){
         const {postsData,postsLoading,authUser,starLoading} = this.props;
-        const {hash,eleWidth,itemPd,tagUrl,windowHeight,tagLeftScroll,tagRightScroll,searchScroll,initial,favActive,active} =this.state;
+        const {hash,eleWidth,itemPd,tagUrl,windowWidth,windowHeight,tagLeftScroll,tagRightScroll,searchScroll,initial,favActive,active} =this.state;
         return (
-            <Scrollbars
-            ref="scrollbars"
-            onScrollFrame={this.handleScroll}
-            renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
-            style={{
-                position:'absolute',
-                height:`${windowHeight-50}px`,
-                marginTop:`50px`
-                
-            }}>
-                <div className={`search-contents-wrap ${searchScroll?'scroll':''}`}>
-                        <div className="search-contents">
-                            <div className="search-result">
-                                {initial?<div className="no-data">
-                                            <span>Search text or tag</span>
-                                        </div>:
-                                <div>
-                                    <div className="search-result-title">
-                                        <span className="count">{postsData.length} Posts</span>
-                                        <span>results for {tagUrl?`tag`:`title/body`}</span>
-                                    </div>
-                                {!initial && !postsLoading && postsData.length===0?
-                                <div className="no-data">
-                                    <span>No matches found for</span>
-                                    <b> "{this.props.match.params.keyword}"</b>
-                                </div>
-                                :null}
-                                    <div className="search-result-contents" ref={(ref)=>{this.searchContents=ref}} >
-                                        {
-                                            postsData.map((item,i)=>{
-                                                let isFav = (item.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
-                                                const isGif=(typeof item.gif.data.path!=='undefined')?true:false;
-                                                return <CardItem key={item._id} 
-                                                    className={`card-item ${active===i?'hover':''}`}
-                                                    onMouseUp={this.itemUp.bind(this,item._id,i)}                                            
-                                                    onMouseOver={this.handleMouseOver.bind(this,i)}
-                                                    onMouseOut={this.handleMouseOut.bind(this,i)}
-                                                    favOver={this.handleMouseOver.bind(this,i)}
-                                                    favClick={this.favClick.bind(this,item._id,i)}
-                                                    fav={isFav}
-                                                    favLoading={favActive===i?starLoading?true:false:false}
-                                                    favCount={(item.starred.length==='')?0:item.starred.length}
-                                                    thumbSrc={(item.thumbnail.data.path)?`${urlConfig.url}/api/${item.thumbnail.data.path}`:''}
-                                                    isGif={isGif}
-                                                    gifLoad={(active===i && isGif)?true:false}
-                                                    gifSrc={(item.gif.data.path)?`${urlConfig.url}/api/${item.gif.data.path}`:''}
-                                                    category={item.category}
-                                                    userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}                                            
-                                                    postDate={item.postDate}
-                                                    title={item.title}
-                                                    author={item.author}
-                                                    summary={item.summary}
-                                                    wrapStyle={{
-                                                        width:`${eleWidth}px`,   
-                                                        padding:`${itemPd}px`,                         
-                                                    }} 
-                                                    bgColor={(typeof item.bgColor!=='undefined')?item.bgColor:null}
-                                                    imgHeight={(eleWidth-itemPd*2)*3/4}
-                                                />
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                            }
-                            </div>
-                            
-                        </div>
-                   
-                    <div className="search-title">
-                        <div className="title-wrap">
+            <div className={`search-contents-wrap ${searchScroll?'scroll':''}`}>
+                <div className="search-title">
+                    <div className="title-wrap">
                         <TransitionMotion
                         willEnter={this.willEnter}
                         willLeave={this.willLeave}
@@ -579,22 +512,22 @@ class Search extends Component{
                                 </h2>
                             }
                         </TransitionMotion>
+                        <Scrollbars
+                            universal 
+                            className={`tags-wrap ${tagLeftScroll?'left':''} ${tagRightScroll?'right':''}`}
+                            style={{
+                                height:60,
+                                
+                            }}
+                            onScrollFrame={this.tagsScrollFrame}
+                            onUpdate={this.tagsScrollUpdate}
+                            >
                             <TransitionMotion
                             willEnter={this.willEnterTags}
                             willLeave={this.willLeaveTags}
                             styles={this.getStyleTags()}
                             >
                                 {currentStyles=>
-                                    <Scrollbars
-                                    className={`tags-wrap ${tagLeftScroll?'left':''} ${tagRightScroll?'right':''}`}
-                                    style={{
-                                        height:`55px`,
-                                        
-                                    }}
-                                    
-                                    onScrollFrame={this.tagsScrollFrame}
-                                    onUpdate={this.tagsScrollUpdate}
-                                    >
                                     <ul>
                                         {currentStyles.map((config,i)=>{
                                             
@@ -610,13 +543,78 @@ class Search extends Component{
                                                     </li>
                                         })}
                                     </ul>
-                                    </Scrollbars>
+                                    
                                 }
                             </TransitionMotion>
-                    </div>
+                        </Scrollbars>
                     </div>
                 </div>
-            </Scrollbars>
+                <Scrollbars
+                    universal
+                    ref="scrollbars"
+                    onScrollFrame={this.handleScroll}
+                    renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
+                    style={{
+                        height:windowHeight,
+                    }}>
+                    <div className="search-contents">
+                        <div className="search-result">
+                            {initial?
+                            <div className="no-data">
+                                        <span>Search text or tag</span>
+                                    </div>:
+                            <div>
+                            <div className="search-result-title">
+                                <span className="count">{postsData.length} Posts</span>
+                                <span>results for {tagUrl?`tag`:`title/body`}</span>
+                            </div>
+                            {!initial && !postsLoading && postsData.length===0?
+                            <div className="no-data">
+                                <span>No matches found for</span>
+                                <b> "{this.props.match.params.keyword}"</b>
+                            </div>
+                            :null}
+                                <div className="search-result-contents" ref={(ref)=>{this.searchContents=ref}} >
+                                    {
+                                        postsData.map((item,i)=>{
+                                            let isFav = (item.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
+                                            const isGif=(typeof item.gif.data.path!=='undefined')?true:false;
+                                            return <CardItem key={item._id} 
+                                                className={`card-item ${active===i?'hover':''}`}
+                                                onMouseUp={this.itemUp.bind(this,item._id,i)}                                            
+                                                onMouseOver={this.handleMouseOver.bind(this,i)}
+                                                onMouseOut={this.handleMouseOut.bind(this,i)}
+                                                favOver={this.handleMouseOver.bind(this,i)}
+                                                favClick={this.favClick.bind(this,item._id,i)}
+                                                fav={isFav}
+                                                favLoading={favActive===i?starLoading?true:false:false}
+                                                favCount={(item.starred.length==='')?0:item.starred.length}
+                                                thumbSrc={(item.thumbnail.data.path)?`${urlConfig.url}/api/${item.thumbnail.data.path}`:''}
+                                                isGif={isGif}
+                                                gifLoad={(active===i && isGif)?true:false}
+                                                gifSrc={(item.gif.data.path)?`${urlConfig.url}/api/${item.gif.data.path}`:''}
+                                                category={item.category}
+                                                userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}                                            
+                                                postDate={item.postDate}
+                                                title={item.title}
+                                                author={item.author}
+                                                summary={item.summary}
+                                                wrapStyle={{
+                                                    width:`${eleWidth}px`,   
+                                                    padding:`${itemPd}px`,                         
+                                                }} 
+                                                bgColor={(typeof item.bgColor!=='undefined')?item.bgColor:null}
+                                                imgHeight={(eleWidth-itemPd*2)*3/4}
+                                            />
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        }
+                        </div>
+                    </div>
+                </Scrollbars>
+            </div>
         );
     }
 };

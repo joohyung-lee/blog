@@ -1,13 +1,7 @@
 .search-contents-wrap{
-    position: absolute;
-    width: 100%;
-    top:0;
-    left:0;
-    right:0;
     max-width:1600px;
-    padding:0px 0 0;
+    padding:0px;
     margin: 0px auto;
-    overflow: hidden;
     &.scroll{
         .search-title{
             &:before{
@@ -19,12 +13,6 @@
     }
     
     .search-title{
-        position: fixed;
-        top: 0px;
-        left: 0;
-        right: 0;
-        width: 100%;
-        max-width: 1650px;
         height: 200px;
         padding: 80px 0px 0px;
         margin: 0 auto;
@@ -73,13 +61,11 @@
     .tags-wrap{
         position: absolute;
         min-height: 40px;
-        margin-top:15px;
         text-align: center;
         left:0;
         bottom:0;
         max-width: 1600px;
         margin:0 auto;
-        margin-top:15px;
         background-color: #f1f1f1;
         &:before,&:after{
             content:'';
