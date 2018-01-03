@@ -38,7 +38,8 @@ module.exports = {
       require.resolve('./polyfills'),
       'react',
       'react-dom',
-      'react-router-dom'
+      'react-router-dom',
+      'remarkable'
     ],
     app: ['react-dev-utils/webpackHotDevClient', paths.appIndexJs]
   },

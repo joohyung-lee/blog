@@ -98,6 +98,7 @@ button{
     width:100%;
     height: 100vh;
     z-index: 1;
+    will-change: opacity
 }
 .page-wrap > div > div{
     position: absolute;

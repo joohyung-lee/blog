@@ -110,13 +110,13 @@ class Header extends Component {
             searchView:false
         });
         
-        if(this.props.history.action==='POP'){
-            return false;
-        }else if(this.props.location.pathname==='/search'){
-            return this.props.history.goBack();
-        }else{
-            return false;
-        }
+        // if(this.props.history.action==='POP'){
+        //     return false;
+        // }else if(this.props.location.pathname==='/search'){
+        //     return this.props.history.goBack();
+        // }else{
+        //     return false;
+        // }
     }
     handleSearch=(e)=>{
         const{common}=this.props;

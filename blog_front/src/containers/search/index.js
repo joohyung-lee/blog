@@ -265,17 +265,14 @@ class Search extends Component{
     }
     dimensions=()=>{
         let eleWidth;
-        if(this.searchContents){
-            eleWidth=window.innerWidth>1200?
-            this.searchContents.clientWidth/4:
-            window.innerWidth<900?
-            window.innerWidth<670?
-            this.searchContents.clientWidth:
-            this.searchContents.clientWidth/2:
-            this.searchContents.clientWidth/3;
-        }else{
-            eleWidth=0;
-        }
+        eleWidth=window.innerWidth>1200?
+        this.searchContents.clientWidth/4:
+        window.innerWidth<900?
+        window.innerWidth<670?
+        this.searchContents.clientWidth:
+        this.searchContents.clientWidth/2:
+        this.searchContents.clientWidth/3;
+
         this.setState({
             eleWidth:eleWidth,
             itemPd:10,
@@ -492,7 +489,7 @@ class Search extends Component{
         const {postsData,postsLoading,authUser,starLoading} = this.props;
         const {hash,eleWidth,itemPd,tagUrl,windowWidth,windowHeight,tagLeftScroll,tagRightScroll,searchScroll,initial,favActive,active} =this.state;
         return (
-            <div className={`search-contents-wrap ${searchScroll?'scroll':''}`}>
+            <div className={`search-container ${searchScroll?'scroll':''}`}>
                 <div className="search-title">
                     <div className="title-wrap">
                         <TransitionMotion
@@ -551,18 +548,19 @@ class Search extends Component{
                 </div>
                 <Scrollbars
                     universal
+                    className="search-contents-wrap"
                     ref="scrollbars"
                     onScrollFrame={this.handleScroll}
                     renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
                     style={{
-                        height:windowHeight,
+                        height:`${windowHeight-200}px`,
                     }}>
                     <div className="search-contents">
-                        <div className="search-result">
+                        <div className="search-result" ref={(ref)=>{this.searchContents=ref}}>
                             {initial?
                             <div className="no-data">
-                                        <span>Search text or tag</span>
-                                    </div>:
+                                <span>Search text or tag</span>
+                            </div>:
                             <div>
                             <div className="search-result-title">
                                 <span className="count">{postsData.length} Posts</span>
@@ -574,41 +572,41 @@ class Search extends Component{
                                 <b> "{this.props.match.params.keyword}"</b>
                             </div>
                             :null}
-                                <div className="search-result-contents" ref={(ref)=>{this.searchContents=ref}} >
-                                    {
-                                        postsData.map((item,i)=>{
-                                            let isFav = (item.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
-                                            const isGif=(typeof item.gif.data.path!=='undefined')?true:false;
-                                            return <CardItem key={item._id} 
-                                                className={`card-item ${active===i?'hover':''}`}
-                                                onMouseUp={this.itemUp.bind(this,item._id,i)}                                            
-                                                onMouseOver={this.handleMouseOver.bind(this,i)}
-                                                onMouseOut={this.handleMouseOut.bind(this,i)}
-                                                favOver={this.handleMouseOver.bind(this,i)}
-                                                favClick={this.favClick.bind(this,item._id,i)}
-                                                fav={isFav}
-                                                favLoading={favActive===i?starLoading?true:false:false}
-                                                favCount={(item.starred.length==='')?0:item.starred.length}
-                                                thumbSrc={(item.thumbnail.data.path)?`${urlConfig.url}/api/${item.thumbnail.data.path}`:''}
-                                                isGif={isGif}
-                                                gifLoad={(active===i && isGif)?true:false}
-                                                gifSrc={(item.gif.data.path)?`${urlConfig.url}/api/${item.gif.data.path}`:''}
-                                                category={item.category}
-                                                userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}                                            
-                                                postDate={item.postDate}
-                                                title={item.title}
-                                                author={item.author}
-                                                summary={item.summary}
-                                                wrapStyle={{
-                                                    width:`${eleWidth}px`,   
-                                                    padding:`${itemPd}px`,                         
-                                                }} 
-                                                bgColor={(typeof item.bgColor!=='undefined')?item.bgColor:null}
-                                                imgHeight={(eleWidth-itemPd*2)*3/4}
-                                            />
-                                        })
-                                    }
-                                </div>
+                            <div className="search-result-contents"  >
+                                {
+                                    postsData.map((item,i)=>{
+                                        let isFav = (item.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
+                                        const isGif=(typeof item.gif.data.path!=='undefined')?true:false;
+                                        return <CardItem key={item._id} 
+                                            className={`card-item ${active===i?'hover':''}`}
+                                            onMouseUp={this.itemUp.bind(this,item._id,i)}                                            
+                                            onMouseOver={this.handleMouseOver.bind(this,i)}
+                                            onMouseOut={this.handleMouseOut.bind(this,i)}
+                                            favOver={this.handleMouseOver.bind(this,i)}
+                                            favClick={this.favClick.bind(this,item._id,i)}
+                                            fav={isFav}
+                                            favLoading={favActive===i?starLoading?true:false:false}
+                                            favCount={(item.starred.length==='')?0:item.starred.length}
+                                            thumbSrc={(item.thumbnail.data.path)?`${urlConfig.url}/api/${item.thumbnail.data.path}`:''}
+                                            isGif={isGif}
+                                            gifLoad={(active===i && isGif)?true:false}
+                                            gifSrc={(item.gif.data.path)?`${urlConfig.url}/api/${item.gif.data.path}`:''}
+                                            category={item.category}
+                                            userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}                                            
+                                            postDate={item.postDate}
+                                            title={item.title}
+                                            author={item.author}
+                                            summary={item.summary}
+                                            wrapStyle={{
+                                                width:`${eleWidth}px`,   
+                                                padding:`${itemPd}px`,                         
+                                            }} 
+                                            bgColor={(typeof item.bgColor!=='undefined')?item.bgColor:null}
+                                            imgHeight={(eleWidth-itemPd*2)*3/4}
+                                        />
+                                    })
+                                }
+                            </div>
                             </div>
                         }
                         </div>

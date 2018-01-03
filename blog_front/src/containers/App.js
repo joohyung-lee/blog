@@ -138,12 +138,12 @@ class App extends Component {
     
     const pageTransitions = {
       atEnter: {
-        opacity :1,
+        opacity :0,
         offsetY: 5,
         scale:0.92
       },
       atLeave: {
-        opacity: this.fade(1),
+        opacity: this.fade(0),
         offsetY: this.move(5),
         scale:this.move(0.92)
       },

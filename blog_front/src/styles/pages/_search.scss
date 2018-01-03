@@ -1,5 +1,4 @@
-.search-contents-wrap{
-    max-width:1600px;
+.search-container{
     padding:0px;
     margin: 0px auto;
     &.scroll{
@@ -13,6 +12,7 @@
     }
     
     .search-title{
+        position: relative;
         height: 200px;
         padding: 80px 0px 0px;
         margin: 0 auto;
@@ -27,6 +27,7 @@
             right: 25px;
             bottom: 0px;
             width: calc(100% - 50px);
+            max-width: 1600px;
             height: 50px;
             margin: 0 auto;
             box-shadow: 0 5px 30px rgba(52, 73, 94, 0.3);
@@ -34,7 +35,7 @@
             z-index: -1;
         }
         .title-wrap{
-            padding:0 0 10px;
+            padding:0 0 20px;
             background-color:#f1f1f1;
         }
         h2{
@@ -57,6 +58,9 @@
             font-weight: 400;
             text-align: center;
         }
+    }
+    .search-contents-wrap{
+        padding:20px;
     }
     .tags-wrap{
         position: absolute;
@@ -145,14 +149,15 @@
         }
     }
     .search-contents{
-        
-        padding:150px 0 0;
+        width:100%;
+        max-width: 1400px;
+        padding:20px;
+        margin:0 auto;
         transition: padding 0.2s ease;
         
     }
     .search-result{
         margin-top: 0px;
-        padding:20px;
         .no-data{
             margin-top:100px;
             text-align: center;
