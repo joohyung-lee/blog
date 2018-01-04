@@ -4,6 +4,7 @@ import IconFav from 'images/iconFav';
 import GifLoading from 'images/gifLoading';
 import DefaultLoading from 'images/defaultLoading';
 import MobileDetect from 'mobile-detect';
+import LinesEllipsis from 'react-lines-ellipsis'
 class CardItem extends Component {
     constructor(props) {
         super(props);
@@ -170,7 +171,13 @@ class CardItem extends Component {
                         </div>
                     </div>
                     <div className="summary-wrap">
-                        <p>{this.props.summary}</p>
+                        <LinesEllipsis
+                            text={this.props.summary}
+                            maxLine='2'
+                            ellipsis='...'
+                            trimRight
+                            basedOn='letters'
+                        />
                     </div>  
                 </div>  
             </div>

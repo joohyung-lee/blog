@@ -562,7 +562,9 @@ class Main extends Component {
                                 >
                                 {currentStyles =>{    
                                     return(
-                                    <div>
+                                    <div style={{
+                                         height:`${eleHeight}px`,
+                                    }}>
                                     {currentStyles.map((config, i) =>{
                                         let isFav = (config.data.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
                                         const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
@@ -590,7 +592,7 @@ class Main extends Component {
                                                 height:`${eleHeight}px`,
                                                 padding:`${itemPd}px`, 
                                                 left:`${config.style.size}px`,
-                                                transform:`perspective(600px) 
+                                                transform:` 
                                                             rotateY(${config.style.rotate}deg) 
                                                             scale(${config.style.scale})
                                                             translate3d(${config.style.sizeX}px,${config.style.sizeY}px,0)`,

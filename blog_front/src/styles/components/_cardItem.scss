@@ -143,9 +143,11 @@
            
         }
         .post-meta{
+            transform: translateZ(0);
             .category{
                 font-weight: 400;
                 color:$c-black-2;
+                
             }
         }
         h3{
@@ -155,6 +157,7 @@
             color:$c-black-0;
             white-space: normal;
             word-break: keep-all;
+            transform: translateZ(0);
         }
         .avatar-wrap{
             position: absolute;
