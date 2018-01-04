@@ -2,3 +2,5 @@
 .env
 node_modules/
 build/
+.DS_Store
+blog_front/.DS_Store

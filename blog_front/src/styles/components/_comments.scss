@@ -1,0 +1,84 @@
+.comments-wrap{
+    .comments-body{
+        .comments-write{
+            display:flex;
+            textarea{
+                flex:1;
+                width:100%;
+                resize:none;
+                
+            }
+            button{
+
+            }
+        }
+        .comments-contents{
+            ul{
+                li{
+                    .user-header{
+                        display: flex;
+                        height:30px;
+                        background-color:$c-black-5;
+                        .btn-group{
+
+                        }
+                        .avatar-wrap{
+                            display: flex;
+                            flex:1;
+                            .avatar-info{
+                                
+                            }
+                        }
+                    }
+                    .text-body{
+                        font-size: 1.2rem;
+                        font-weight: 500;
+                        padding:10px;
+                    }
+                    .original-comments{
+                        border-bottom:1px solid $c-black-2;
+                        .user-header{
+
+                            .btn-group{
+
+                            }
+                            .avatar-wrap{
+                                display: flex;
+                                .avatar-info{
+
+                                }
+                            }
+                        }
+                        p{
+                           
+                        }
+                    }
+                    .reply-comments{
+                        padding:10px 10px 10px 30px;
+                        background-color:$c-black-8;
+                        border-bottom:1px solid $c-black-2;
+                        ul{
+                            li{
+                                .user-header{
+
+                                    .btn-group{
+        
+                                    }
+                                    .avatar-wrap{
+                                        .avatar-info{
+
+                                        }
+                                    }
+                                }
+                                p{
+                                    
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

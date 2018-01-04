@@ -11,28 +11,28 @@ export class Documentation extends Component {
         {
             "postId": 1,
             "id": 1,
-            "userName": "LEE",
+            "userName": "joohyung",
             "body": "댓글 내용이다아",
             reply:[
                 {
                     "postId": 1,
                     "id": 2,
-                    "userName": "reply",
-                    "body": "댓글 내용이다아"
+                    "userName": "username",
+                    "body": "대댓글 내용이다아"
                 },
                 {
                     "postId": 1,
                     "id": 3,
-                    "userName": "reply",
-                    "body": "댓글 내용이다아"
+                    "userName": "username",
+                    "body": "대댓글 내용이다아"
                 },
             ]
         },
         {
             "postId": 1,
             "id": 4,
-            "userName": "JOO",
-            "body": "댓글 내용이다아"
+            "userName": "joomation",
+            "body": "댓글 내용이다아222222"
         },
     ]
     }
