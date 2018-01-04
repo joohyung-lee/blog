@@ -592,7 +592,7 @@ class Main extends Component {
                                                 height:`${eleHeight}px`,
                                                 padding:`${itemPd}px`, 
                                                 left:`${config.style.size}px`,
-                                                transform:` 
+                                                transform:` perspective(600px)
                                                             rotateY(${config.style.rotate}deg) 
                                                             scale(${config.style.scale})
                                                             translate3d(${config.style.sizeX}px,${config.style.sizeY}px,0)`,
