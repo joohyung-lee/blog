@@ -3,39 +3,13 @@ import {Link} from 'react-router-dom';
 //components
 import {MarkdownView} from 'components/pages';
 import {Comments} from 'components/detail';
+
+//temp
+import commentsData from './commentsTemp'
 export class Documentation extends Component {
   constructor(props){
     super(props);
-    this.state={
-      commentsData:[//임시 테스트
-        {
-            "postId": 1,
-            "id": 1,
-            "userName": "joohyung",
-            "body": "댓글 내용이다아",
-            reply:[
-                {
-                    "postId": 1,
-                    "id": 2,
-                    "userName": "username",
-                    "body": "대댓글 내용이다아"
-                },
-                {
-                    "postId": 1,
-                    "id": 3,
-                    "userName": "username",
-                    "body": "대댓글 내용이다아"
-                },
-            ]
-        },
-        {
-            "postId": 1,
-            "id": 4,
-            "userName": "joomation",
-            "body": "댓글 내용이다아222222"
-        },
-    ]
-    }
+    this.state=commentsData
   }
   render() {
       return (
@@ -66,7 +40,10 @@ export class Documentation extends Component {
                             <MarkdownView source={item.body}/>
                         </div>
                         <Comments
+                            writeComments={this.props.writeComments}
                             commentsData={this.state.commentsData}
+                            commentsText={this.props.commentsText}
+                            commentsOnChange={this.props.commentsOnChange}
                         />
                     </div>
           })}

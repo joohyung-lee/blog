@@ -26,6 +26,7 @@ var postSchema = new Schema({
             postId:String,
             name:String,
             body:String,
+            reply:[String]
         }
     ],
     postDate: String

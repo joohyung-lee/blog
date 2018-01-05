@@ -8,6 +8,9 @@ const POSTS_DELETE='POSTS/DELETE';
 const POSTS_CATEGORY_GET='POSTS/CATEGORY_GET';
 const POSTS_OLD_GET='POSTS/OLD_GET';
 const POSTS_SINGLE_GET='POSTS/SINGLE_GET';
+
+const POSTS_COMMENTS_SAVE='POSTS/COMMENTS_SAVE';
+
 const POSTS_STAR_SAVE='POSTS/STAR_SAVE';
 const POSTS_STAR_CLIENT_SAVE='POSTS/STAR_CLIENT_SAVE';
 
@@ -57,6 +60,11 @@ const initialState=Map({
         pending: false,
         error: -1,
         data: List([]),
+        comments:Map({
+            pending: false,
+            error: -1,
+            state:'',
+        }),
     }),
     searchData:Map({
         pending: false,
@@ -182,6 +190,16 @@ export default handleActions({
         name:['itemData'],
         successResult:(state,action)=>{
             const {data}=action.payload;
+            console.log(data)
+            return state.setIn(['itemData','data'],data);
+        }
+    }),
+    //WRITE COMMENTS
+    ...pending({
+        type:POSTS_COMMENTS_SAVE,
+        name:['itemData','comments'],
+        successResult:(state,action)=>{
+            const {data}=action.payload;
             return state.setIn(['itemData','data'],data);
         }
     }),
@@ -207,6 +225,7 @@ export default handleActions({
             
         }
     }),
+  
     ...pending({
         type:POSTS_SEARCH_STAR_SAVE,
         name:['searchData','starred'],

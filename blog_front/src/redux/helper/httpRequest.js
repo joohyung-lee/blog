@@ -48,6 +48,7 @@ function fileDelete(filename){
     return axios.delete(`/api/images/${filename}`);
 }
 //-------------------------admin end
+
 //auth
 function getAuthAPI() {
     return axios.get(`/auth/account`);
@@ -67,6 +68,10 @@ function getPostSingleAPI(category,postId){
 // load old posts
 function getOldPostAPI(category,listType,id) {
     return axios.get(`/api/post/category/${category}/${listType}/${id}`);
+}
+//save comments admin
+function writeCommentAPI(postId,data) {
+    return axios.post(`/api/post/comments/${postId}`,data);
 }
 //save starred post
 function savePostStarAPI(postId){
@@ -414,7 +419,9 @@ export const getSinglePost = (type,category,postId) => dispatch => {
         (response) => {
             dispatch({
                 type: actionType.SUCCESS,
-                payload: response
+                payload: {
+                    data:response.data[0]
+                }
             })
         }
     ).catch((error) => {
@@ -467,6 +474,27 @@ export const getOldPost = ({type,category,listType,id}) => dispatch => {
     });    
 }
 
+//write star
+export const writeComments=({postId,data,type})=>dispatch=>{
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return writeCommentAPI(postId,data).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:{
+                    data:response.data.post
+                },
+            })
+        }).catch((error) => {
+            dispatch({
+                type: actionType.FAILURE,
+                payload:{
+                    error:error.response.code
+                }
+            });
+        });
+}
 
 //give star
 export const saveStar=({postId,index,type})=>dispatch=>{

@@ -27,7 +27,8 @@ class DetailView extends Component {
             mobileMode:false,
             deskMode:true,
             iframeLoad:false,
-            doc:false
+            doc:false,
+            commentsText:''
             
         }
     }
@@ -56,11 +57,11 @@ class DetailView extends Component {
             this.setState({
                 iframeLoad:false
             })
-            if(this.props.data[0]!==data[0]){
-                let isBright = (parseInt(this.get_brightness(data[0].bgColor),10) > 160);                
+            if(this.props.data!==data){ 
+                let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);                
                 motionDispatch.motionActions({
                     motions:{
-                        bgColor:data[0].bgColor,
+                        bgColor:data.bgColor,
                         detailLoad:true
                     }
                 });  
@@ -182,8 +183,33 @@ class DetailView extends Component {
             doc:!this.state.doc
         });
     }
+    commentsOnChange=(e)=>{
+        this.setState({
+            commentsText:e.target.value
+        })
+    }
+    writeComments=(postId)=>{
+        const {get,authUser,modalView}=this.props;
+        if(authUser.isLogin){
+            return get.writeComments({   
+                data:{
+                    comments:{
+                        postId:postId,
+                        name:'joobyung',
+                        body:this.state.commentsText,
+                    }
+                },
+                postId:postId,
+                type:'POSTS/COMMENTS_SAVE'
+            });
+        }else{
+            return modalView.openModal({
+                        modalName:'login'
+                    });
+        }
+    }
     render() {
-        const {data,motion}=this.props;
+        const {data,motion,get}=this.props;
         const {windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc} = this.state;
         return (
             <div
@@ -198,44 +224,42 @@ class DetailView extends Component {
                     <div className={`loading-text ${iframeLoad?'fade-out':''}`}>
                         <h3>Loading...</h3>
                     </div>
-                    {motion.detailLoad?
-                        data.map((item,i)=>{
-                        return( 
-                            <div key={item._id} className={`detail-simulate ${doc?'fade-out':''}`}>
-                                <div className={`fullsize ${!frameDivide?'fade-out':''}`} onClick={this.fullSize}>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                                <div className="device-controll-wrap">
-                                    <div className="device-controll">
-                                        <div className="dic mobile" onClick={this.modeChange.bind(this,'mobile')}>
-                                            <span className="icon-device"></span>
-                                            <span className="icon-text">Phone</span>
-                                        </div>
-                                        <div className="dic desk" onClick={this.modeChange.bind(this,'desk')}>
-                                            <span className="icon-device"></span>
-                                            <span className="icon-text">Desktop</span>
-                                        </div>
-                                        <div className="dic visit-site">
-                                            <a href={item.iframeUrl}>Visit Site</a>
-                                        </div>
+                    {motion.detailLoad? 
+                        <div key={data._id} className={`detail-simulate ${doc?'fade-out':''}`}>
+                            <div className={`fullsize ${!frameDivide?'fade-out':''}`} onClick={this.fullSize}>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div className="device-controll-wrap">
+                                <div className="device-controll">
+                                    <div className="dic mobile" onClick={this.modeChange.bind(this,'mobile')}>
+                                        <span className="icon-device"></span>
+                                        <span className="icon-text">Phone</span>
+                                    </div>
+                                    <div className="dic desk" onClick={this.modeChange.bind(this,'desk')}>
+                                        <span className="icon-device"></span>
+                                        <span className="icon-text">Desktop</span>
+                                    </div>
+                                    <div className="dic visit-site">
+                                        <a href={data.iframeUrl}>Visit Site</a>
                                     </div>
                                 </div>
-                                
-                                <div key={item._id} className={`iframe-wrap ${iframeLoad?'animate':''}`}
-                                    style={{
-                                        width:frameSizeX,
-                                        height:`${frameSizeY}px`,
-                                        transform:`scale(${iframeLoad?1:0.3})`
-                                    }}
-                                >
-                                    
-                                    <iframe title="This is a detailView" key="i" src={item.iframeUrl}
-                                        onLoad={this.iframeLoad} 
-                                        frameBorder="0" width={"100%"} height="100%"></iframe>
-                                </div>  
                             </div>
-                    )}):null} 
+                            
+                            <div key={data._id} className={`iframe-wrap ${iframeLoad?'animate':''}`}
+                                style={{
+                                    width:frameSizeX,
+                                    height:`${frameSizeY}px`,
+                                    transform:`scale(${iframeLoad?1:0.3})`
+                                }}
+                            >
+                                
+                                <iframe title="This is a detailView" key="i" src={data.iframeUrl}
+                                    onLoad={this.iframeLoad} 
+                                    frameBorder="0" width={"100%"} height="100%"></iframe>
+                            </div>  
+                        </div>
+                    :null} 
                     {motion.detailLoad?
                     <div className={`scroll-doc ${!frameFull?'fade-out':''}`}>
                         <span onClick={this.scrollDown}>{doc?`Preview`:`Documentation`}</span>
@@ -252,7 +276,13 @@ class DetailView extends Component {
                         width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,
                         height:frameFull?`calc(100% - 100px)`:`${windowHeight}px`,
                     }}>
-                        <Documentation className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} data={data}/>
+                        <Documentation 
+                            className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} 
+                            data={data}
+                            writeComments={this.writeComments.bind(this,data._id)}
+                            commentsText={this.state.commentsText}
+                            commentsOnChange={this.commentsOnChange}
+                        />
                     </Scrollbars>
                     :null
                 }
@@ -265,6 +295,7 @@ class DetailView extends Component {
 
 export default connect(
     (state)=>({
+        authUser:state.auth.toJS().profile,
         common:state.common.toJS(),        
         motion:state.main.toJS().motions,
         modal:state.modal.toJS(),

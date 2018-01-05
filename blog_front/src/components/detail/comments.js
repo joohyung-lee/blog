@@ -9,8 +9,10 @@ class Comments extends Component {
                 </div>
                 <div className="comments-body">
                     <div className="comments-write">
-                        <textarea type="text" placeholder="댓글을 입력해주세요"/>
-                        <button>등록</button>
+                        <textarea type="text" placeholder="댓글을 입력해주세요"
+                            value={this.props.commentsText} 
+                            onChange={this.props.commentsOnChange}/>
+                        <button onClick={this.props.writeComments}>등록</button>
                     </div>    
                     <div className="comments-contents">
                         <ul>
