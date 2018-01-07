@@ -69,9 +69,13 @@ function getPostSingleAPI(category,postId){
 function getOldPostAPI(category,listType,id) {
     return axios.get(`/api/post/category/${category}/${listType}/${id}`);
 }
-//save comments admin
+//save comments
 function writeCommentAPI(postId,data) {
     return axios.post(`/api/post/comments/${postId}`,data);
+}
+//delete comments
+function deleteCommentsAPI(id,index) {   
+    return axios.delete(`/api/post/comments/${id}/${index}`);
 }
 //save starred post
 function savePostStarAPI(postId){
@@ -425,6 +429,7 @@ export const getSinglePost = (type,category,postId) => dispatch => {
             })
         }
     ).catch((error) => {
+        
         dispatch({
             type: actionType.FAILURE,
             payload:error
@@ -474,7 +479,7 @@ export const getOldPost = ({type,category,listType,id}) => dispatch => {
     });    
 }
 
-//write star
+//write commments
 export const writeComments=({postId,data,type})=>dispatch=>{
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
@@ -483,7 +488,7 @@ export const writeComments=({postId,data,type})=>dispatch=>{
             dispatch({
                 type: actionType.SUCCESS,
                 payload:{
-                    data:response.data.post
+                    data:response.data
                 },
             })
         }).catch((error) => {
@@ -495,7 +500,31 @@ export const writeComments=({postId,data,type})=>dispatch=>{
             });
         });
 }
-
+//delete commments
+export const deleteComments = ({type,id,index}) => dispatch => {    
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return deleteCommentsAPI(id,index).then(
+        (response) => {
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:{
+                    data:response.data,
+                    index:index
+                } 
+                
+            })
+        }
+    ).catch((error) => {
+        dispatch({
+            type: actionType.FAILURE,
+            payload:{
+                error:0,
+                msg:'Delete Failure',
+            }
+        });
+    });    
+}
 //give star
 export const saveStar=({postId,index,type})=>dispatch=>{
     const actionType=actions(type);

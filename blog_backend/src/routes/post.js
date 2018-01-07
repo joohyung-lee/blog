@@ -276,13 +276,13 @@ router.post('/comments/:id', (req, res) => {
         });
     }
 
-    // // CHECK LOGIN STATUS
-    // if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
-    //     return res.status(403).json({
-    //         error: "NOT LOGGED IN",
-    //         code: 403
-    //     });
-    // }
+    // CHECK LOGIN STATUS
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
+        return res.status(403).json({
+            error: "NOT LOGGED IN",
+            code: 403
+        });
+    }
      Post.findById(req.params.id, function (err, post) {
         if (err) return res.status(500).json({
             error: 'database fail'
@@ -290,7 +290,7 @@ router.post('/comments/:id', (req, res) => {
         if (!post) return res.status(404).json({
             error: 'post not found'
         });
-        post.comments.push(req.body.comments);
+        post.comments.unshift(req.body.comments);
         post.save(function (err) {
             if (err) {
                 console.error(err);
@@ -304,6 +304,38 @@ router.post('/comments/:id', (req, res) => {
         });
     });
     
+});
+// DELETE COMMENTS
+router.delete('/comments/:id/:index', (req, res) => {  
+    //CHECK LOGIN STATUS
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
+        return res.status(403).json({
+            error: "NOT LOGGED IN",
+            code: 403
+        });
+    }
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({
+            error: "INVALID ID",
+            code: 400
+        });
+    }
+    Post.findById(req.params.id, (err, post) => {
+        if(err) throw err;
+
+        if(!post) {
+            return res.status(404).json({
+                error: "NO RESOURCE",
+                code: 404
+            });
+        }    
+        post.comments.splice(req.params.index, 1);
+        // SAVE THE POST
+        post.save((err, post) => {
+            if(err) throw err;
+            res.json(post);
+        });
+    });
 });
 // GIVE STAR
 router.post('/star/:id', (req, res) => {
@@ -350,7 +382,7 @@ router.post('/star/:id', (req, res) => {
             post.starred.splice(index, 1);
         }
 
-        // SAVE THE post
+        // SAVE THE POST
         post.save((err, post) => {
             if(err) throw err;
             res.json({

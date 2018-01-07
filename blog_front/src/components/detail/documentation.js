@@ -9,44 +9,40 @@ import commentsData from './commentsTemp'
 export class Documentation extends Component {
   constructor(props){
     super(props);
-    this.state=commentsData
+    //this.state=commentsData
   }
   render() {
+      const {data}= this.props;
       return (
         <div className={this.props.className}>
-          {this.props.data.map((item,i)=>{
-            return  <div key="i"
-                        className="detail-contents"
-                    >
-                        <div className="header">
-                            <span className="category">{item.category}</span>
-                            <h2>{item.title}</h2>
-                            <span className="date">{item.postDate}</span>
-                            <p>{item.summary}</p>
-                        </div>
-                        <div className="tags-wrap">
-                        <ul>
-                            {item.tags.map((tagsItem,i)=>{
-                                return (
-                                    <li key={i}>
-                                        <Link to={`/search/tags/${tagsItem}`}>{tagsItem}</Link>
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                        </div>
-                        <div className="body">   
-                            <h3 className="title">Documentation</h3> 
-                            <MarkdownView source={item.body}/>
-                        </div>
-                        <Comments
-                            writeComments={this.props.writeComments}
-                            commentsData={this.state.commentsData}
-                            commentsText={this.props.commentsText}
-                            commentsOnChange={this.props.commentsOnChange}
-                        />
-                    </div>
-          })}
+            <div key="i"
+                className="detail-contents"
+            >
+                <div className="header">
+                    <span className="category">{data.category}</span>
+                    <h2>{data.title}</h2>
+                    <span className="date">{data.postDate}</span>
+                    <p>{data.summary}</p>
+                </div>
+                <div className="tags-wrap">
+                <ul>
+                    {data.tags.map((tagsdata,i)=>{
+                        return (
+                            <li key={i}>
+                                <Link to={`/search/tags/${tagsdata}`}>{tagsdata}</Link>
+                            </li>
+                        )
+                    })}
+                </ul>
+                </div>
+                <div className="body">   
+                    <h3 className="title">Documentation</h3> 
+                    <MarkdownView source={data.body}/>
+                </div>
+                <Comments
+                    {...this.props}
+                />
+            </div>
         </div>
       )}
 
