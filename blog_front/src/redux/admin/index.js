@@ -190,7 +190,7 @@ export default handleActions({
         name:['modifyData'],
         successResult:(state,action)=>{
             const {data}=action.payload;
-            return state.setIn(['modifyData','data'],fromJS(data[0]));
+            return state.setIn(['modifyData','data'],fromJS(data));
         }
     }),
     //썸네일 이미지 업로드

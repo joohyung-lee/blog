@@ -10,7 +10,9 @@ const POSTS_OLD_GET='POSTS/OLD_GET';
 const POSTS_SINGLE_GET='POSTS/SINGLE_GET';
 
 const POSTS_COMMENTS_SAVE='POSTS/COMMENTS_SAVE';
+const POSTS_COMMENTS_UPDATE='POSTS/COMMENTS_UPDATE';
 const POSTS_COMMENTS_DELETE='POSTS/COMMENTS_DELETE';
+const POSTS_COMMENTS_MODIFY='POSTS/COMMENTS_MODIFY';
 
 const POSTS_STAR_SAVE='POSTS/STAR_SAVE';
 const POSTS_STAR_CLIENT_SAVE='POSTS/STAR_CLIENT_SAVE';
@@ -25,6 +27,8 @@ const POSTS_SEARCH_SCROLL='POSTS/POSTS_SEARCH_SCROLL';
 export const starSave = createAction(POSTS_STAR_CLIENT_SAVE);
 export const postVacuum=createAction(POSTS_SEARCH_VACUUM);
 export const postScroll=createAction(POSTS_SEARCH_SCROLL);
+
+export const modifyComments=createAction(POSTS_COMMENTS_MODIFY);
 //초기화
 const initialState=Map({
     listData:Map({
@@ -195,7 +199,7 @@ export default handleActions({
         name:['itemData'],
         successResult:(state,action)=>{
             const {data}=action.payload;
-            return state.setIn(['itemData','data'],data);
+            return state.setIn(['itemData','data'],fromJS(data));
         }
     }),
     //WRITE COMMENTS
@@ -204,16 +208,30 @@ export default handleActions({
         name:['itemData','comments'],
         successResult:(state,action)=>{
             const {data}=action.payload;
-            return state.setIn(['itemData','data'],data);
+            return state.setIn(['itemData','data'],fromJS(data));
         }
     }),
+    //UPDATE COMMENTS
+    ...pending({
+        type:POSTS_COMMENTS_UPDATE,
+        name:['itemData','comments'],
+        successResult:(state,action)=>{
+            const {data}=action.payload;
+            return state.setIn(['itemData','data'],fromJS(data));
+        }
+    }),
+    //MODIFY COMMENTS
+    [POSTS_COMMENTS_MODIFY]: (state, action) => {  
+        const {index,body} = action.payload;
+        return state.setIn(['itemData','data','comments',index,'body'],body);
+    },
     //DELETE COMMENTS
     ...pending({
         type:POSTS_COMMENTS_DELETE,
         name:['itemData','delComments'],
         successResult:(state,action)=>{
             const {data}=action.payload;
-            return state.setIn(['itemData','data'],data);            
+            return state.setIn(['itemData','data'],fromJS(data));            
         }
     }),
     ...pending({

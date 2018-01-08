@@ -11,6 +11,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as modalActions from 'redux/modal';
 import * as motionActions from 'redux/main';
+import * as postsAction from 'redux/posts';
+
 //svg&images
 
 class DetailView extends Component {
@@ -29,7 +31,9 @@ class DetailView extends Component {
             iframeLoad:false,
             doc:false,
             commentsText:'',
-            commentsModifyText:''
+            modifyIndex:null,
+            commentView:'',
+            replyText:''
         }
     }
     componentDidMount(){   
@@ -46,7 +50,7 @@ class DetailView extends Component {
  
     }
     componentWillReceiveProps(nextProps) {
-        const {get,data,motionDispatch,handleHeader,motion,loading,dataState}=nextProps;
+        const {get,data,motionDispatch,handleHeader,motion,loading,commentsLoading,dataState}=nextProps;
         const locationChanged = nextProps.location !== this.props.location;
         if(locationChanged){
             setTimeout(()=>{
@@ -68,6 +72,15 @@ class DetailView extends Component {
                 handleHeader.isBrightness({
                     isBright:isBright
                 });
+            }
+        }
+        //change commentsData
+        if(this.props.commentsLoading!==commentsLoading){
+            //when update complete,modify hide
+            if(!commentsLoading){
+                this.setState({
+                    modifyIndex:null
+                })
             }
         }
  
@@ -184,37 +197,65 @@ class DetailView extends Component {
             doc:!this.state.doc
         });
     }
-    commentsOnChange=(type,e)=>{
+    commentsOnChange=(type,i,e)=>{
+        const {input,data}=this.props
         if(type==='write'){
             this.setState({
                 commentsText:e.target.value
             })
-        }else{
-            this.setState({
-                commentsModifyText:e.target.value
+        }else if(type==='modify'){
+            input.modifyComments({
+                index:i,
+                body:e.target.value
             })
         }
     }
-    writeComments=(postId)=>{
-        const {get,authUser,modalView}=this.props;
+    writeComments=(postId,type)=>{
+        const {get,data,authUser,modalView}=this.props;
         if(authUser.isLogin){
-            return get.writeComments({   
-                data:{
-                    comments:{
-                        postId:postId,
-                        name:authUser.user.userName,
-                        body:this.state.commentsText,
-                    }
-                },
-                postId:postId,
-                type:'POSTS/COMMENTS_SAVE'
-            });
+            if(type==='write'){
+                return get.writeComments({   
+                    data:{
+                        comments:{
+                            postId:postId,
+                            name:authUser.user.userName,
+                            body:this.state.commentsText,
+                        }
+                    },
+                    postId:postId,
+                    type:'POSTS/COMMENTS_SAVE'
+                });
+            }else if(type==='modify'){
+                return get.updateComments({   
+                    data:data,
+                    postId:postId,
+                    type:'POSTS/COMMENTS_UPDATE'
+                });
+            }else if(type==='reply'){
+
+            }
+            
         }else{
             return modalView.openModal({
                         modalName:'login'
                     });
         }
     }
+    writeMode=(type,i)=>{
+        if(type==='modify'){
+            return this.setState({
+                modifyIndex:i,
+                commentView:'modify'
+            })
+        }else if(type==='reply'){
+            return this.setState({
+                modifyIndex:i,
+                commentView:'reply'
+            })
+        }
+        
+    }
+
     delComments=(id,i)=>{
         const{get}=this.props;
         get.deleteComments({
@@ -223,9 +264,10 @@ class DetailView extends Component {
             index:i
         });
     }
+    
     render() {
-        const {data,motion,get,authUser}=this.props;
-        const {windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,commentsModifyText} = this.state;
+        const {data,motion,get,authUser,commentsLoading}=this.props;
+        const {replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex} = this.state;
         return (
             <div className={`detail-frame`}>
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
@@ -294,11 +336,17 @@ class DetailView extends Component {
                             data={data}
                             commentsData={data.comments}
                             writeComments={this.writeComments.bind(this,data._id)}
-                            commentsText={commentsText}
-                            commentsModifyText={commentsModifyText}
-                            commentsOnChange={this.commentsOnChange}
+                            
                             delComments={this.delComments.bind(this,data._id)}
                             commentsUser={authUser.user.userName}
+
+                            commentsOnChange={this.commentsOnChange}
+                            commentsText={commentsText}
+                            replyText={replyText}
+
+                            modifyIndex={modifyIndex}
+                            commentView={commentView}
+                            writeMode={this.writeMode}
                         />
                     </Scrollbars>
                     :null
@@ -318,6 +366,7 @@ export default connect(
         modal:state.modal.toJS(),
         data:state.posts.toJS().itemData.data,
         loading:state.posts.toJS().itemData.pending,
+        commentsLoading:state.posts.toJS().itemData.comments.pending,
         dataState:state.posts.toJS().itemData.state,
     }),
     (dispatch)=>({
@@ -325,6 +374,6 @@ export default connect(
         modalView: bindActionCreators(modalActions, dispatch),
         motionDispatch:bindActionCreators(motionActions,dispatch),
         handleHeader:bindActionCreators(commonAction,dispatch),
-        
+        input: bindActionCreators(postsAction, dispatch),
     })
 )(DetailView);

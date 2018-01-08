@@ -305,6 +305,45 @@ router.post('/comments/:id', (req, res) => {
     });
     
 });
+// MODIFY COMMENTS
+router.put('/comments/:id', (req, res) => {
+    // CHECK MEMO ID VALIDITY
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({
+            error: "INVALID ID",
+            code: 400
+        });
+    }
+
+    // CHECK LOGIN STATUS
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
+        return res.status(403).json({
+            error: "NOT LOGGED IN",
+            code: 403
+        });
+    }
+     Post.findById(req.params.id, function (err, post) {
+        if (err) return res.status(500).json({
+            error: 'database fail'
+        });
+        if (!post) return res.status(404).json({
+            error: 'post not found'
+        });
+        post.comments=req.body.comments;
+        post.save(function (err) {
+            if (err) {
+                console.error(err);
+                res.json({
+                    code: 0
+                });
+                return;
+            }
+
+            res.json(post);
+        });
+    });
+    
+});
 // DELETE COMMENTS
 router.delete('/comments/:id/:index', (req, res) => {  
     //CHECK LOGIN STATUS
