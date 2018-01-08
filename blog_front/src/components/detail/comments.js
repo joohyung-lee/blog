@@ -14,7 +14,7 @@ class Comments extends Component {
                         <textarea type="text" placeholder="댓글을 입력해주세요"
                             value={this.props.commentsText} 
                             onChange={this.props.commentsOnChange.bind(this,'write',null)}/>
-                        <button onClick={this.props.writeComments.bind(this,'write')}>등록</button>
+                        <button onClick={this.props.writeComments.bind(this,'write',null)}>등록</button>
                     </div>    
                     <div className="comments-contents">
                         <ul>
@@ -48,7 +48,7 @@ class Comments extends Component {
                                                     <textarea type="text" 
                                                         value={item.body}
                                                         onChange={this.props.commentsOnChange.bind(this,'modify',i)}/>
-                                                    <button onClick={this.props.writeComments.bind(this,'modify')}>등록</button>
+                                                    <button onClick={this.props.writeComments.bind(this,'modify',null)}>등록</button>
                                                     </div>:
                                                     <p className="text-body">{item.body}</p>
                                                 }
@@ -58,7 +58,7 @@ class Comments extends Component {
                                                     <textarea type="text" 
                                                         value={this.props.replyText}
                                                         onChange={this.props.commentsOnChange.bind(this,'reply',i)}/>
-                                                    <button onClick={this.props.writeComments.bind(this,'reply')}>등록</button>
+                                                    <button onClick={this.props.writeComments.bind(this,'reply',i)}>등록</button>
                                                     </div>:
                                                     null
                                                 }

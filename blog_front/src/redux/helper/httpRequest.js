@@ -71,12 +71,17 @@ function getOldPostAPI(category,listType,id) {
 }
 //save comments
 function writeCommentAPI(postId,data) {
-    return axios.post(`/api/post/comments/${postId}`,data);
+    return axios.post(`/api/post/comments/original/${postId}`,data);
+}
+//reply comments
+function replyCommentAPI(postId,index,data) {
+    return axios.post(`/api/post/comments/reply/${postId}/${index}`,data);
 }
 //update comments
 function updateCommentAPI(postId,data) {
     return axios.put(`/api/post/comments/${postId}`,data);
 }
+
 //delete comments
 function deleteCommentsAPI(id,index) {   
     return axios.delete(`/api/post/comments/${id}/${index}`);
@@ -493,6 +498,28 @@ export const writeComments=({postId,data,type})=>dispatch=>{
                 type: actionType.SUCCESS,
                 payload:{
                     data:response.data
+                },
+            })
+        }).catch((error) => {
+            dispatch({
+                type: actionType.FAILURE,
+                payload:{
+                    error:error.response.code
+                }
+            });
+        });
+}
+//reply commments
+export const replyComments=({postId,index,data,type})=>dispatch=>{
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return replyCommentAPI(postId,index,data).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:{
+                    data:response.data,
+                    index:index
                 },
             })
         }).catch((error) => {

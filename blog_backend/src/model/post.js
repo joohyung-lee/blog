@@ -23,10 +23,14 @@ var postSchema = new Schema({
     files:{data:[]},
     comments:[
         {
-            postId:String,
             name:String,
             body:String,
-            reply:[String]
+            reply:[
+                {
+                    name:String,
+                    body:String,
+                }
+            ]
         }
     ],
     postDate: String

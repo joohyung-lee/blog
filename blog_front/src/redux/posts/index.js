@@ -10,6 +10,7 @@ const POSTS_OLD_GET='POSTS/OLD_GET';
 const POSTS_SINGLE_GET='POSTS/SINGLE_GET';
 
 const POSTS_COMMENTS_SAVE='POSTS/COMMENTS_SAVE';
+const POSTS_COMMENTS_REPLY='POSTS/COMMENTS_REPLY';
 const POSTS_COMMENTS_UPDATE='POSTS/COMMENTS_UPDATE';
 const POSTS_COMMENTS_DELETE='POSTS/COMMENTS_DELETE';
 const POSTS_COMMENTS_MODIFY='POSTS/COMMENTS_MODIFY';
@@ -209,6 +210,15 @@ export default handleActions({
         successResult:(state,action)=>{
             const {data}=action.payload;
             return state.setIn(['itemData','data'],fromJS(data));
+        }
+    }),
+    //REPLY COMMENTS
+    ...pending({
+        type:POSTS_COMMENTS_REPLY,
+        name:['itemData','comments'],
+        successResult:(state,action)=>{
+            const {data,index}=action.payload;
+            return state.setIn(['itemData','data','comments',index,'reply'],fromJS(data));
         }
     }),
     //UPDATE COMMENTS

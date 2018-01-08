@@ -208,16 +208,19 @@ class DetailView extends Component {
                 index:i,
                 body:e.target.value
             })
+        }else if(type==='reply'){
+            this.setState({
+                replyText:e.target.value
+            })
         }
     }
-    writeComments=(postId,type)=>{
+    writeComments=(postId,type,i)=>{
         const {get,data,authUser,modalView}=this.props;
         if(authUser.isLogin){
             if(type==='write'){
                 return get.writeComments({   
                     data:{
                         comments:{
-                            postId:postId,
                             name:authUser.user.userName,
                             body:this.state.commentsText,
                         }
@@ -232,7 +235,17 @@ class DetailView extends Component {
                     type:'POSTS/COMMENTS_UPDATE'
                 });
             }else if(type==='reply'){
-
+                return get.replyComments({   
+                    data:{
+                        reply:{
+                            name:authUser.user.userName,
+                            body:this.state.replyText,
+                        }
+                    },
+                    index:i,
+                    postId:postId,
+                    type:'POSTS/COMMENTS_REPLY'
+                });
             }
             
         }else{
