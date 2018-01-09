@@ -24,10 +24,12 @@ var postSchema = new Schema({
     comments:[
         {
             name:String,
+            date:String,
             body:String,
             reply:[
                 {
                     name:String,
+                    date:String,
                     body:String,
                 }
             ]

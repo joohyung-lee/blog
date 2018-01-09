@@ -218,7 +218,7 @@ export default handleActions({
         name:['itemData','comments'],
         successResult:(state,action)=>{
             const {data,index}=action.payload;
-            return state.setIn(['itemData','data','comments',index,'reply'],fromJS(data));
+            return state.setIn(['itemData','data'],fromJS(data));
         }
     }),
     //UPDATE COMMENTS
@@ -232,8 +232,13 @@ export default handleActions({
     }),
     //MODIFY COMMENTS
     [POSTS_COMMENTS_MODIFY]: (state, action) => {  
-        const {index,body} = action.payload;
-        return state.setIn(['itemData','data','comments',index,'body'],body);
+        const {index,replyIndex,body,view} = action.payload;
+        if(view==='write'){
+            return state.setIn(['itemData','data','comments',index,'body'],body);
+        }else{
+            return state.setIn(['itemData','data','comments',index,'reply',replyIndex,'body'],body);
+        }
+        
     },
     //DELETE COMMENTS
     ...pending({

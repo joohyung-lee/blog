@@ -83,8 +83,8 @@ function updateCommentAPI(postId,data) {
 }
 
 //delete comments
-function deleteCommentsAPI(id,index) {   
-    return axios.delete(`/api/post/comments/${id}/${index}`);
+function deleteCommentsAPI(view,id,index,replyIndex) {   
+    return axios.delete(`/api/post/comments/${view}/${id}/${index}/${replyIndex}`);
 }
 //save starred post
 function savePostStarAPI(postId){
@@ -526,7 +526,7 @@ export const replyComments=({postId,index,data,type})=>dispatch=>{
             dispatch({
                 type: actionType.FAILURE,
                 payload:{
-                    error:error.response.code
+                    error:error
                 }
             });
         });
@@ -554,16 +554,15 @@ export const updateComments=({postId,data,type})=>dispatch=>{
         });
 }
 //delete commments
-export const deleteComments = ({type,id,index}) => dispatch => {    
+export const deleteComments = ({view,type,id,index,replyIndex}) => dispatch => {    
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
-    return deleteCommentsAPI(id,index).then(
+    return deleteCommentsAPI(view,id,index,replyIndex).then(
         (response) => {
             dispatch({
                 type: actionType.SUCCESS,
                 payload:{
                     data:response.data,
-                    index:index
                 } 
                 
             })

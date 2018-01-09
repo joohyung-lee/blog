@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
-
+import dateFormat from 'dateformat';
 //components
 import {Documentation} from 'components/detail';
 //redux
@@ -197,7 +197,8 @@ class DetailView extends Component {
             doc:!this.state.doc
         });
     }
-    commentsOnChange=(type,i,e)=>{
+    commentsOnChange=(type,i,rei,e)=>{
+    
         const {input,data}=this.props
         if(type==='write'){
             this.setState({
@@ -206,15 +207,24 @@ class DetailView extends Component {
         }else if(type==='modify'){
             input.modifyComments({
                 index:i,
-                body:e.target.value
+                body:e.target.value,
+                view:'write'
             })
         }else if(type==='reply'){
             this.setState({
                 replyText:e.target.value
             })
+        }else if(type==='replyModify'){
+            input.modifyComments({
+                index:i,
+                replyIndex:rei,
+                body:e.target.value,
+                view:'reply'
+            })
         }
     }
     writeComments=(postId,type,i)=>{
+        const now = new Date();
         const {get,data,authUser,modalView}=this.props;
         if(authUser.isLogin){
             if(type==='write'){
@@ -222,6 +232,7 @@ class DetailView extends Component {
                     data:{
                         comments:{
                             name:authUser.user.userName,
+                            date:dateFormat(now,"mmm d, yyyy"),
                             body:this.state.commentsText,
                         }
                     },
@@ -239,6 +250,7 @@ class DetailView extends Component {
                     data:{
                         reply:{
                             name:authUser.user.userName,
+                            date:dateFormat(now,"mmm d, yyyy"),
                             body:this.state.replyText,
                         }
                     },
@@ -246,15 +258,20 @@ class DetailView extends Component {
                     postId:postId,
                     type:'POSTS/COMMENTS_REPLY'
                 });
+            }else if(type==='replyModify'){
+                return get.updateComments({   
+                    data:data,
+                    postId:postId,
+                    type:'POSTS/COMMENTS_UPDATE'
+                });
             }
-            
         }else{
             return modalView.openModal({
                         modalName:'login'
                     });
         }
     }
-    writeMode=(type,i)=>{
+    writeMode=(type,i,rei)=>{
         if(type==='modify'){
             return this.setState({
                 modifyIndex:i,
@@ -265,17 +282,25 @@ class DetailView extends Component {
                 modifyIndex:i,
                 commentView:'reply'
             })
+        }else if(type==='replyModify'){
+            return this.setState({
+                modifyIndex:rei,
+                commentView:'replyModify'
+            })
         }
         
     }
 
-    delComments=(id,i)=>{
+    delComments=(id,type,i,rei)=>{
         const{get}=this.props;
         get.deleteComments({
             type:'POSTS/COMMENTS_DELETE',
+            view:type,
             id:id,
-            index:i
+            index:i,
+            replyIndex:rei
         });
+ 
     }
     
     render() {

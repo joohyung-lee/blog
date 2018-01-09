@@ -13,7 +13,7 @@ class Comments extends Component {
                     <div className="comments-write">
                         <textarea type="text" placeholder="댓글을 입력해주세요"
                             value={this.props.commentsText} 
-                            onChange={this.props.commentsOnChange.bind(this,'write',null)}/>
+                            onChange={this.props.commentsOnChange.bind(this,'write',null,null)}/>
                         <button onClick={this.props.writeComments.bind(this,'write',null)}>등록</button>
                     </div>    
                     <div className="comments-contents">
@@ -34,11 +34,11 @@ class Comments extends Component {
                                                     <div className="btn-group">
                                                         <button className="btn-reply" onClick={this.props.writeMode.bind(this,'reply',i)}>댓글쓰기</button>
                                                         {item.name===this.props.commentsUser?
-                                                        <div className="my-comments">
-                                                            <button className="btn-modify" onClick={this.props.writeMode.bind(this,'modify',i)}>수정</button>
-                                                            <button onClick={this.props.delComments.bind(this,i)} className="btn-delete">지우기</button>
-                                                        </div>
-                                                        :null
+                                                            <div className="my-comments">
+                                                                <button className="btn-modify" onClick={this.props.writeMode.bind(this,'modify',i)}>수정</button>
+                                                                <button onClick={this.props.delComments.bind(this,'modify',i,null)} className="btn-delete">지우기</button>
+                                                            </div>
+                                                            :null
                                                         }
                                                     </div>
                                                 </div>
@@ -47,7 +47,7 @@ class Comments extends Component {
                                                     <div className="comments-write">
                                                     <textarea type="text" 
                                                         value={item.body}
-                                                        onChange={this.props.commentsOnChange.bind(this,'modify',i)}/>
+                                                        onChange={this.props.commentsOnChange.bind(this,'modify',i,null)}/>
                                                     <button onClick={this.props.writeComments.bind(this,'modify',null)}>등록</button>
                                                     </div>:
                                                     <p className="text-body">{item.body}</p>
@@ -57,8 +57,8 @@ class Comments extends Component {
                                                     <div className="comments-write">
                                                     <textarea type="text" 
                                                         value={this.props.replyText}
-                                                        onChange={this.props.commentsOnChange.bind(this,'reply',i)}/>
-                                                    <button onClick={this.props.writeComments.bind(this,'reply',i)}>등록</button>
+                                                        onChange={this.props.commentsOnChange.bind(this,'reply',i,null)}/>
+                                                    <button onClick={this.props.writeComments.bind(this,'reply',i,null)}>등록</button>
                                                     </div>:
                                                     null
                                                 }
@@ -68,9 +68,9 @@ class Comments extends Component {
                                         (item.reply)?
                                         <div className="reply-comments">
                                             <ul>
-                                                {item.reply.map((replyItem,i)=>{
+                                                {item.reply.map((replyItem,rei)=>{
                                                     return  (
-                                                        <li key={i}>
+                                                        <li key={rei}>
                                                             <div className="user-header">
                                                                 <div className="avatar-wrap">
                                                                     <div className="avatar" style={{backgroundImage:`url(${replyItem.userImg})`}}/>
@@ -80,11 +80,26 @@ class Comments extends Component {
                                                                     </div>
                                                                 </div>
                                                                 <div className="btn-group">
-                                                                    <button className="btn-modify">수정</button>
-                                                                    <button className="btn-delete">지우기</button>
+                                                                    {replyItem.name===this.props.commentsUser?
+                                                                        <div className="my-comments">
+                                                                            <button className="btn-modify" onClick={this.props.writeMode.bind(this,'replyModify',i,rei)}>수정</button>
+                                                                            <button onClick={this.props.delComments.bind(this,'reply',i,rei)} className="btn-delete">지우기</button>
+                                                                        </div>
+                                                                        :null
+                                                                    }
                                                                 </div>
                                                             </div>
-                                                            <p className="text-body">{replyItem.body}</p>
+                                                            {//reply comments
+                                                                this.props.commentView==='replyModify' && this.props.modifyIndex===rei?
+                                                                <div className="comments-write">
+                                                                <textarea type="text" 
+                                                                    value={replyItem.body}
+                                                                    onChange={this.props.commentsOnChange.bind(this,'replyModify',i,rei)}/>
+                                                                <button onClick={this.props.writeComments.bind(this,'replyModify',i)}>등록</button>
+                                                                </div>:
+                                                                <p className="text-body">{replyItem.body}</p>
+                                                            }
+                                                            
                                                         </li>
                                                     )
                                                 })}

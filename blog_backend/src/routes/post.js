@@ -381,7 +381,7 @@ router.put('/comments/:id', (req, res) => {
     
 });
 // DELETE COMMENTS
-router.delete('/comments/:id/:index', (req, res) => {  
+router.delete('/comments/:view/:id/:index/:replyIndex', (req, res) => {  
     //CHECK LOGIN STATUS
     if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
         return res.status(403).json({
@@ -404,7 +404,12 @@ router.delete('/comments/:id/:index', (req, res) => {
                 code: 404
             });
         }    
-        post.comments.splice(req.params.index, 1);
+        if(req.params.view==='modify'){
+            post.comments.splice(req.params.index, 1);
+        }else{
+            post.comments[req.params.index].reply.splice(req.params.replyIndex, 1);
+        }
+        
         // SAVE THE POST
         post.save((err, post) => {
             if(err) throw err;

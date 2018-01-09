@@ -196,7 +196,7 @@ class Write extends Component {
      };
     handleSubmit=(e)=>{      
         const {writeupload,writePost}=this.props;
-        var now = new Date();
+        const now = new Date();
         if(this.writeType==='write'){
             writeupload.savePost({
                 data:{
