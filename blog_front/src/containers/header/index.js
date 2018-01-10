@@ -132,7 +132,6 @@ class Header extends Component {
     render(){
         const{modal,common}=this.props;
         const {searchView}=this.state;
-        if(this.props.mode){
             return (
                 <div className="global-nav">
                     <div className="logo">
@@ -154,14 +153,11 @@ class Header extends Component {
                         onKeyDown={this.handleSearch}
                         searchClose={this.backSearch}/>
 
-                        <AuthLogin open={modal['mymenu'].open} header={false} dropdown={this.dropdown} avatarFace={modal['mymenu'].open}/>
+                        <AuthLogin open={modal['mymenu'].open} dropdown={this.dropdown} avatarFace={modal['mymenu'].open}/>
                     </div>
                     
                 </div>
             );
-        }else{
-            return <div></div>
-        }
     }
 };
 Header.propTypes = {

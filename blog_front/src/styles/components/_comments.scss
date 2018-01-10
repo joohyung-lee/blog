@@ -1,15 +1,28 @@
 .comments-wrap{
     .comments-body{
         .comments-write{
+            position: relative;
             display:flex;
             textarea{
                 flex:1;
                 width:100%;
+                display: block;
+                padding:12px 10px;
                 resize:none;
-                
+                outline: none;
+                overflow-y: hidden;
+                border:1px solid $c-black-6;
+                border-radius: 5px;
+                background-color:$c-black-10;
+                font-size: 16px;
+                &.animate{
+                    transition:height 0.2s;
+                }
             }
             button{
-
+                position: absolute;
+                top:0;
+                right:0;
             }
         }
         .comments-contents{

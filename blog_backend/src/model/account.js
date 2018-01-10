@@ -5,7 +5,10 @@ var accountSchema = new Schema({
     oauthID: Number,
     userName:String,
     email:String,
-    profileImg:String,
+    profileImg:{
+        url:String,
+        isDefault:false
+    },
     type:String,
    
 });

@@ -1,20 +1,14 @@
-.overlay{
-    position:fixed;
-    top:0;
-    right:0;
-    bottom:0;
-    left:0;
-    background-color:#aaa;
-}
-.login-modal-wrap{
+
+.modal-wrap{
     position: fixed;
     left:0;
     top:0;
     width:100%;
     height:100%;
-    background-color:$t-white-6;
+    background-color:$t-white-9;
     z-index: 9999;
-    .login-modal-box{
+    will-change: opacity;
+    .modal-box{
         position: absolute;
         top:0;
         right:0;
@@ -24,20 +18,10 @@
         height:500px;
         margin:auto;
         background-color:$t-white-10;
-        box-shadow: 0 0 45px 2px$t-black-3;
+        box-shadow: 0 0 45px 2px $t-black-2;
     }
 }
-.modal-wrap{
-    position:absolute;
-    width:500px;
-    height: 500px;
-    top:0;
-    right:0;
-    bottom:0;
-    left:0;
-    margin:auto;
-    background-color:#fff;
-}
+
 .login-toast{
     position: fixed;
     top: 0;

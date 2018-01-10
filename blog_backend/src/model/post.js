@@ -23,11 +23,13 @@ var postSchema = new Schema({
     files:{data:[]},
     comments:[
         {
+            oauthID: Number,
             name:String,
             date:String,
             body:String,
             reply:[
                 {
+                    oauthID: Number,
                     name:String,
                     date:String,
                     body:String,

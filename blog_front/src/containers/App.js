@@ -167,7 +167,7 @@ class App extends Component {
     return (
         <div className="app">
             <LoginModal open={modal['login'].open} close={this.loginClose}/>
-            <Header mode={header.isHeader} />
+            <Header/>
               <Route render={({location}) => {
                 if(adminError===403 || postsError===403){
                   return <Route component={Forbidden}/>

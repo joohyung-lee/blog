@@ -2,6 +2,37 @@ import React, { Component } from 'react';
 class Comments extends Component {
     constructor(props){
         super(props);
+        this.state={
+            textareaHeight:50,
+            textareaActive:false
+        }
+    }
+    textareaFocus=()=>{
+        this.setState({
+            textareaActive:true,
+            textareaHeight:this.state.textareaHeight<100?100:this.state.textareaHeight
+        })
+    }
+    textareaBlur=(e)=>{
+        if(e.target.value===''){
+            this.setState({
+                textareaActive:true,
+                textareaHeight:50,
+            })
+        }
+        
+    }
+    textareaKeyDown=(e)=>{
+        const target=e.target;
+        requestAnimationFrame((e)=>{
+            this.setState({
+                textareaActive:false,
+                textareaHeight:50,
+            });
+            this.setState({
+                textareaHeight:target.scrollHeight<100?100:target.scrollHeight
+            });
+        })
     }
     render() {
         return (
@@ -10,11 +41,28 @@ class Comments extends Component {
                     {this.props.header}
                 </div>
                 <div className="comments-body">
-                    <div className="comments-write">
-                        <textarea type="text" placeholder="댓글을 입력해주세요"
+                    <div className="comments-write"
+                        >
+                        <div className="avatar-wrap">
+                            <div className="avatar" 
+                                style={{backgroundImage:`url(${this.props.currentUser.profileImg})`}}
+                            />
+                            <div className="avatar-info">
+                                <p className="name">{this.props.currentUser.userName}</p>                                
+                            </div>
+                        </div>
+                        <textarea type="text" placeholder="Add comment..."
+                            className={this.state.textareaActive?'animate':''}
                             value={this.props.commentsText} 
-                            onChange={this.props.commentsOnChange.bind(this,'write',null,null)}/>
-                        <button onClick={this.props.writeComments.bind(this,'write',null)}>등록</button>
+                            onChange={this.props.commentsOnChange.bind(this,'write',null,null)}
+                            onKeyDown={this.textareaKeyDown}
+                            onFocus={this.textareaFocus}
+                            onBlur={this.textareaBlur}
+                            style={{
+                                height:this.state.textareaHeight
+                            }}
+                            />
+                        <button className="submit" onClick={this.props.writeComments.bind(this,'write',null)}>등록</button>
                     </div>    
                     <div className="comments-contents">
                         <ul>
@@ -24,19 +72,21 @@ class Comments extends Component {
                                         <div className="original-comments">
                                                 <div className="user-header">
                                                     <div className="avatar-wrap">
-                                                        <div className="avatar" style={{backgroundImage:`url(${item.userImg})`}}/>
+                                                        <div className="avatar" style={{
+                                                            backgroundImage:`url(${item.userImg})`}}
+                                                        />
                                                         <div className="avatar-info">
-                                                            <p>{item.name}</p>
-                                                            <p>{item.date}</p>
+                                                            <p className="name">{item.name}</p>
+                                                            <p className="date">{item.date}</p>
                                                             
                                                         </div>
                                                     </div>
                                                     <div className="btn-group">
                                                         <button className="btn-reply" onClick={this.props.writeMode.bind(this,'reply',i)}>댓글쓰기</button>
-                                                        {item.name===this.props.commentsUser?
+                                                        {item.oauthID===this.props.currentUser.oauthID?
                                                             <div className="my-comments">
-                                                                <button className="btn-modify" onClick={this.props.writeMode.bind(this,'modify',i)}>수정</button>
-                                                                <button onClick={this.props.delComments.bind(this,'modify',i,null)} className="btn-delete">지우기</button>
+                                                                <button className="modify" onClick={this.props.writeMode.bind(this,'modify',i)}>수정</button>
+                                                                <button className="delete" onClick={this.props.delComments.bind(this,'modify',i,null)} className="btn-delete">지우기</button>
                                                             </div>
                                                             :null
                                                         }
@@ -48,7 +98,7 @@ class Comments extends Component {
                                                     <textarea type="text" 
                                                         value={item.body}
                                                         onChange={this.props.commentsOnChange.bind(this,'modify',i,null)}/>
-                                                    <button onClick={this.props.writeComments.bind(this,'modify',null)}>등록</button>
+                                                    <button className="submit" onClick={this.props.writeComments.bind(this,'modify',null)}>등록</button>
                                                     </div>:
                                                     <p className="text-body">{item.body}</p>
                                                 }
@@ -58,7 +108,7 @@ class Comments extends Component {
                                                     <textarea type="text" 
                                                         value={this.props.replyText}
                                                         onChange={this.props.commentsOnChange.bind(this,'reply',i,null)}/>
-                                                    <button onClick={this.props.writeComments.bind(this,'reply',i,null)}>등록</button>
+                                                    <button className="submit" onClick={this.props.writeComments.bind(this,'reply',i,null)}>등록</button>
                                                     </div>:
                                                     null
                                                 }
@@ -75,15 +125,15 @@ class Comments extends Component {
                                                                 <div className="avatar-wrap">
                                                                     <div className="avatar" style={{backgroundImage:`url(${replyItem.userImg})`}}/>
                                                                     <div className="avatar-info">
-                                                                        <p>{replyItem.name}</p>
-                                                                        <p>{replyItem.date}</p>
+                                                                        <p className="name">{replyItem.name}</p>
+                                                                        <p className="date">{replyItem.date}</p>
                                                                     </div>
                                                                 </div>
                                                                 <div className="btn-group">
-                                                                    {replyItem.name===this.props.commentsUser?
+                                                                    {replyItem.oauthID===this.props.currentUser.oauthID?
                                                                         <div className="my-comments">
-                                                                            <button className="btn-modify" onClick={this.props.writeMode.bind(this,'replyModify',i,rei)}>수정</button>
-                                                                            <button onClick={this.props.delComments.bind(this,'reply',i,rei)} className="btn-delete">지우기</button>
+                                                                            <button className="modify" onClick={this.props.writeMode.bind(this,'replyModify',i,rei)}>수정</button>
+                                                                            <button className="delete" onClick={this.props.delComments.bind(this,'reply',i,rei)} className="btn-delete">지우기</button>
                                                                         </div>
                                                                         :null
                                                                     }
@@ -95,7 +145,7 @@ class Comments extends Component {
                                                                 <textarea type="text" 
                                                                     value={replyItem.body}
                                                                     onChange={this.props.commentsOnChange.bind(this,'replyModify',i,rei)}/>
-                                                                <button onClick={this.props.writeComments.bind(this,'replyModify',i)}>등록</button>
+                                                                <button className="submit" onClick={this.props.writeComments.bind(this,'replyModify',i)}>등록</button>
                                                                 </div>:
                                                                 <p className="text-body">{replyItem.body}</p>
                                                             }

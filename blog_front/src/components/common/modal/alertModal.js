@@ -11,7 +11,7 @@ const springOption={
         damping: 18
     }
 }
-class LoginModal extends Component {
+class AlertModal extends Component {
     componentDidUpdate(prevProps, prevState){
         if(prevProps.open !== this.props.open) {
             
@@ -23,7 +23,7 @@ class LoginModal extends Component {
         }else{
             return[
                 {
-                    key: 'loginModal',
+                    key: 'alertModal',
                     style:{
                         opacity:spring(1,springOption.enter)
                     },
@@ -45,20 +45,7 @@ class LoginModal extends Component {
     deArea=(e)=>{
         e.stopPropagation();
     }
-    //구글 로그인
-    googleLogin=()=>{
-        window.open('/auth/loginPopup/google','google','_blank'); 
-    }
-    //페이스북 로그인
-    facebookLogin=()=>{
-        window.open('/auth/loginPopup/facebook','facebook','_blank'); 
-    }
-    //github 로그인
-    githubLogin=()=>{
-        window.open('/auth/loginPopup/github','github','_blank'); 
-    }
-    render() {
-        
+    render() {      
         return(       
             <TransitionMotion
             styles={this.getStyle()}
@@ -67,7 +54,7 @@ class LoginModal extends Component {
             didLeave={this.didLeave}              
         >
             {interpolatedStyles=>
-            <div className="login-container">
+            <div className="alert-container">
                 {interpolatedStyles.map(config => {
                 return(
                     <div className="modal-wrap"
@@ -78,21 +65,9 @@ class LoginModal extends Component {
                         onClick={this.props.close}
                     >
                         <div onClick={this.deArea} className="modal-box">
-                            <div className="login-title">
-                                <h1>Login</h1>
-                            </div>
-                            <div className="login-content">
-                                <ul>
-                                    <li className='google'>
-                                        <button onClick={this.googleLogin}>Google</button>
-                                    </li>
-                                    <li className='facebook'>
-                                        <button onClick={this.facebookLogin}>Facebook</button>
-                                    </li>
-                                    <li className='github'>
-                                        <button onClick={this.githubLogin}>github</button>
-                                    </li>
-                                </ul>
+                            <div className="modal-title">
+                                <h1>Alert</h1>
+                                <p className="msg">{this.props.msg}</p>
                             </div>
                         </div>
                     </div>
@@ -105,8 +80,8 @@ class LoginModal extends Component {
         }
 }
 
-LoginModal.propTypes = {
+AlertModal.propTypes = {
     open:PropTypes.bool,
 };
 
-export default LoginModal;
+export default AlertModal;

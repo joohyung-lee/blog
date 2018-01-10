@@ -13,6 +13,7 @@ passport.use(new GoogleStrategy({
     var updates = {
         userName: profile.displayName,
         email: profile.emails[0].value,
+        profileImg:profile._json.image,
         type:'google'
       };
       var options = {

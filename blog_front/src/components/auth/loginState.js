@@ -92,7 +92,7 @@ class LoginState extends Component {
                         <button className="btn-login" onClick={this.props.dropdown}>Login</button>:
                         <div className="avatar-wrap" onClick={this.props.dropdown}>
                         
-                            <div className="avatar" style={{backgroundImage:`url(${this.props.header?'':this.props.userImg})`}}>
+                            <div className="avatar" style={{backgroundImage:`url(${this.props.userImg})`}}>
                                 {this.props.header?<DefaultAvatar open={this.props.avatarFace}/>:null}
                             </div>
                         </div>

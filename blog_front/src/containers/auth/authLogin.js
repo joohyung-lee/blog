@@ -12,7 +12,6 @@ import { bindActionCreators } from 'redux';
 import defaultAvatar from 'images/defaultAvatar.svg';
 class AuthLogin extends Component {
     componentWillMount(){
-        console.log('adf')
         const {request} =this.props;
         request.getAuth({
             type:'AUTH/PROFILE'
@@ -62,19 +61,17 @@ class AuthLogin extends Component {
                 <LoginState 
                     view={(authUser.isLogin)?'mypage':'login'}
                     open={this.props.open}
-                    header={this.props.header}
                     dropdown={this.props.dropdown}
                     avatarFace={this.props.avatarFace}
-                    userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg} 
+                    userImg={authUser.isLogin?authUser.user.profileImg.isDefault?defaultAvatar:authUser.user.profileImg.url:''}  
                     logOut={this.logOut}
                     authLoading={authUser.pending}
-                    username={authUser.user.userName}
                     adminUser={authUser.user.email==="joomation@gmail.com"?true:false}
                 />   
                 }    
                 <LoginToast 
                     open={modal['toast'].open}
-                    userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg} 
+                    userImg={authUser.isLogin?authUser.user.profileImg.isDefault?defaultAvatar:authUser.user.profileImg.url:''}  
                     type={authUser.user.type}>
                     {(authUser.pending)?
                     <p>

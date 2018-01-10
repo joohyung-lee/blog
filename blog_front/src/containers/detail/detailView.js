@@ -231,6 +231,7 @@ class DetailView extends Component {
                 return get.writeComments({   
                     data:{
                         comments:{
+                            oauthID:authUser.user.oauthID,
                             name:authUser.user.userName,
                             date:dateFormat(now,"mmm d, yyyy"),
                             body:this.state.commentsText,
@@ -249,6 +250,7 @@ class DetailView extends Component {
                 return get.replyComments({   
                     data:{
                         reply:{
+                            oauthID:authUser.user.oauthID,
                             name:authUser.user.userName,
                             date:dateFormat(now,"mmm d, yyyy"),
                             body:this.state.replyText,
@@ -371,12 +373,13 @@ class DetailView extends Component {
                     }}>
                         <Documentation 
                             className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} 
+
                             data={data}
                             commentsData={data.comments}
                             writeComments={this.writeComments.bind(this,data._id)}
                             
                             delComments={this.delComments.bind(this,data._id)}
-                            commentsUser={authUser.user.userName}
+                            currentUser={authUser.user}
 
                             commentsOnChange={this.commentsOnChange}
                             commentsText={commentsText}

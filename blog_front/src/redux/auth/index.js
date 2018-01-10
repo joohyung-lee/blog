@@ -34,6 +34,7 @@ export default handleActions({
         name:['adminProfile'],
         successResult:(state,action)=>{
             const {data}=action.payload;
+           
             return state.setIn(['adminProfile','user'],data.user)
                         .setIn(['adminProfile','isLogin'],true)
         }
