@@ -282,20 +282,20 @@ class AdminMain extends Component {
 }
 export default connect(
     (state)=>({
-        loading:state.posts.toJS().listData.pending,
-        delLoading:state.posts.toJS().listData.delPosts.pending, 
-        delState:state.posts.toJS().listData.delPosts.state, 
-        error:state.posts.toJS().listData.error,
-        data:state.posts.toJS().listData.data,
-        total:state.posts.toJS().listData.total,
-        pages:state.posts.toJS().listData.pages,
-        page:state.posts.toJS().listData.page,
-        pageLast:state.posts.toJS().listData.pageLast,
+        loading:state.admin.toJS().listData.pending,
+        delLoading:state.admin.toJS().listData.delPosts.pending, 
+        delState:state.admin.toJS().listData.delPosts.state, 
+        error:state.admin.toJS().listData.error,
+        data:state.admin.toJS().listData.data,
+        total:state.admin.toJS().listData.total,
+        pages:state.admin.toJS().listData.pages,
+        page:state.admin.toJS().listData.page,
+        pageLast:state.admin.toJS().listData.pageLast,
         
-        first:state.posts.toJS().listData.firstPages,
-        prev:state.posts.toJS().listData.prevPages,
-        next:state.posts.toJS().listData.nextPages,
-        last:state.posts.toJS().listData.lastPages
+        first:state.admin.toJS().listData.firstPages,
+        prev:state.admin.toJS().listData.prevPages,
+        next:state.admin.toJS().listData.nextPages,
+        last:state.admin.toJS().listData.lastPages
     }),
     (dispatch)=>({
         get:bindActionCreators(httpRequest, dispatch),

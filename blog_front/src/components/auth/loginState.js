@@ -62,18 +62,47 @@ class LoginState extends Component {
     deArea=(e)=>{
         e.stopPropagation();
     }
+   openDialog = (uri, name, options, closeCallback)=>{
+        let win = window.open(uri, name, options);
+        let interval = window.setInterval(function() {
+            try {
+                if (win == null || win.closed) {
+                    window.clearInterval(interval);
+                    closeCallback(win);
+                }
+            }
+            catch (e) {
+            }
+        }, 100);
+        return win;
+    };
     
     //구글 로그인
     googleLogin=()=>{
-        window.open('/auth/loginPopup/google','google','_blank'); 
+        const uri='/auth/loginPopup/google';
+        const popupName='google login';
+        const options='_blank';
+        this.openDialog(uri, popupName, options, function(win) {
+            return window.loginSuccess();
+        });        
     }
     //페이스북 로그인
     facebookLogin=()=>{
-        window.open('/auth/loginPopup/facebook','facebook','_blank'); 
+        const uri='/auth/loginPopup/facebook';
+        const popupName='facebook login';
+        const options='_blank';
+        this.openDialog(uri, popupName, options, function(win) {
+            return window.loginSuccess();
+        });    
     }
     //github 로그인
     githubLogin=()=>{
-        window.open('/auth/loginPopup/github','github','_blank'); 
+        const uri='/auth/loginPopup/github';
+        const popupName='github login';
+        const options='_blank';
+        this.openDialog(uri, popupName, options, function(win) {
+            return window.loginSuccess();
+        });    
     }
     render() {
         return (

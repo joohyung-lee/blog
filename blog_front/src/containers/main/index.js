@@ -566,26 +566,20 @@ class Main extends Component {
                                          height:`${eleHeight}px`,
                                     }}>
                                     {currentStyles.map((config, i) =>{
-                                        let isFav = (config.data.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
+                                        let isFav = (config.data.starred.indexOf(authUser.user.oauthID) > -1) ? true : false ; 
                                         const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
                                         return(
                                         <CardItem key={config.key} 
+                                            data={config.data}
                                             onMouseUp={this.itemUp.bind(this,config.data._id,i,config.data.bgColor,config.data.category)}
                                             favClick={this.favClick.bind(this,config.data._id,i)}
                                             fav={isFav}
                                             favLoading={favActive===i?starLoading?true:false:false}
-                                            favCount={(config.data.starred.length==='')?0:config.data.starred.length}
                                             favOver={this.handleMouseOver.bind(this,i)}
                                             isGif={isGif}
                                             gifLoad={(active===i && isGif)?true:false}
                                             onMouseOver={this.handleMouseOver.bind(this,i)} 
                                             onMouseOut={this.handleMouseOut}
-                                            category={config.data.category}
-                                            postDate={config.data.postDate}
-                                            title={config.data.title}
-                                            author={config.data.author}
-                                            userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}
-                                            summary={config.data.summary}
                                             className={active===i?"card-item hover":"card-item"}
                                             wrapStyle={{
                                                 width:`${eleWidth}px`,
@@ -611,7 +605,6 @@ class Main extends Component {
                                             bottomHeight={(eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4}
                                             thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}
                                             gifSrc={(config.data.gif.data.path)?`${urlConfig.url}/api/${config.data.gif.data.path}`:''}
-                                            bgColor={(typeof config.data.bgColor!=='undefined')?config.data.bgColor:null}
                                         />
                                         )}
                                         )

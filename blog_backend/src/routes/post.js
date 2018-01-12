@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 let router = express.Router();
 //DATA MODEL
 import Post from '../model/post';
+import Account from '../model/account';
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
     console.log('Time: ', Date.now());
@@ -99,6 +100,7 @@ router.put('/:id', function (req, res) {
         if (!post) return res.status(404).json({
             error: 'post not found'
         });
+        post.oauthID=req.session.passport.user.oauthID;
         post.author = req.session.passport.user.userName;
         post.title = req.body.title;
         post.body = req.body.body;
@@ -128,7 +130,9 @@ router.put('/:id', function (req, res) {
 router.get('/single/:category/:id',(req,res)=>{
     let category=req.params.category;
     let id = req.params.id;
-    Post.find({_id:req.params.id},function (err, posts) {
+    Post.find({_id:req.params.id})
+    .populate('user')
+    .exec((err, posts)=>{
         if (err) return res.status(500).json({
             error: 'Internal Server Error',
             code:500
@@ -137,6 +141,7 @@ router.get('/single/:category/:id',(req,res)=>{
             error: "NO RESOURCE",
             code: 404
         });
+        console.log(posts)
         res.json(posts);
     })
 
@@ -148,6 +153,7 @@ router.get('/list/:category',(req,res)=>{
         Post.find({},{"body":false})
             .sort({"_id": -1})
             .limit(6)
+            .populate('user')
             .exec((err, posts) => {
                 if (err) return res.status(500).json({
                     error: 'Internal Server Error',
@@ -160,7 +166,7 @@ router.get('/list/:category',(req,res)=>{
                 Post.count({}, function(err, c) {
                     res.json({
                         posts,
-                        count:c
+                        count:c,
                     });
                 });
                 
@@ -169,6 +175,7 @@ router.get('/list/:category',(req,res)=>{
         Post.find({category:category},{"body":false}) 
         .sort({"_id": -1})
         .limit(6)
+        .populate('user')
         .exec((err, posts) => {
             if (err) return res.status(500).json({
                 error: 'Internal Server Error',
@@ -214,6 +221,7 @@ router.get('/category/:category/:listType/:id', (req, res) => {
         Post.find({ _id: { $lt: objId }})
         .sort({_id: -1})
         .limit(6)
+        .populate('user')
         .exec((err, posts) => {
             if(err) throw err;
             return res.json(posts);
@@ -222,6 +230,7 @@ router.get('/category/:category/:listType/:id', (req, res) => {
         Post.find({ $and:[{_id:{ $lt: objId }},{category: category}]})
         .sort({_id: -1})
         .limit(6)
+        .populate('user')
         .exec((err, posts) => {
             if(err) throw err;
             return res.json(posts);
@@ -230,7 +239,7 @@ router.get('/category/:category/:listType/:id', (req, res) => {
 });
 // CREATE POST
 router.post('/', function (req, res) {
-    var post = new Post();
+   
     if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined'
     || req.session.passport.user.email!=="joomation@gmail.com"
     ) {
@@ -239,6 +248,8 @@ router.post('/', function (req, res) {
             code: 403
         });
     }
+    var post = new Post();
+    post.user=req.session.passport.user._id,
     post.author = req.session.passport.user.userName;
     post.title = req.body.title;
     post.body = req.body.body;
@@ -259,30 +270,30 @@ router.post('/', function (req, res) {
             });
             return;
         }
-
         res.json({
             result: post
         });
 
     });
+    
 });
 // WRITE COMMENTS
 router.post('/comments/original/:id', (req, res) => {
-    // CHECK MEMO ID VALIDITY
-    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return res.status(400).json({
-            error: "INVALID ID",
-            code: 400
-        });
-    }
+    // // CHECK POST ID VALIDITY
+    // if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    //     return res.status(400).json({
+    //         error: "INVALID ID",
+    //         code: 400
+    //     });
+    // }
 
-    // CHECK LOGIN STATUS
-    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
-        return res.status(403).json({
-            error: "NOT LOGGED IN",
-            code: 403
-        });
-    }
+    // // CHECK LOGIN STATUS
+    // if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
+    //     return res.status(403).json({
+    //         error: "NOT LOGGED IN",
+    //         code: 403
+    //     });
+    // }
      Post.findById(req.params.id, function (err, post) {
         if (err) return res.status(500).json({
             error: 'database fail'
@@ -290,7 +301,9 @@ router.post('/comments/original/:id', (req, res) => {
         if (!post) return res.status(404).json({
             error: 'post not found'
         });
-        post.comments.unshift(req.body.comments);
+        var commentUser={user:req.session.passport.user._id};
+        var commentData=Object.assign({},req.body.comments,commentUser);
+        post.comments.unshift(commentData);
         post.save(function (err) {
             if (err) {
                 console.error(err);
@@ -449,14 +462,14 @@ router.post('/star/:id', (req, res) => {
         }
 
         // GET INDEX OF USERNAME IN THE ARRAY
-        let index = post.starred.indexOf(req.session.passport.user.userName);
+        let index = post.starred.indexOf(req.session.passport.user.oauthID);
 
         // CHECK WHETHER THE USER ALREADY HAS GIVEN A STAR
         let hasStarred = (index === -1) ? false : true;
 
         if(!hasStarred) {
             // IF IT DOES NOT EXIST
-            post.starred.push(req.session.passport.user.userName);
+            post.starred.push(req.session.passport.user.oauthID);
         } else {
             // ALREADY starred
             post.starred.splice(index, 1);

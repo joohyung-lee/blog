@@ -10,8 +10,7 @@ let passportFacebook = require('../passport/facebook');
 let passportGithub=require('../passport/github');
 
 router.get('/google',
-  passportGoogle.authenticate('google', { scope:[ 'https://www.googleapis.com/auth/plus.login',
-  'https://www.googleapis.com/auth/plus.profile.emails.read' ]}
+  passportGoogle.authenticate('google', { scope: ['profile', 'email']}
 
 ));
 router.get('/google/callback',

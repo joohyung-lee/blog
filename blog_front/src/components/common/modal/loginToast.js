@@ -46,7 +46,7 @@ class LoginToast extends Component {
     }
     willLeave=()=>{
         return{
-            size:spring(200,springOption.leave)
+            size:spring(220,springOption.leave)
         }
     }
     render() {
@@ -71,12 +71,16 @@ class LoginToast extends Component {
                         transform:`translate3d(${config.style.size}px,0,0)`,
                     }}
                     >
+                        {this.props.isLogin?
                         <div className="avatar"
                         style={{backgroundImage:`url(${this.props.userImg})`}}
                         >
-                        </div>
-                        <div className="user-info">
-                            <p>{this.props.type}</p>
+                        </div>:null
+                        }
+                        <div className={`user-info ${this.props.isLogin?'left':'center'}`}>
+                            {this.props.isLogin?
+                            <p className="type">{this.props.type}</p>:null
+                            }
                             {this.props.children}
                         </div>
                     </div>

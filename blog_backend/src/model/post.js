@@ -5,6 +5,10 @@ var Schema = mongoose.Schema;
 
 var postSchema = new Schema({
    // _id:String,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'account'
+    },
     author:String,
     title:String,
     summary:String,
@@ -12,7 +16,7 @@ var postSchema = new Schema({
     bgColor:String,
     iframeUrl:String,
     category:String,
-    starred: [String],
+    starred: [Number],
     tags:[String],
     thumbnail:{data:{
         type: Schema.Types.Mixed, default: {}
@@ -23,14 +27,18 @@ var postSchema = new Schema({
     files:{data:[]},
     comments:[
         {
-            oauthID: Number,
-            name:String,
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'account'
+            },
             date:String,
             body:String,
             reply:[
                 {
-                    oauthID: Number,
-                    name:String,
+                    user: {
+                        type: Schema.Types.ObjectId,
+                        ref: 'account'
+                    },
                     date:String,
                     body:String,
                 }

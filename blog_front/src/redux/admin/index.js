@@ -3,6 +3,8 @@ import {pending} from 'redux/helper/pending'
 import { Map,List,fromJS } from 'immutable';
 
 //액션
+const POSTS_GET='POSTS/GET';
+const POSTS_DELETE='POSTS/DELETE';
 const ADMIN_TITLE_WRITE = 'ADMIN/ADMIN_TITLE_WRITE';
 const ADMIN_SUMMARY_WRITE = 'ADMIN/ADMIN_SUMMARY_WRITE';
 const ADMIN_POST_WRITE = 'ADMIN/ADMIN_POST_WRITE';
@@ -46,6 +48,36 @@ const initialState=Map({
         }),
         files:Map({
             pending: false,
+        }),
+    }),
+    listData:Map({
+        pending: false,
+        error: -1,
+        state:'',
+        lastPosts:false,
+        page:1,
+        pages:List([]),
+        total:0,
+        pageLast:0,
+        firstPages:false,
+        prevPages:false,
+        nextPages:false,
+        lastPages:false,
+        data: List([]),
+        starred:Map({
+            pending: false,
+            error: -1,
+            state:'',
+        }),
+        oldPosts:Map({
+            pending: false,
+            error: -1,
+            state:'',
+        }),
+        delPosts:Map({
+            pending: false,
+            error: -1,
+            state:'',
         }),
     }),
     createData:Map({
@@ -166,6 +198,68 @@ export default handleActions({
             return state.setIn(['modifyData','data','tags'],tagsArr.splice(index,1));
         }
     },
+    ...pending({
+        type:POSTS_GET,
+        name:['listData'],
+        successResult:(state,action)=>{
+            const {data}=action.payload;
+            let firstPages=false;
+            let prevPages=false;
+            let nextPages=false;
+            let lastPages=false;
+            let pages=[];
+            let n=Math.floor(Number(data.page)/10);
+            n=(Number(data.page)===10*n)?n-1:n;
+            let start=10*n;
+            let pageLength=data.pages>10?10:data.pages
+            for(let i=0; i< pageLength; i++){
+                pages.push({pageNum:i+start+1})
+                    if(Number(data.page)>1){
+                        firstPages=true;
+                        prevPages=true;
+                        nextPages=true;
+                        lastPages=true
+                    }else{
+                        firstPages=false;
+                        prevPages=false;
+                        nextPages=true;
+                        lastPages=true;
+                    }
+                    if(Number(data.page)===data.pages){
+                        if(data.pages===1){
+                            firstPages=false;
+                            prevPages=false;
+                            nextPages=false;
+                            lastPages=false;
+                        }else{
+                            firstPages=true;
+                            prevPages=true;
+                            nextPages=false;
+                            lastPages=false;
+                        }
+                    }
+            }
+            return state.setIn(['listData','data'],data.docs)
+                        .setIn(['listData','page'],Number(data.page)) 
+                        .setIn(['listData','pages'],pages) 
+                        .setIn(['listData','pageLast'],data.pages) 
+                        .setIn(['listData','total'],data.total)
+                        .setIn(['listData','firstPages'],firstPages)
+                        .setIn(['listData','prevPages'],prevPages)
+                        .setIn(['listData','nextPages'],nextPages)
+                        .setIn(['listData','lastPages'],lastPages)                     
+        }
+    }),
+    //delete post
+    ...pending({
+        type:POSTS_DELETE,
+        name:['listData','delPosts'],
+        successResult:(state,action)=>{
+            const {index}=action.payload;
+            const postsArr = fromJS(state.getIn(['listData','data']));
+            return state.setIn(['listData','data'],postsArr.splice(index,1))            
+        }
+    }),
     //save post
     ...pending({
         type:ADMIN_POST,

@@ -71,6 +71,7 @@ class AuthLogin extends Component {
                 }    
                 <LoginToast 
                     open={modal['toast'].open}
+                    isLogin={authUser.isLogin}
                     userImg={authUser.isLogin?authUser.user.profileImg.isDefault?defaultAvatar:authUser.user.profileImg.url:''}  
                     type={authUser.user.type}>
                     {(authUser.pending)?
@@ -80,7 +81,7 @@ class AuthLogin extends Component {
                     <p>
                         {
                             (authUser.isLogin)?'Login Success':
-                            'Logout Success'
+                            'Logout'
                         }
                     </p>
                     }

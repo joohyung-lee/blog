@@ -14,8 +14,7 @@ class RedirectLogin extends Component {
             window.location.href=urlConfig.GITHUB_LOGIN_URL;                    
             break;        
             case 'success':               
-                window.opener.loginSuccess();
-                window.close();              
+               window.close();            
                 break;
             default:
                 break;

@@ -578,6 +578,7 @@ class Search extends Component{
                                         let isFav = (item.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
                                         const isGif=(typeof item.gif.data.path!=='undefined')?true:false;
                                         return <CardItem key={item._id} 
+                                            data={item}
                                             className={`card-item ${active===i?'hover':''}`}
                                             onMouseUp={this.itemUp.bind(this,item._id,i)}                                            
                                             onMouseOver={this.handleMouseOver.bind(this,i)}
@@ -586,22 +587,15 @@ class Search extends Component{
                                             favClick={this.favClick.bind(this,item._id,i)}
                                             fav={isFav}
                                             favLoading={favActive===i?starLoading?true:false:false}
-                                            favCount={(item.starred.length==='')?0:item.starred.length}
                                             thumbSrc={(item.thumbnail.data.path)?`${urlConfig.url}/api/${item.thumbnail.data.path}`:''}
                                             isGif={isGif}
                                             gifLoad={(active===i && isGif)?true:false}
                                             gifSrc={(item.gif.data.path)?`${urlConfig.url}/api/${item.gif.data.path}`:''}
-                                            category={item.category}
                                             userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}                                            
-                                            postDate={item.postDate}
-                                            title={item.title}
-                                            author={item.author}
-                                            summary={item.summary}
                                             wrapStyle={{
                                                 width:`${eleWidth}px`,   
                                                 padding:`${itemPd}px`,                         
                                             }} 
-                                            bgColor={(typeof item.bgColor!=='undefined')?item.bgColor:null}
                                             imgHeight={(eleWidth-itemPd*2)*3/4}
                                         />
                                     })

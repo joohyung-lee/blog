@@ -107,6 +107,7 @@ class CardItem extends Component {
     } 
     render() {
         const {thumbLoading,gifLoading,imgSrc,videoSrc,imgLoadState,itemPress}=this.state;
+        const {data}=this.props;
         return (
             <div className={(itemPress)?`scale ${this.props.className}`:this.props.className} 
                 style={this.props.wrapStyle}
@@ -127,7 +128,7 @@ class CardItem extends Component {
                     >    
                         <div className="card-item-image" style={{
                             height:`${this.props.imgHeight}px`,
-                            backgroundColor:this.props.bgColor
+                            backgroundColor:(typeof data.bgColor!=='undefined')?data.bgColor:null
                             }}>
                             <img className={`${(imgLoadState==='success')?`fade-in`:`fade-out`}`} src={imgSrc} alt={imgSrc}/>
                             {
@@ -147,13 +148,13 @@ class CardItem extends Component {
                         </div>
                         <div className="card-item-bottom" style={{height:`${this.props.bottomHeight}px`}}>
                             <div className="post-meta">
-                                <span className="category">{this.props.category}</span>
+                                <span className="category">{data.category}</span>
                             </div>
-                            <h3 style={{fontSize:`${this.props.responseFont}px`}}>{this.props.title}</h3>
+                            <h3 style={{fontSize:`${this.props.responseFont}px`}}>{data.title}</h3>
                             <div className="avatar-wrap">                       
-                            <div className="avatar" style={{backgroundImage:`url(${this.props.userImg})`}}/>
-                                <span>{this.props.author}</span>
-                                <span className="date">{this.props.postDate}</span>
+                            <div className="avatar" style={{backgroundImage:`url(${data.user.profileImg.url})`}}/>
+                                <span>{data.user.userName}</span>
+                                <span className="date">{data.postDate}</span>
                             </div>
                         </div>
                         
@@ -161,7 +162,7 @@ class CardItem extends Component {
                     <div onMouseEnter={this.props.favOver} 
                     className={(this.props.favLoading)?`icon-fav fav-loading`:(this.props.fav)?'icon-fav active':'icon-fav'}>
                         <div className="fav-info">
-                            <span className="count">{this.props.favCount}</span>
+                            <span className="count">{(data.starred.length==='')?0:data.starred.length}</span>
                         </div>
                         <div className="svg-wrap" onClick={this.props.favClick}>
                             {
@@ -172,7 +173,7 @@ class CardItem extends Component {
                     </div>
                     <div className="summary-wrap">
                         <LinesEllipsis
-                            text={this.props.summary}
+                            text={data.summary}
                             maxLine='2'
                             ellipsis='...'
                             trimRight

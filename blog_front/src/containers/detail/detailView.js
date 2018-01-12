@@ -231,8 +231,6 @@ class DetailView extends Component {
                 return get.writeComments({   
                     data:{
                         comments:{
-                            oauthID:authUser.user.oauthID,
-                            name:authUser.user.userName,
                             date:dateFormat(now,"mmm d, yyyy"),
                             body:this.state.commentsText,
                         }
@@ -250,8 +248,6 @@ class DetailView extends Component {
                 return get.replyComments({   
                     data:{
                         reply:{
-                            oauthID:authUser.user.oauthID,
-                            name:authUser.user.userName,
                             date:dateFormat(now,"mmm d, yyyy"),
                             body:this.state.replyText,
                         }

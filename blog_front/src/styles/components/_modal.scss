@@ -18,33 +18,52 @@
         height:500px;
         margin:auto;
         background-color:$t-white-10;
-        box-shadow: 0 0 45px 2px $t-black-2;
+        box-shadow: $box-shadow-modal;
     }
 }
 
 .login-toast{
     position: fixed;
-    top: 0;
-    right: 0;
-    background-color: $t-black-8;
-    padding: 10px;
+    display: flex;
+    top: 10px;
+    right: 20px;
+    background-color: $t-white-10;
+    height:65px;
     width: 200px;
+    padding: 0 15px;
+    border-radius: 10px;
+    box-shadow: $box-shadow-modal;
     .avatar{
-        width:40px;
-        height:40px;
+        align-self: center;
     }
     .user-info{
-        position: absolute;
-        top:10px;
-        left:60px;
+        flex:1;
+        margin-left:15px;
+        align-self: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        &.center{
+            margin:0;
+            text-align: center;
+        }
         p{
-            color:$t-white-8;
+            display: inline;
+            color:$c-black-1;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .type{
+            display: block;
+            color:$c-black-3;
+            font-weight: 500;
+            margin:0 0 5px 0;
         }
         span{
-            color:$t-white-10;
+            color:$c-black-2;
         }   
         .username{
-            color:$t-white-10;
+            color:$c-black-2;
             font-weight: 400;
         }
     }

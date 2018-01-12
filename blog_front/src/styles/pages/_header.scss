@@ -84,26 +84,7 @@
         .btn-login{
 
         }
-        .avatar-wrap{
-            cursor: pointer;
-            span{
-                display: inline-block;
-                vertical-align: middle;
-                font-weight: 400;
-                margin-right:10px;
-            }
-            .avatar{
-                display: inline-block;
-                width:35px;
-                height: 35px;
-                vertical-align: middle;
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size:cover;
-                border-radius: 50%;
-                overflow: hidden;
-            }
-        }
+        
         .my-state{
             li{
                 a{
