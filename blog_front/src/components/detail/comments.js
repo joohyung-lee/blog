@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import defaultAvatar from 'images/defaultAvatar.svg';
 class Comments extends Component {
     constructor(props){
         super(props);
@@ -45,7 +46,7 @@ class Comments extends Component {
                         >
                         <div className="avatar-wrap">
                             <div className="avatar" 
-                                style={{backgroundImage:`url(${this.props.currentUser.profileImg})`}}
+                                style={{backgroundImage:`url(${defaultAvatar})`}}
                             />
                             <div className="avatar-info">
                                 <p className="name">{this.props.currentUser.userName}</p>                                
@@ -73,17 +74,17 @@ class Comments extends Component {
                                                 <div className="user-header">
                                                     <div className="avatar-wrap">
                                                         <div className="avatar" style={{
-                                                            backgroundImage:`url(${item.userImg})`}}
+                                                            backgroundImage:`url(${item.user.profileImg.isDefault?defaultAvatar:item.user.profileImg.url})`}}
                                                         />
                                                         <div className="avatar-info">
-                                                            <p className="name">{item.name}</p>
+                                                            <p className="name">{item.user.userName}</p>
                                                             <p className="date">{item.date}</p>
                                                             
                                                         </div>
                                                     </div>
                                                     <div className="btn-group">
                                                         <button className="btn-reply" onClick={this.props.writeMode.bind(this,'reply',i)}>댓글쓰기</button>
-                                                        {item.oauthID===this.props.currentUser.oauthID?
+                                                        {item.user.oauthID===this.props.currentUser.oauthID?
                                                             <div className="my-comments">
                                                                 <button className="modify" onClick={this.props.writeMode.bind(this,'modify',i)}>수정</button>
                                                                 <button className="delete" onClick={this.props.delComments.bind(this,'modify',i,null)} className="btn-delete">지우기</button>
@@ -123,14 +124,16 @@ class Comments extends Component {
                                                         <li key={rei}>
                                                             <div className="user-header">
                                                                 <div className="avatar-wrap">
-                                                                    <div className="avatar" style={{backgroundImage:`url(${replyItem.userImg})`}}/>
+                                                                    <div className="avatar" style={{
+                                                                        backgroundImage:`url(${replyItem.user.profileImg.isDefault?defaultAvatar:replyItem.user.profileImg.url})`
+                                                                    }}/>
                                                                     <div className="avatar-info">
-                                                                        <p className="name">{replyItem.name}</p>
+                                                                        <p className="name">{replyItem.user.userName}</p>
                                                                         <p className="date">{replyItem.date}</p>
                                                                     </div>
                                                                 </div>
                                                                 <div className="btn-group">
-                                                                    {replyItem.oauthID===this.props.currentUser.oauthID?
+                                                                    {replyItem.user.oauthID===this.props.currentUser.oauthID?
                                                                         <div className="my-comments">
                                                                             <button className="modify" onClick={this.props.writeMode.bind(this,'replyModify',i,rei)}>수정</button>
                                                                             <button className="delete" onClick={this.props.delComments.bind(this,'reply',i,rei)} className="btn-delete">지우기</button>

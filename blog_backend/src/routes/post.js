@@ -131,7 +131,7 @@ router.get('/single/:category/:id',(req,res)=>{
     let category=req.params.category;
     let id = req.params.id;
     Post.find({_id:req.params.id})
-    .populate('user')
+    .populate(['user','comments.user','comments.reply.user'])
     .exec((err, posts)=>{
         if (err) return res.status(500).json({
             error: 'Internal Server Error',
@@ -279,28 +279,31 @@ router.post('/', function (req, res) {
 });
 // WRITE COMMENTS
 router.post('/comments/original/:id', (req, res) => {
-    // // CHECK POST ID VALIDITY
-    // if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    //     return res.status(400).json({
-    //         error: "INVALID ID",
-    //         code: 400
-    //     });
-    // }
+    // CHECK POST ID VALIDITY
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({
+            error: "INVALID ID",
+            code: 400
+        });
+    }
 
-    // // CHECK LOGIN STATUS
-    // if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
-    //     return res.status(403).json({
-    //         error: "NOT LOGGED IN",
-    //         code: 403
-    //     });
-    // }
-     Post.findById(req.params.id, function (err, post) {
+    // CHECK LOGIN STATUS
+    if(typeof req.session.passport=== 'undefined'||typeof req.session.passport.user=== 'undefined') {
+        return res.status(403).json({
+            error: "NOT LOGGED IN",
+            code: 403
+        });
+    }
+     Post.findById(req.params.id)
+     .populate(['user','comments.user','comments.reply.user'])
+     .exec((err, post) =>{
         if (err) return res.status(500).json({
             error: 'database fail'
         });
         if (!post) return res.status(404).json({
             error: 'post not found'
         });
+        console.log(post)
         var commentUser={user:req.session.passport.user._id};
         var commentData=Object.assign({},req.body.comments,commentUser);
         post.comments.unshift(commentData);
@@ -341,7 +344,9 @@ router.post('/comments/reply/:id/:index', (req, res) => {
         if (!post) return res.status(404).json({
             error: 'post not found'
         });
-        post.comments[req.params.index].reply.unshift(req.body.reply);
+        var commentUser={user:req.session.passport.user._id};
+        var commentData=Object.assign({},commentUser,req.body.reply);
+        post.comments[req.params.index].reply.unshift(commentData);
         post.save(function (err) {
             if (err) {
                 console.error(err);

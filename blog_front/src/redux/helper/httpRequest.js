@@ -504,7 +504,7 @@ export const writeComments=({postId,data,type})=>dispatch=>{
             dispatch({
                 type: actionType.FAILURE,
                 payload:{
-                    error:error.response.code
+                    error:'Failure Comment'
                 }
             });
         });
