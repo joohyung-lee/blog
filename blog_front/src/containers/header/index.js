@@ -76,6 +76,7 @@ class Header extends Component {
             searchValue:e.target.value
         })
         const {handleHeader}=this.props;
+        //check space
         let blank_pattern = /^\s+|\s+$/g;
         if(e.target.value.replace( blank_pattern, '' ) === "" ){
             handleHeader.searchValue({

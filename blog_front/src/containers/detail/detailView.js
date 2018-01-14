@@ -31,9 +31,10 @@ class DetailView extends Component {
             iframeLoad:false,
             doc:false,
             commentsText:'',
+            replyText:'',
             modifyIndex:null,
             commentView:'',
-            replyText:''
+            
         }
     }
     componentDidMount(){   
@@ -79,7 +80,9 @@ class DetailView extends Component {
             //when update complete,modify hide
             if(!commentsLoading){
                 this.setState({
-                    modifyIndex:null
+                    modifyIndex:null,
+                    commentsText:'',
+                    replyText:'',
                 })
             }
         }
@@ -197,69 +200,95 @@ class DetailView extends Component {
             doc:!this.state.doc
         });
     }
-    commentsOnChange=(type,i,rei,e)=>{
-    
-        const {input,data}=this.props
+    commentsOnChange=(type,e)=>{
+        const {input,authUser,modalView}=this.props;
+        if(!authUser.isLogin){
+            return modalView.openModal({
+                modalName:'login'
+            });
+        }
         if(type==='write'){
             this.setState({
                 commentsText:e.target.value
             })
         }else if(type==='modify'){
-            input.modifyComments({
-                index:i,
-                body:e.target.value,
-                view:'write'
+            this.setState({
+                replyText:e.target.value
             })
         }else if(type==='reply'){
             this.setState({
                 replyText:e.target.value
             })
         }else if(type==='replyModify'){
-            input.modifyComments({
-                index:i,
-                replyIndex:rei,
-                body:e.target.value,
-                view:'reply'
+            this.setState({
+                replyText:e.target.value
             })
         }
     }
-    writeComments=(postId,type,i)=>{
+    writeComments=(postId,type,i,rei)=>{
         const now = new Date();
         const {get,data,authUser,modalView}=this.props;
+        const {commentsText,replyText}=this.state;
         if(authUser.isLogin){
+             
             if(type==='write'){
-                return get.writeComments({   
-                    data:{
-                        comments:{
-                            date:dateFormat(now,"mmm d, yyyy"),
-                            body:this.state.commentsText,
-                        }
-                    },
-                    postId:postId,
-                    type:'POSTS/COMMENTS_SAVE'
-                });
+                //blank space
+                let blank_pattern = /^\s+|\s+$/g;
+                if(commentsText.replace( blank_pattern, '' ) === ""){
+                    alert('blank');
+                    return false;
+                }else{
+                    return get.writeComments({   
+                        data:{
+                            comments:{
+                                date:dateFormat(now,"mmm d, yyyy"),
+                                body:this.state.commentsText,
+                            }
+                        },
+                        postId:postId,
+                        type:'POSTS/COMMENTS_SAVE'
+                    });
+                }
             }else if(type==='modify'){
                 return get.updateComments({   
-                    data:data,
-                    postId:postId,
-                    type:'POSTS/COMMENTS_UPDATE'
-                });
-            }else if(type==='reply'){
-                return get.replyComments({   
                     data:{
-                        reply:{
-                            date:dateFormat(now,"mmm d, yyyy"),
+                        comments:{
                             body:this.state.replyText,
                         }
                     },
-                    index:i,
                     postId:postId,
-                    type:'POSTS/COMMENTS_REPLY'
+                    index:i,
+                    type:'POSTS/COMMENTS_UPDATE'
                 });
+            }else if(type==='reply'){
+                //blank space
+                let blank_pattern = /^\s+|\s+$/g;
+                if(replyText.replace( blank_pattern, '' ) === "" ){
+                    alert('blank');
+                    return false;
+                }else{
+                    return get.replyComments({   
+                        data:{
+                            reply:{
+                                date:dateFormat(now,"mmm d, yyyy"),
+                                body:this.state.replyText,
+                            }
+                        },
+                        index:i,
+                        postId:postId,
+                        type:'POSTS/COMMENTS_REPLY'
+                    });
+                }
             }else if(type==='replyModify'){
                 return get.updateComments({   
-                    data:data,
+                    data:{
+                        comments:{
+                            body:this.state.replyText,
+                        }
+                    },
                     postId:postId,
+                    index:i,
+                    replyIndex:rei,
                     type:'POSTS/COMMENTS_UPDATE'
                 });
             }
@@ -269,21 +298,30 @@ class DetailView extends Component {
                     });
         }
     }
-    writeMode=(type,i,rei)=>{
+    writeMode=(type,i,rei,value)=>{
+        const {authUser,modalView}=this.props;
+        if(!authUser.isLogin){
+            return modalView.openModal({
+                modalName:'login'
+            });
+        }
         if(type==='modify'){
             return this.setState({
                 modifyIndex:i,
-                commentView:'modify'
+                commentView:'modify',
+                replyText:value
             })
         }else if(type==='reply'){
             return this.setState({
                 modifyIndex:i,
-                commentView:'reply'
+                commentView:'reply',
+                replyText:''
             })
         }else if(type==='replyModify'){
             return this.setState({
                 modifyIndex:rei,
-                commentView:'replyModify'
+                commentView:'replyModify',
+                replyText:value
             })
         }
         
@@ -300,7 +338,12 @@ class DetailView extends Component {
         });
  
     }
-    
+    modalView=()=>{
+        const {modalView} = this.props;
+        modalView.openModal({
+            modalName:'login'
+        });
+    }
     render() {
         const {data,motion,get,authUser,commentsLoading}=this.props;
         const {replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex} = this.state;
@@ -375,6 +418,7 @@ class DetailView extends Component {
                             writeComments={this.writeComments.bind(this,data._id)}
                             
                             delComments={this.delComments.bind(this,data._id)}
+                            isLogin={authUser.isLogin}
                             currentUser={authUser.user}
 
                             commentsOnChange={this.commentsOnChange}
@@ -384,6 +428,7 @@ class DetailView extends Component {
                             modifyIndex={modifyIndex}
                             commentView={commentView}
                             writeMode={this.writeMode}
+                            modalView={this.modalView}
                         />
                     </Scrollbars>
                     :null

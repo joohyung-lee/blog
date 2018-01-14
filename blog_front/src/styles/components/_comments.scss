@@ -1,22 +1,52 @@
 .comments-wrap{
     .comments-body{
         .comments-write{
+            &.focus{
+                .avatar-wrap{
+                    .avatar-info{
+                        opacity: 1;
+                        transform: translate3d(0,30px,0)
+                    }
+                    
+                }
+                textarea{
+                    padding-top:50px;
+                }
+            }
+        }
+        .comments-write{
+            border:1px solid $c-black-6;
+            border-radius: 5px;
+            background-color:$c-black-10;
+            overflow: hidden;
+            .avatar-wrap{
+                position: relative;
+                padding:14px 5px 0 15px;
+                .avatar-info{
+                    position: absolute;
+                    top:-10px;
+                    left:calc(100% + 10px);
+                    white-space: nowrap;
+                    opacity: 0;
+                    transition: opacity 0.1s,transform 0.2s;
+                }
+            }
             position: relative;
             display:flex;
             textarea{
                 flex:1;
                 width:100%;
                 display: block;
-                padding:12px 10px;
+                padding:20px 15px 15px 15px;
                 resize:none;
                 outline: none;
                 overflow-y: hidden;
-                border:1px solid $c-black-6;
-                border-radius: 5px;
-                background-color:$c-black-10;
+                border:none;
                 font-size: 16px;
+                background:none;
+                transition:padding-top 0.2s;
                 &.animate{
-                    transition:height 0.2s;
+                    transition:padding-top 0.2s,height 0.2s;
                 }
             }
             button{

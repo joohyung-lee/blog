@@ -12,9 +12,15 @@ passport.use(new FacebookStrategy({
     profileFields: ['id', 'emails','displayName', 'photos','gender' ]
   },
   function(accessToken, refreshToken, profile, done) {
+    console.log(profile._json.picture.data)
     var updates = {
+        oauthID:profile.id,
         userName: profile.displayName,
         email: profile.emails[0].value,
+        profileImg:{
+          url:profile._json.picture.data.url,
+          isDefault:profile._json.picture.data.is_silhouette
+        },
         type:'facebook'
       };
       var options = {

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var findOrCreate = require('mongoose-findorcreate');
 var Schema = mongoose.Schema;
 var accountSchema = new Schema({
-    oauthID: Number,
+    oauthID:Number,
     userName:String,
     email:String,
     profileImg:{

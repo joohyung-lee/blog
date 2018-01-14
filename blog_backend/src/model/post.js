@@ -28,6 +28,7 @@ var postSchema = new Schema({
     comments:[
         {
             user: {
+                oauthID:Number,
                 type: Schema.Types.ObjectId,
                 ref: 'account'
             },

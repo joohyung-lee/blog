@@ -11,6 +11,7 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
     var updates = {
+        oauthID:profile.id,
         userName: profile.displayName,
         email: profile.emails[0].value,
         profileImg:profile._json.image,

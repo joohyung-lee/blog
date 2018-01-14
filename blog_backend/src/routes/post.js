@@ -100,8 +100,6 @@ router.put('/:id', function (req, res) {
         if (!post) return res.status(404).json({
             error: 'post not found'
         });
-        post.oauthID=req.session.passport.user.oauthID;
-        post.author = req.session.passport.user.userName;
         post.title = req.body.title;
         post.body = req.body.body;
         post.summary = req.body.summary;
@@ -141,7 +139,6 @@ router.get('/single/:category/:id',(req,res)=>{
             error: "NO RESOURCE",
             code: 404
         });
-        console.log(posts)
         res.json(posts);
     })
 
@@ -295,7 +292,6 @@ router.post('/comments/original/:id', (req, res) => {
         });
     }
      Post.findById(req.params.id)
-     .populate(['user','comments.user','comments.reply.user'])
      .exec((err, post) =>{
         if (err) return res.status(500).json({
             error: 'database fail'
@@ -303,7 +299,6 @@ router.post('/comments/original/:id', (req, res) => {
         if (!post) return res.status(404).json({
             error: 'post not found'
         });
-        console.log(post)
         var commentUser={user:req.session.passport.user._id};
         var commentData=Object.assign({},req.body.comments,commentUser);
         post.comments.unshift(commentData);
@@ -315,8 +310,19 @@ router.post('/comments/original/:id', (req, res) => {
                 });
                 return;
             }
-
-            res.json(post);
+            Post.findById(req.params.id)
+            .populate(['user','comments.user','comments.reply.user'])
+            .exec((err, post)=>{
+                if (err) return res.status(500).json({
+                    error: 'Internal Server Error',
+                    code:500
+                });
+                if (!post) return res.status(404).json({
+                    error: "NO RESOURCE",
+                    code: 404
+                });
+                res.json(post);
+            })
         });
     });
 });
@@ -355,12 +361,24 @@ router.post('/comments/reply/:id/:index', (req, res) => {
                 });
                 return;
             }
-            res.json(post);
+            Post.findById(req.params.id)
+            .populate(['user','comments.user','comments.reply.user'])
+            .exec((err, post)=>{
+                if (err) return res.status(500).json({
+                    error: 'Internal Server Error',
+                    code:500
+                });
+                if (!post) return res.status(404).json({
+                    error: "NO RESOURCE",
+                    code: 404
+                });
+                res.json(post);
+            })
         });
     });
 });
 // MODIFY COMMENTS
-router.put('/comments/:id', (req, res) => {
+router.put('/comments/:id/:index/:replyIndex', (req, res) => {
     // CHECK MEMO ID VALIDITY
     if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).json({
@@ -383,7 +401,11 @@ router.put('/comments/:id', (req, res) => {
         if (!post) return res.status(404).json({
             error: 'post not found'
         });
-        post.comments=req.body.comments;
+        if(req.params.replyIndex==='undefined'){
+            post.comments[req.params.index].body=req.body.comments.body;
+        }else{
+            post.comments[req.params.index].reply[req.params.replyIndex].body=req.body.comments.body;
+        }
         post.save(function (err) {
             if (err) {
                 console.error(err);
@@ -392,8 +414,19 @@ router.put('/comments/:id', (req, res) => {
                 });
                 return;
             }
-
-            res.json(post);
+            Post.findById(req.params.id)
+            .populate(['user','comments.user','comments.reply.user'])
+            .exec((err, post)=>{
+                if (err) return res.status(500).json({
+                    error: 'Internal Server Error',
+                    code:500
+                });
+                if (!post) return res.status(404).json({
+                    error: "NO RESOURCE",
+                    code: 404
+                });
+                res.json(post);
+            })
         });
     });
     
@@ -431,7 +464,19 @@ router.delete('/comments/:view/:id/:index/:replyIndex', (req, res) => {
         // SAVE THE POST
         post.save((err, post) => {
             if(err) throw err;
-            res.json(post);
+            Post.findById(req.params.id)
+            .populate(['user','comments.user','comments.reply.user'])
+            .exec((err, post)=>{
+                if (err) return res.status(500).json({
+                    error: 'Internal Server Error',
+                    code:500
+                });
+                if (!post) return res.status(404).json({
+                    error: "NO RESOURCE",
+                    code: 404
+                });
+                res.json(post);
+            })
         });
     });
 });
@@ -455,7 +500,9 @@ router.post('/star/:id', (req, res) => {
     }
 
     // POST POST
-    Post.findById(req.params.id, (err, post) => {
+    Post.findById(req.params.id)
+    .populate('user')
+    .exec((err, post) => {
         if(err) throw err;
 
         // POST DOES NOT EXIST
@@ -465,7 +512,6 @@ router.post('/star/:id', (req, res) => {
                 code: 404
             });
         }
-
         // GET INDEX OF USERNAME IN THE ARRAY
         let index = post.starred.indexOf(req.session.passport.user.oauthID);
 

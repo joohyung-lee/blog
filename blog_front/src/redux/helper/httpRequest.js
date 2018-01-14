@@ -78,8 +78,8 @@ function replyCommentAPI(postId,index,data) {
     return axios.post(`/api/post/comments/reply/${postId}/${index}`,data);
 }
 //update comments
-function updateCommentAPI(postId,data) {
-    return axios.put(`/api/post/comments/${postId}`,data);
+function updateCommentAPI(postId,data,index,replyIndex) {
+    return axios.put(`/api/post/comments/${postId}/${index}/${replyIndex}`,data);
 }
 
 //delete comments
@@ -532,10 +532,10 @@ export const replyComments=({postId,index,data,type})=>dispatch=>{
         });
 }
 //update commments
-export const updateComments=({postId,data,type})=>dispatch=>{
+export const updateComments=({postId,data,index,replyIndex,type})=>dispatch=>{
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
-    return updateCommentAPI(postId,data).then(
+    return updateCommentAPI(postId,data,index,replyIndex).then(
         (response)=>{
             dispatch({
                 type: actionType.SUCCESS,
