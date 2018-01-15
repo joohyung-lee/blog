@@ -1,24 +1,37 @@
 .comments-wrap{
     .comments-body{
         .comments-write{
-            &.focus{
-                .avatar-wrap{
-                    .avatar-info{
-                        opacity: 1;
-                        transform: translate3d(0,30px,0)
-                    }
-                    
-                }
-                textarea{
-                    padding-top:50px;
-                }
-            }
-        }
-        .comments-write{
+            position: relative;
             border:1px solid $c-black-6;
             border-radius: 5px;
             background-color:$c-black-10;
             overflow: hidden;
+            .commentsTxtArea{
+                display:flex;
+                &.focus{
+                    .avatar-wrap{
+                        .avatar-info{
+                            opacity: 1;
+                            transform: translate3d(0,30px,0)
+                        }
+                    }
+                    textarea{
+                        padding-top:50px;
+                    }
+                    .btn-group{
+                        
+                    }
+                }
+                .btn-group{
+                    display: flex;
+                    text-align: center;
+                    padding:15px 15px 15px 15px;
+                    button{
+                        width:auto;
+                        height:30px;
+                    }
+                }
+            }
             .avatar-wrap{
                 position: relative;
                 padding:14px 5px 0 15px;
@@ -29,10 +42,10 @@
                     white-space: nowrap;
                     opacity: 0;
                     transition: opacity 0.1s,transform 0.2s;
+                    
                 }
             }
-            position: relative;
-            display:flex;
+            
             textarea{
                 flex:1;
                 width:100%;
@@ -50,8 +63,8 @@
                 }
             }
             button{
-                position: absolute;
-                top:0;
+                position: relative;
+                bottom:0px;
                 right:0;
             }
         }

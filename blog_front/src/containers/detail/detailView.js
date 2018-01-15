@@ -225,7 +225,8 @@ class DetailView extends Component {
             })
         }
     }
-    writeComments=(postId,type,i,rei)=>{
+    writeComments=(postId,type,i,rei,e)=>{
+        e.stopPropagation();
         const now = new Date();
         const {get,data,authUser,modalView}=this.props;
         const {commentsText,replyText}=this.state;
@@ -250,16 +251,23 @@ class DetailView extends Component {
                     });
                 }
             }else if(type==='modify'){
-                return get.updateComments({   
-                    data:{
-                        comments:{
-                            body:this.state.replyText,
-                        }
-                    },
-                    postId:postId,
-                    index:i,
-                    type:'POSTS/COMMENTS_UPDATE'
-                });
+                //blank space
+                let blank_pattern = /^\s+|\s+$/g;
+                if(replyText.replace( blank_pattern, '' ) === "" ){
+                    alert('blank');
+                    return false;
+                }else{
+                    return get.updateComments({   
+                        data:{
+                            comments:{
+                                body:this.state.replyText,
+                            }
+                        },
+                        postId:postId,
+                        index:i,
+                        type:'POSTS/COMMENTS_UPDATE'
+                    });
+                }
             }else if(type==='reply'){
                 //blank space
                 let blank_pattern = /^\s+|\s+$/g;
@@ -298,7 +306,8 @@ class DetailView extends Component {
                     });
         }
     }
-    writeMode=(type,i,rei,value)=>{
+    writeMode=(type,i,rei,value,e)=>{
+        e.stopPropagation();
         const {authUser,modalView}=this.props;
         if(!authUser.isLogin){
             return modalView.openModal({
@@ -319,7 +328,7 @@ class DetailView extends Component {
             })
         }else if(type==='replyModify'){
             return this.setState({
-                modifyIndex:rei,
+                modifyIndex:`${i}/${rei}`,
                 commentView:'replyModify',
                 replyText:value
             })
@@ -327,7 +336,8 @@ class DetailView extends Component {
         
     }
 
-    delComments=(id,type,i,rei)=>{
+    delComments=(id,type,i,rei,e)=>{
+        e.stopPropagation();
         const{get}=this.props;
         get.deleteComments({
             type:'POSTS/COMMENTS_DELETE',
@@ -343,6 +353,19 @@ class DetailView extends Component {
         modalView.openModal({
             modalName:'login'
         });
+    }
+    writeInit=(type)=>{
+        if(type==='write'){
+            return this.setState({
+                modifyIndex:null
+            })
+        }
+    }
+    textareaCancel=(e)=>{
+        e.stopPropagation()
+        this.setState({
+            modifyIndex:null
+        })
     }
     render() {
         const {data,motion,get,authUser,commentsLoading}=this.props;
@@ -412,7 +435,7 @@ class DetailView extends Component {
                     }}>
                         <Documentation 
                             className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} 
-
+                            writeInit={this.writeInit}
                             data={data}
                             commentsData={data.comments}
                             writeComments={this.writeComments.bind(this,data._id)}
@@ -429,6 +452,7 @@ class DetailView extends Component {
                             commentView={commentView}
                             writeMode={this.writeMode}
                             modalView={this.modalView}
+                            textareaCancel={this.textareaCancel}
                         />
                     </Scrollbars>
                     :null

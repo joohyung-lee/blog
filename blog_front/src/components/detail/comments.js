@@ -1,57 +1,8 @@
 import React, { Component } from 'react';
 import defaultAvatar from 'images/defaultAvatar.svg';
+import CommentsTxtArea from './commentsTxtArea';
+import ModifyTxtArea from './modifyTxtArea';
 class Comments extends Component {
-    constructor(props){
-        super(props);
-        this.state={
-            textareaHeight:60,
-            textareaFocus:false,
-            textareaActive:false,
-            blank:false
-        }
-    }
-    textareaFocus=(e)=>{
-        if(!this.props.isLogin){
-            return this.props.modalView();
-        }else{
-            e.target.style.height=e.target.clientHeight<120?'120px':e.target.clientHeight+'px';
-
-            return this.setState({
-                textareaFocus:true,
-                textareaActive:true,
-                textareaHeight:this.state.textareaHeight<120?120:this.state.textareaHeight
-            })
-        }
-    }
-    textareaBlur=(e)=>{
-         //check space
-         let blank_pattern = /^\s+|\s+$/g;
-         if(e.target.value.replace( blank_pattern, '' ) === "" ){
-            this.setState({
-                textareaFocus:false,
-                textareaActive:true,
-                textareaHeight:60,
-                blank:true
-            })
-         }
-        
-    }
-    textareaKeyDown=(e)=>{
-        let target=e.target;
-        requestAnimationFrame((e)=>{
-            this.setState({
-                textareaActive:false,
-                textareaHeight:60,
-                blank:false
-            });
-            
-            target.style.height='60px';
-            target.style.height=target.scrollHeight<120?'120px':target.scrollHeight+'px';
-            this.setState({
-                textareaHeight:target.scrollHeight<120?120:target.scrollHeight
-            });
-        })
-    }
     render() {
         return (
             <div className="comments-wrap">
@@ -59,29 +10,14 @@ class Comments extends Component {
                     {this.props.header}
                 </div>
                 <div className={`comments-body`}>
-                    <div className={`comments-write ${this.state.textareaFocus?'focus':'default'}`}>
-                        {this.props.isLogin?
-                        <div className="avatar-wrap">
-                            <div className="avatar" 
-                                style={{backgroundImage:`url(${this.props.currentUser.profileImg.isDefault?defaultAvatar:this.props.currentUser.profileImg.url})`}}
-                            />
-                            <div className="avatar-info">
-                                <p className="name">{this.props.currentUser.userName}</p>                                
-                            </div>
-                        </div>:null
-                        }
-                        <textarea type="text" placeholder="Add comment..."
-                            className={this.state.textareaActive?'animate':''}
-                            value={this.state.blank?'':this.props.commentsText}
-                            onChange={this.props.commentsOnChange.bind(this,'write')}
-                            onKeyDown={this.textareaKeyDown}
-                            onFocus={this.textareaFocus}
-                            onBlur={this.textareaBlur}
-                            style={{
-                                height:60
-                            }}
-                            />
+                    <div className={`comments-write`}>
+                        <CommentsTxtArea
+                        {...this.props}
+                        writeInit={this.props.writeInit.bind(this,'write')}
+                        focus={false}
+                        commentsOnChange={this.props.commentsOnChange.bind(null,'write')}>
                         <button className="submit" onClick={this.props.writeComments.bind(this,'write',null,null)}>등록</button>
+                        </CommentsTxtArea>
                     </div>    
                     <div className="comments-contents">
                         <ul>
@@ -113,36 +49,38 @@ class Comments extends Component {
                                                 </div>
                                                 {//modify comments
                                                     this.props.commentView==='modify' && this.props.modifyIndex===i?
-                                                    <div className="comments-write reply">
-                                                    <textarea type="text" 
-                                                        value={this.props.replyText}
-                                                        onChange={this.props.commentsOnChange.bind(this,'modify')}
-                                                        onKeyDown={this.textareaKeyDown}
-                                                        onFocus={this.textareaFocus}
-                                                        onBlur={this.textareaBlur}
-                                                        style={{
-                                                            height:this.state.textareaHeight
-                                                        }}
-                                                    />
-                                                    <button className="submit" onClick={this.props.writeComments.bind(this,'modify',i,null)}>등록</button>
-                                                    </div>:
-                                                    <p className="text-body">{item.body}</p>
+                                                        <div className="comments-write reply">
+                                                            <ModifyTxtArea
+                                                            {...this.props}
+                                                            focus={true}
+                                                            commentsOnChange={this.props.commentsOnChange.bind(this,'modify')}
+                                                            >
+                                                            <div className="btn-group">
+                                                                <button className="submit" onClick={this.props.writeComments.bind(this,'modify',i,null)}>등록</button>
+                                                                <button className="btn-cancel" onClick={this.props.textareaCancel}>Cancle</button>
+                                                            </div>
+                                                            </ModifyTxtArea>
+                                                        </div>
+                                                        :
+                                                    <p className="text-body">{item.body.split('\n').map((line,i)=>{
+                                                        return (<span key={i}>{line}<br/></span>)
+                                                    })}</p>
                                                 }
                                                 {//reply comments
                                                     this.props.commentView==='reply' && this.props.modifyIndex===i?
-                                                    <div className="comments-write reply">
-                                                    <textarea type="text" 
-                                                        value={this.state.blank?'':this.props.replyText}
-                                                        onChange={this.props.commentsOnChange.bind(this,'reply')}
-                                                        onKeyDown={this.textareaKeyDown}
-                                                        onFocus={this.textareaFocus}
-                                                        onBlur={this.textareaBlur}
-                                                        style={{
-                                                            height:this.state.textareaHeight
-                                                        }}
-                                                    />
-                                                    <button className="submit" onClick={this.props.writeComments.bind(this,'reply',i,null)}>등록</button>
-                                                    </div>:
+                                                        <div className="comments-write reply">
+                                                            <CommentsTxtArea
+                                                            {...this.props}
+                                                            commentsText={this.props.replyText}
+                                                            focus={true}
+                                                            commentsOnChange={this.props.commentsOnChange.bind(null,'reply')}
+                                                            >
+                                                            <div className="btn-group">
+                                                                <button className="submit" onClick={this.props.writeComments.bind(this,'reply',i,null)}>등록</button>
+                                                                <button className="btn-cancel" onClick={this.props.textareaCancel}>Cancle</button>
+                                                            </div>
+                                                            </CommentsTxtArea>
+                                                        </div>:
                                                     null
                                                 }
                                         </div>
@@ -174,21 +112,22 @@ class Comments extends Component {
                                                                 </div>
                                                             </div>
                                                             {//reply comments
-                                                                this.props.commentView==='replyModify' && this.props.modifyIndex===rei?
-                                                                <div className="comments-write reply">
-                                                                    <textarea type="text" 
-                                                                        value={this.props.replyText}
-                                                                        onChange={this.props.commentsOnChange.bind(this,'replyModify')}
-                                                                        onKeyDown={this.textareaKeyDown}
-                                                                        onFocus={this.textareaFocus}
-                                                                        onBlur={this.textareaBlur}
-                                                                        style={{
-                                                                            height:this.state.textareaHeight
-                                                                        }}    
-                                                                    />
-                                                                    <button className="submit" onClick={this.props.writeComments.bind(this,'replyModify',i,rei)}>등록</button>
-                                                                </div>:
-                                                                <p className="text-body">{replyItem.body}</p>
+                                                                this.props.commentView==='replyModify' && this.props.modifyIndex===`${i}/${rei}`?
+                                                                    <div className="comments-write reply">
+                                                                        <ModifyTxtArea
+                                                                        {...this.props}
+                                                                        focus={true}
+                                                                        commentsOnChange={this.props.commentsOnChange.bind(this,'replyModify')}
+                                                                        >
+                                                                        <div className="btn-group">
+                                                                            <button className="submit" onClick={this.props.writeComments.bind(this,'replyModify',i,rei)}>등록</button>
+                                                                            <button className="btn-cancel" onClick={this.props.textareaCancel}>Cancle</button>
+                                                                        </div>
+                                                                        </ModifyTxtArea>
+                                                                    </div>:
+                                                                <p className="text-body">{replyItem.body.split('\n').map((line,i)=>{
+                                                                    return (<span key={i}>{line}<br/></span>)
+                                                                })}</p>
                                                             }
                                                             
                                                         </li>
