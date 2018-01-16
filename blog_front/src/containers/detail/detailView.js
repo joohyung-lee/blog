@@ -308,31 +308,32 @@ class DetailView extends Component {
     }
     writeMode=(type,i,rei,value,e)=>{
         e.stopPropagation();
+        const {modifyIndex} = this.state;
         const {authUser,modalView}=this.props;
         if(!authUser.isLogin){
             return modalView.openModal({
                 modalName:'login'
             });
         }
-        if(type==='modify'){
-            return this.setState({
-                modifyIndex:i,
-                commentView:'modify',
-                replyText:value
-            })
-        }else if(type==='reply'){
-            return this.setState({
-                modifyIndex:i,
-                commentView:'reply',
-                replyText:''
-            })
-        }else if(type==='replyModify'){
-            return this.setState({
-                modifyIndex:`${i}/${rei}`,
-                commentView:'replyModify',
-                replyText:value
-            })
-        }
+            if(type==='modify'){
+                return this.setState({
+                    modifyIndex:i===modifyIndex?null:i,
+                    commentView:'modify',
+                    replyText:value
+                })
+            }else if(type==='reply'){
+                return this.setState({
+                    modifyIndex:i===modifyIndex?null:i,
+                    commentView:'reply',
+                    replyText:''
+                })
+            }else if(type==='replyModify'){
+                return this.setState({
+                    modifyIndex:`${i}/${rei}`===modifyIndex?null:`${i}/${rei}`,
+                    commentView:'replyModify',
+                    replyText:value
+                })
+            }
         
     }
 
@@ -366,6 +367,17 @@ class DetailView extends Component {
         this.setState({
             modifyIndex:null
         })
+    }
+    commentsCount=()=>{
+        const {data}=this.props;
+        let originalCount=data.comments.length;
+        let replyCount=0;
+       data.comments.map((item,i)=>{
+            item.reply.map((replyItem,i)=>{
+                replyCount=replyCount+1;
+            })
+       });
+       return originalCount+replyCount;
     }
     render() {
         const {data,motion,get,authUser,commentsLoading}=this.props;
@@ -435,6 +447,8 @@ class DetailView extends Component {
                     }}>
                         <Documentation 
                             className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} 
+                            commentsCount={this.commentsCount()}
+
                             writeInit={this.writeInit}
                             data={data}
                             commentsData={data.comments}

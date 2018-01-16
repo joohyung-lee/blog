@@ -12,8 +12,8 @@ class ModifyTxtArea extends Component {
         }
     }
     componentDidMount(){
+        (this.props.focus)?this.refs.modifyTxtArea.focus():null;
         this.initialHeight();
-        (this.props.focus)?this.refs.modifyTxtArea.focus():null
     }
     textareaFocus=(e)=>{
         if(!this.props.isLogin){
@@ -66,11 +66,15 @@ class ModifyTxtArea extends Component {
         })
     }
     render() {
+        const {textareaFocus} = this.state;
         return (
-            <div className="commentsTxtArea">
+            <div className={`commentsTxtArea modify ${textareaFocus?'focus':'default'}`}>
+                <div className={`avatar-info`}>
+                    <p className="name">Modify</p>                                
+                </div>
                 <textarea type="text" placeholder="Add comment..."
                     ref="modifyTxtArea"
-                    className={this.state.textareaActive?'animate':''}
+                    className={`${this.state.textareaActive?'animate':''}`}
                     value={this.props.replyText}
                     onChange={this.props.commentsOnChange}
                     onKeyDown={this.textareaKeyDown}

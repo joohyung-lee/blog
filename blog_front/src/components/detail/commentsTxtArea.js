@@ -35,8 +35,9 @@ class CommentsTxtArea extends Component {
                textareaHeight:60,
                textareaFocus:false,
                textareaActive:true,
-               blank:true
-           })
+               blank:true,
+               visible:this.props.type==='reply'?false:true
+           });
         }
        
    }

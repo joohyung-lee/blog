@@ -1,13 +1,28 @@
 .comments-wrap{
+    margin-top:15px;
+    .category-title{
+        display: flex;
+        padding:15px 0;
+        h4{
+            font-weight: 700;
+            font-size: 1.2rem
+        }
+        .comments-count{
+
+        }
+    }
     .comments-body{
         .comments-write{
             position: relative;
-            border:1px solid $c-black-6;
-            border-radius: 5px;
-            background-color:$c-black-10;
-            overflow: hidden;
             .commentsTxtArea{
                 display:flex;
+                border:1px solid $c-black-6;
+                border-radius: 5px;
+                background-color:$c-black-10;
+                overflow: hidden;
+                &.modify{
+                 
+                }
                 &.focus{
                     .avatar-wrap{
                         .avatar-info{
@@ -19,17 +34,46 @@
                         padding-top:50px;
                     }
                     .btn-group{
-                        
+                        button{
+                            
+                            &.submit{
+                                color:$c-green-10;
+                                &:hover{
+                                    background-color: $c-black-7;
+                                }
+                            }
+                            &.cancel{
+                               
+                            }
+                        }
                     }
                 }
                 .btn-group{
+                    position: absolute;
+                    top:0;
+                    right:0;
                     display: flex;
                     text-align: center;
                     padding:15px 15px 15px 15px;
                     button{
                         width:auto;
                         height:30px;
+                        border:none;
+                        font-weight: 500;
+                        border-radius: 3px;
+                        transition: all 0.3s;
+                        &.submit{
+                            color:$c-black-3;
+                        }
+                        &.cancel{
+                            color:$c-black-3;
+                            &:hover{
+                                background-color: $c-black-7;
+                            }
+                        }
+                        
                     }
+                    
                 }
             }
             .avatar-wrap{
@@ -42,10 +86,11 @@
                     white-space: nowrap;
                     opacity: 0;
                     transition: opacity 0.1s,transform 0.2s;
-                    
+                    p{
+                        font-weight: 500;
+                    }
                 }
             }
-            
             textarea{
                 flex:1;
                 width:100%;
@@ -56,11 +101,12 @@
                 overflow-y: hidden;
                 border:none;
                 font-size: 16px;
+                font-weight: 500;
                 background:none;
-                transition:padding-top 0.2s;
                 &.animate{
                     transition:padding-top 0.2s,height 0.2s;
                 }
+                
             }
             button{
                 position: relative;
@@ -69,13 +115,17 @@
             }
         }
         .comments-contents{
-            margin-top:20px;
+            margin-top:30px;
             ul{
                 li{
+                    
+                    border-bottom:1px solid $c-black-9;
                     .user-header{
                         display: flex;
-                        height:30px;
-                        background-color:$c-black-5;
+                        padding:10px 0 10px 0;
+                        margin-top:15px;
+                        
+
                         .btn-group{
 
                         }
@@ -83,19 +133,33 @@
                             display: flex;
                             flex:1;
                             .avatar-info{
-                                
+                                margin-left:15px;
+                                .name{
+                                    font-weight: 500;
+                                }
+                                .date{
+                                    color:$c-black-2;
+                                }
+                            }
+                        }
+                        .btn-group{
+                            display: flex;
+                            button{
+                                height: 30px;
                             }
                         }
                     }
                     .text-body{
+                        padding:0 0 20px 0;
+                    }
+                    .text-body *{
                         font-size: 1.2rem;
                         font-weight: 500;
-                        padding:10px;
+                        padding:10px 0;
                     }
                     .original-comments{
-                        border-bottom:1px solid $c-black-2;
+                        
                         .user-header{
-
                             .btn-group{
 
                             }
@@ -111,13 +175,27 @@
                         }
                     }
                     .reply-comments{
-                        padding:10px 10px 10px 30px;
-                        background-color:$c-black-8;
-                        border-bottom:1px solid $c-black-2;
+                        position: relative;
+                        padding:5px 10px 5px 20px;
+                        margin-top:10px;
+                        background-color:$c-black-9;
+                        &:before{
+                            content:"";
+                            position: absolute;
+                            top:-10px;
+                            left:20px;
+                            border-left: 10px solid transparent;
+                            border-right: 10px solid transparent;
+                            border-bottom: 10px solid $c-black-9;
+                        }
                         ul{
                             li{
+                                border-bottom:1px solid $c-black-5;
+                                &:last-child{
+                                    border:none;
+                                }
                                 .user-header{
-
+                                    margin-top:10px;
                                     .btn-group{
         
                                     }

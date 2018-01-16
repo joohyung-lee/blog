@@ -6,6 +6,10 @@ class Comments extends Component {
     render() {
         return (
             <div className="comments-wrap">
+                <div className="category-title">
+                    <h4>Comments</h4>
+                    <span className="comments-count">{this.props.commentsCount}</span>
+                </div>
                 <div className="comments-header">
                     {this.props.header}
                 </div>
@@ -16,7 +20,9 @@ class Comments extends Component {
                         writeInit={this.props.writeInit.bind(this,'write')}
                         focus={false}
                         commentsOnChange={this.props.commentsOnChange.bind(null,'write')}>
-                        <button className="submit" onClick={this.props.writeComments.bind(this,'write',null,null)}>등록</button>
+                        <div className="btn-group">
+                            <button className="submit" onClick={this.props.writeComments.bind(this,'write',null,null)}>Submit</button>
+                        </div>
                         </CommentsTxtArea>
                     </div>    
                     <div className="comments-contents">
@@ -37,10 +43,10 @@ class Comments extends Component {
                                                         </div>
                                                     </div>
                                                     <div className="btn-group">
-                                                        <button className="btn-reply" onClick={this.props.writeMode.bind(this,'reply',i,null,null)}>댓글쓰기</button>
+                                                        <button className="btn-reply" onClick={this.props.writeMode.bind(this,'reply',i,null,null)}>Reply</button>
                                                         {item.user.oauthID===this.props.currentUser.oauthID?
                                                             <div className="my-comments">
-                                                                <button className="modify" onClick={this.props.writeMode.bind(this,'modify',i,null,item.body)}>수정</button>
+                                                                <button className="modify" onClick={this.props.writeMode.bind(this,'modify',i,null,item.body)}>Modify</button>
                                                                 <button className="delete" onClick={this.props.delComments.bind(this,'modify',i,null)}>지우기</button>
                                                             </div>
                                                             :null
@@ -56,8 +62,8 @@ class Comments extends Component {
                                                             commentsOnChange={this.props.commentsOnChange.bind(this,'modify')}
                                                             >
                                                             <div className="btn-group">
-                                                                <button className="submit" onClick={this.props.writeComments.bind(this,'modify',i,null)}>등록</button>
-                                                                <button className="btn-cancel" onClick={this.props.textareaCancel}>Cancle</button>
+                                                                <button className="submit" onClick={this.props.writeComments.bind(this,'modify',i,null)}>Submit</button>
+                                                                <button className="cancel" onClick={this.props.textareaCancel}>Cancle</button>
                                                             </div>
                                                             </ModifyTxtArea>
                                                         </div>
@@ -72,12 +78,13 @@ class Comments extends Component {
                                                             <CommentsTxtArea
                                                             {...this.props}
                                                             commentsText={this.props.replyText}
+                                                            type='reply'
                                                             focus={true}
                                                             commentsOnChange={this.props.commentsOnChange.bind(null,'reply')}
                                                             >
                                                             <div className="btn-group">
-                                                                <button className="submit" onClick={this.props.writeComments.bind(this,'reply',i,null)}>등록</button>
-                                                                <button className="btn-cancel" onClick={this.props.textareaCancel}>Cancle</button>
+                                                                <button className="submit" onClick={this.props.writeComments.bind(this,'reply',i,null)}>Submit</button>
+                                                                <button className="cancel" onClick={this.props.textareaCancel}>Cancle</button>
                                                             </div>
                                                             </CommentsTxtArea>
                                                         </div>:
@@ -85,7 +92,7 @@ class Comments extends Component {
                                                 }
                                         </div>
                                         {
-                                        (item.reply)?
+                                        (item.reply && item.reply.length!==0)?
                                         <div className="reply-comments">
                                             <ul>
                                                 {item.reply.map((replyItem,rei)=>{
@@ -104,7 +111,7 @@ class Comments extends Component {
                                                                 <div className="btn-group">
                                                                     {replyItem.user.oauthID===this.props.currentUser.oauthID?
                                                                         <div className="my-comments">
-                                                                            <button className="modify" onClick={this.props.writeMode.bind(this,'replyModify',i,rei,replyItem.body)}>수정</button>
+                                                                            <button className="modify" onClick={this.props.writeMode.bind(this,'replyModify',i,rei,replyItem.body)}>Modify</button>
                                                                             <button className="delete" onClick={this.props.delComments.bind(this,'reply',i,rei)}>지우기</button>
                                                                         </div>
                                                                         :null
@@ -120,8 +127,8 @@ class Comments extends Component {
                                                                         commentsOnChange={this.props.commentsOnChange.bind(this,'replyModify')}
                                                                         >
                                                                         <div className="btn-group">
-                                                                            <button className="submit" onClick={this.props.writeComments.bind(this,'replyModify',i,rei)}>등록</button>
-                                                                            <button className="btn-cancel" onClick={this.props.textareaCancel}>Cancle</button>
+                                                                            <button className="submit" onClick={this.props.writeComments.bind(this,'replyModify',i,rei)}>Submit</button>
+                                                                            <button className="cancel" onClick={this.props.textareaCancel}>Cancle</button>
                                                                         </div>
                                                                         </ModifyTxtArea>
                                                                     </div>:
