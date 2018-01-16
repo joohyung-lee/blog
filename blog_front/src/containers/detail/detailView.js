@@ -63,7 +63,7 @@ class DetailView extends Component {
                 iframeLoad:false
             })
             if(this.props.loading!==loading && dataState==="success"){ 
-                let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);                
+                let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);           
                 motionDispatch.motionActions({
                     motions:{
                         bgColor:data.bgColor,
@@ -179,6 +179,7 @@ class DetailView extends Component {
         }
     }
    get_brightness=(hexCode)=>{
+       
         hexCode = hexCode.replace('#', '');
         var c_r = parseInt(hexCode.substr(0, 2),16);
         var c_g = parseInt(hexCode.substr(2, 2),16);
@@ -380,10 +381,10 @@ class DetailView extends Component {
        return originalCount+replyCount;
     }
     render() {
-        const {data,motion,get,authUser,commentsLoading}=this.props;
+        const {data,motion,get,authUser,commentsLoading,common}=this.props;
         const {replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex} = this.state;
         return (
-            <div className={`detail-frame`}>
+            <div className={`detail-frame ${common.isBright?'white':'black'}`}>
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
                     style={{
                         width:frameFull?`${windowWidth}px`:motion.detailLoad?`${frameWrap}px`:`${windowWidth}px`,
