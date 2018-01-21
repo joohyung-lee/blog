@@ -11,7 +11,7 @@ import LoginModal from 'components/common/modal/loginModal';
 import {MainRoute,SearchRoute,AdminRoute} from 'components/route';
 
 //pages
-import {RedirectLogin,Profile,Header,DetailView} from 'components/pages';
+import {RedirectLogin,Collections,Header,DetailView} from 'components/pages';
 
 //redux
 import * as modalActions from 'redux/modal';
@@ -190,7 +190,7 @@ class App extends Component {
                       <Route path="/posts/:category/:postId"/>
                       <Route path="/search" component={SearchRoute}/> 
                       <Route path="/admin" component={AdminRoute}/> 
-                      <Route path="/mypage/profile" component={Profile}/>
+                      <Route path="/mypage/collections" component={Collections}/>
                       <Route path="/auth/loginPopup/:name" component={RedirectLogin}/>
                       <Route path="/:category" component={MainRoute}/> 
                     </AnimatedSwitch>

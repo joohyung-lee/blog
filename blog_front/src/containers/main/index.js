@@ -569,43 +569,43 @@ class Main extends Component {
                                         let isFav = (config.data.starred.indexOf(authUser.user.oauthID) > -1) ? true : false ; 
                                         const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
                                         return(
-                                        <CardItem key={config.key} 
-                                            data={config.data}
-                                            onMouseUp={this.itemUp.bind(this,config.data._id,i,config.data.bgColor,config.data.category)}
-                                            favClick={this.favClick.bind(this,config.data._id,i)}
-                                            fav={isFav}
-                                            favLoading={favActive===i?starLoading?true:false:false}
-                                            favOver={this.handleMouseOver.bind(this,i)}
-                                            isGif={isGif}
-                                            gifLoad={(active===i && isGif)?true:false}
-                                            onMouseOver={this.handleMouseOver.bind(this,i)} 
-                                            onMouseOut={this.handleMouseOut}
-                                            className={active===i?"card-item hover":"card-item"}
-                                            wrapStyle={{
-                                                width:`${eleWidth}px`,
-                                                height:`${eleHeight}px`,
-                                                padding:`${itemPd}px`, 
-                                                left:`${config.style.size}px`,
-                                                transform:` perspective(600px)
-                                                            rotateY(${config.style.rotate}deg) 
-                                                            scale(${config.style.scale})
-                                                            translate3d(${config.style.sizeX}px,${config.style.sizeY}px,0)`,
-                                                zIndex:detailView===i?10:1,
-                                                opacity:config.style.opacity
-                                            }}
-                                            style={{
-                                                width:`100%`,
-                                                height:`100%`,
-                                                borderRadius:`10px`,
-                                                boxShadow: `0 ${config.style.shadowSize1}px ${config.style.shadowSize2}px rgba(52, 73, 94, ${config.style.shadowColor})`,
-                                                
-                                            }} 
-                                            responseFont={(eleWidth-itemPd*2)/21}
-                                            imgHeight={(eleWidth-itemPd*2)*3/4}
-                                            bottomHeight={(eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4}
-                                            thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}
-                                            gifSrc={(config.data.gif.data.path)?`${urlConfig.url}/api/${config.data.gif.data.path}`:''}
-                                        />
+                                            <CardItem key={config.key} 
+                                                data={config.data}
+                                                onMouseUp={this.itemUp.bind(this,config.data._id,i,config.data.bgColor,config.data.category)}
+                                                favClick={this.favClick.bind(this,config.data._id,i)}
+                                                fav={isFav}
+                                                favLoading={favActive===i?starLoading?true:false:false}
+                                                favOver={this.handleMouseOver.bind(this,i)}
+                                                isGif={isGif}
+                                                gifLoad={(active===i && isGif)?true:false}
+                                                onMouseOver={this.handleMouseOver.bind(this,i)} 
+                                                onMouseOut={this.handleMouseOut}
+                                                className={active===i?"card-item hover":"card-item"}
+                                                wrapStyle={{
+                                                    width:`${eleWidth}px`,
+                                                    height:`${eleHeight}px`,
+                                                    padding:`${itemPd}px`, 
+                                                    left:`${config.style.size}px`,
+                                                    transform:` perspective(600px)
+                                                                rotateY(${config.style.rotate}deg) 
+                                                                scale(${config.style.scale})
+                                                                translate3d(${config.style.sizeX}px,${config.style.sizeY}px,0)`,
+                                                    zIndex:detailView===i?10:1,
+                                                    opacity:config.style.opacity
+                                                }}
+                                                style={{
+                                                    width:`100%`,
+                                                    height:`100%`,
+                                                    borderRadius:`10px`,
+                                                    boxShadow: `0 ${config.style.shadowSize1}px ${config.style.shadowSize2}px rgba(52, 73, 94, ${config.style.shadowColor})`,
+                                                    
+                                                }} 
+                                                responseFont={(eleWidth-itemPd*2)/21}
+                                                imgHeight={(eleWidth-itemPd*2)*3/4}
+                                                bottomHeight={(eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4}
+                                                thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}
+                                                gifSrc={(config.data.gif.data.path)?`${urlConfig.url}/api/${config.data.gif.data.path}`:''}
+                                            />
                                         )}
                                         )
                                     }

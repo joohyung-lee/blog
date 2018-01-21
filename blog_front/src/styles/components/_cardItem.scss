@@ -91,8 +91,10 @@
         width:100%;
         background-color:#222;
         img{
+            position: relative;
             display: inline-block;
             width: 100%;
+            z-index: 1;
         }
         .video-wrap{
             position: absolute;

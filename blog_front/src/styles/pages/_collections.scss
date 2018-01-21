@@ -1,0 +1,53 @@
+.collections-wrap{
+        max-width: 1400px;
+        padding:50px 20px 20px;
+        margin:0 auto;
+    .collections-header{
+        padding:30px 0;
+        text-align: center;
+        .avatar{
+            width:50px;
+            height:50px;
+        }
+        .avatar-info{
+            margin-top:10px;
+            .name{
+                font-weight: 700;
+                font-size: 1.2rem;
+                line-height: 1;
+            }
+            .type{
+                color:$c-black-2;
+            }
+        }
+    }
+    .collections-contents{
+        display: flex;
+        flex-wrap:wrap;
+        .card-item{
+            flex:0 0 25%;
+            padding:10px;
+            height: 300px;
+            @media screen and(max-width:$screen-desktop){
+                flex:0 0 33.33%;
+            }
+            @media screen and(max-width:$screen-pad){
+                flex:0 0 50%;
+            }
+            @media screen and(max-width:$screen-phone-large){
+                flex:0 0 100%;
+            }
+            .card-item-box{
+                height:100%;
+                background: $t-white-10;
+            }
+            .card-item-image{
+                height:70%;
+                
+            }
+            .card-item-bottom{
+                height:30%;
+            }
+        }
+    }
+}

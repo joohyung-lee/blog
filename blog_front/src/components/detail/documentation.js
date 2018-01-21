@@ -3,21 +3,12 @@ import {Link} from 'react-router-dom';
 //components
 import {MarkdownView} from 'components/pages';
 import {Comments} from 'components/detail';
-
-//temp
-import commentsData from './commentsTemp'
 export class Documentation extends Component {
-  constructor(props){
-    super(props);
-    //this.state=commentsData
-  }
   render() {
       const {data}= this.props;
       return (
         <div className={this.props.className}>
-            <div key="i"
-                className="detail-contents"
-            >
+            <div className="detail-contents">
                 <div className="header">
                     <span className="category">{data.category}</span>
                     <h2>{data.title}</h2>

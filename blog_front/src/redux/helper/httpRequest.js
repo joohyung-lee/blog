@@ -457,13 +457,7 @@ export const getCategoryPost = (type,category) => dispatch => {
             })
         }
     ).catch((error) => {
-        dispatch({
-            type: actionType.FAILURE,
-            payload:{
-                error:error.response.data.code,
-                msg:error.response.data.error,
-            }
-        });
+        
     }); 
 }
 //old posts

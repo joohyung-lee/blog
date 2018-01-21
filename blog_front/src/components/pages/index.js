@@ -19,7 +19,7 @@ let md = new MobileDetect(window.navigator.userAgent);
 
 export const Main = asyncRoute(() => (md.mobile())?import('containers/main/mobile'):import('containers/main'));
 export const RedirectLogin = asyncRoute(() => import('components/loginPopup/redirect'));
-export const Profile  = asyncRoute(() => import('containers/mypage/profile'));
+export const Collections  = asyncRoute(() => import('containers/mypage/collections'));
 export const AdminMain = asyncRoute(() => import('containers/admin'));
 export const Write = asyncRoute(() => import('containers/admin/write'));
 

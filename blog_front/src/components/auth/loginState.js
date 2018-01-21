@@ -158,10 +158,7 @@ class LoginState extends Component {
                                         </li>
                                     :null}
                                     <li>
-                                        <Link to="/mypage/profile">Profile</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="">Collections</Link>
+                                        <Link to="/mypage/collections">Collections</Link>
                                     </li>
                                     
                                     <li>
