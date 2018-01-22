@@ -384,7 +384,7 @@ class DetailView extends Component {
         const {data,motion,get,authUser,commentsLoading,common}=this.props;
         const {replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex} = this.state;
         return (
-            <div className={`detail-frame ${common.isBright?'white':'black'}`}>
+            <div className={`detail-frame ${common.isBright?'black':'white'}`}>
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
                     style={{
                         width:frameFull?`${windowWidth}px`:motion.detailLoad?`${frameWrap}px`:`${windowWidth}px`,

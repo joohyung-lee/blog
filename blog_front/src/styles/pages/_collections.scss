@@ -27,26 +27,35 @@
         .card-item{
             flex:0 0 25%;
             padding:10px;
-            height: 300px;
+            height: 400px;
             @media screen and(max-width:$screen-desktop){
                 flex:0 0 33.33%;
             }
             @media screen and(max-width:$screen-pad){
                 flex:0 0 50%;
             }
-            @media screen and(max-width:$screen-phone-large){
+            @media screen and(max-width:550px){
                 flex:0 0 100%;
             }
             .card-item-box{
+                display: flex;
+                flex-flow: column;
                 height:100%;
                 background: $t-white-10;
             }
             .card-item-image{
-                height:70%;
-                
+                flex:1;
+                .back-image{
+                    position:relative;
+                    width: 100%;
+                    height:100%;
+                    background-size:cover;
+                    background-position: center;
+                    z-index: 1;
+                }
             }
             .card-item-bottom{
-                height:30%;
+                height:160px;
             }
         }
     }

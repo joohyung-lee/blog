@@ -86,6 +86,10 @@ function updateCommentAPI(postId,data,index,replyIndex) {
 function deleteCommentsAPI(view,id,index,replyIndex) {   
     return axios.delete(`/api/post/comments/${view}/${id}/${index}/${replyIndex}`);
 }
+//load starred post
+function loadPostStarAPI(userId){
+    return axios.get(`/api/post/starlist/${userId}`)
+}
 //save starred post
 function savePostStarAPI(postId){
     return axios.post(`/api/post/star/${postId}`);
@@ -570,6 +574,25 @@ export const deleteComments = ({view,type,id,index,replyIndex}) => dispatch => {
             }
         });
     });    
+}
+//load star
+export const loadStar=({type,userId})=>dispatch=>{
+    const actionType=actions(type);
+    dispatch({type: actionType.PENDING});
+    return loadPostStarAPI(userId).then(
+        (response)=>{
+            dispatch({
+                type: actionType.SUCCESS,
+                payload:response
+            })
+        }).catch((error) => {
+            dispatch({
+                type: actionType.FAILURE,
+                payload:{
+                    error:error
+                }
+            });
+        });
 }
 //give star
 export const saveStar=({postId,index,type})=>dispatch=>{

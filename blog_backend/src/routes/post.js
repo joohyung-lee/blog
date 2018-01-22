@@ -480,6 +480,37 @@ router.delete('/comments/:view/:id/:index/:replyIndex', (req, res) => {
         });
     });
 });
+//STARRED POST
+router.get('/starlist/:userId',(req,res)=>{
+    Post.find({},{"body":false})
+            .sort({"_id": -1})
+            .limit(6)
+            .populate('user')
+            .exec((err, posts) => {
+                if (err) return res.status(500).json({
+                    error: 'Internal Server Error',
+                    code:500
+                });
+                if (!posts) return res.status(404).json({
+                    error: "NO RESOURCE",
+                    code: 404
+                });
+                let starPosts=[];
+                for(let i=0;i<posts.length;i++){
+                    if(posts[i].starred.indexOf(req.params.userId)>-1){
+                        
+                        starPosts.unshift(posts[i]);
+                    }
+                }
+                return res.json({
+                    starPosts,
+                });
+               
+
+                
+                
+            });
+})
 // GIVE STAR
 router.post('/star/:id', (req, res) => {
     // CHECK MEMO ID VALIDITY

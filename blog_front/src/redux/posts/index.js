@@ -14,6 +14,7 @@ const POSTS_COMMENTS_UPDATE='POSTS/COMMENTS_UPDATE';
 const POSTS_COMMENTS_DELETE='POSTS/COMMENTS_DELETE';
 const POSTS_COMMENTS_MODIFY='POSTS/COMMENTS_MODIFY';
 
+const POSTS_STAR_LOAD='POSTS/STAR_LOAD';
 const POSTS_STAR_SAVE='POSTS/STAR_SAVE';
 const POSTS_STAR_CLIENT_SAVE='POSTS/STAR_CLIENT_SAVE';
 
@@ -48,6 +49,13 @@ const initialState=Map({
             error: -1,
             state:'',
         }),
+    }),
+    starListData:Map({
+        pending: false,
+        error: -1,
+        state:'',
+        total:0,
+        data: List([]),
     }),
     itemData:Map({
         pending: false,
@@ -169,6 +177,15 @@ export default handleActions({
         successResult:(state,action)=>{
             const {data}=action.payload;
             return state.setIn(['itemData','data'],fromJS(data));            
+        }
+    }),
+    //LOAD STARRED POST
+    ...pending({
+        type:POSTS_STAR_LOAD,
+        name:['starListData'],
+        successResult:(state,action)=>{
+            const {data}=action.payload;
+            return state.setIn(['starListData','data'],data.starPosts)
         }
     }),
     ...pending({

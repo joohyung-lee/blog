@@ -15,9 +15,25 @@ class Collections extends Component {
         }
     }
     componentDidMount(){
-        const {get} = this.props;
-        const url='home';
-        get.getCategoryPost('POSTS/CATEGORY_GET',url);
+        const {user,get} = this.props;
+        const userId=user.oauthID;
+        if(this.props.userSuccess==='success'){
+            return get.loadStar({
+                type:'POSTS/STAR_LOAD',
+                userId:userId
+            });
+        }
+        
+    }
+    componentWillReceiveProps(nextProps){
+        const {user,get} = nextProps;
+        const userId=user.oauthID;
+        if(this.props.userSuccess!==nextProps.userSuccess){
+            return get.loadStar({
+                type:'POSTS/STAR_LOAD',
+                userId:userId
+            });
+        }
     }
     itemUp=(id,i,bgColor,category,e)=>{
         const {motionDispatch}=this.props;
@@ -49,6 +65,7 @@ class Collections extends Component {
                             <LikeContents
                             key={item._id}
                             data={item}
+                            currentUser={user}
                             />
                         )
                     })
@@ -60,7 +77,7 @@ class Collections extends Component {
 }
 export default connect(
     (state)=>({
-        data:state.posts.toJS().listData.data,
+        data:state.posts.toJS().starListData.data,
         user:state.auth.toJS().profile.user,
         userSuccess:state.auth.toJS().profile.state,
     }),
