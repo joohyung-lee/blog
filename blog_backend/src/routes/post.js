@@ -572,6 +572,7 @@ router.get('/main/search/posts/:searchKeyword', function (req, res) {
     let searchValue=req.params.searchKeyword;
     Post.find({$text:{$search: searchValue}})
         .sort({_id: -1})
+        .populate('user')
         .exec((err, posts) => {
             if(err) throw err;
             return res.json({posts});
@@ -583,6 +584,7 @@ router.get('/main/search/tags/:tagsname', function (req, res) {
     var re = '^'+searchValue;
     Post.find({tags:{$regex: re, $options: 'i' }})
     .sort({_id: -1})
+    .populate('user')
     .exec((err, posts) => {
         if(err) throw err;
         return res.json({posts});

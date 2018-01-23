@@ -18,6 +18,7 @@ class Collections extends Component {
         const {user,get} = this.props;
         const userId=user.oauthID;
         if(this.props.userSuccess==='success'){
+            console.log('didmount')
             return get.loadStar({
                 type:'POSTS/STAR_LOAD',
                 userId:userId
@@ -59,6 +60,9 @@ class Collections extends Component {
                     }
                 </div>
                 <div className="collections-contents">
+                    <div className="collections-contents-title">
+                        <span>Collections</span>
+                    </div>
                 {
                     data.map((item,i)=>{
                         return (

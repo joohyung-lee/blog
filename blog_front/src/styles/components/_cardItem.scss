@@ -162,9 +162,10 @@
         }
         .avatar-wrap{
             position: absolute;
+            display:flex;
             left:0;
             bottom:20px;
-            padding:0 0 0 60px;
+            padding:0 0 0 20px;
             span{
                 display: block;
                 line-height: 1.4;
@@ -177,13 +178,14 @@
                 color:$c-black-2;
             }
             .avatar{
-                position: absolute;
-                left:15px;
                 width:35px;
                 height: 35px;
                 vertical-align: middle;
                 background-position: center;
                 background-repeat: no-repeat;
+            }
+            .avatar-info{
+                margin:0 0 0 10px;
             }
         }
     }

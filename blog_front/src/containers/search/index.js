@@ -156,7 +156,8 @@ class Search extends Component{
                     searchValue:''
                 });
                 this.setState({
-                    initial:true
+                    initial:true,
+                    searchKeyowrdAni:[]
                 });
                 return get.getSearchPosts({
                     type:'POSTS/POSTS_SEARCH_POSTS',
@@ -486,7 +487,7 @@ class Search extends Component{
  
     }
     render(){
-        const {postsData,postsLoading,authUser,starLoading} = this.props;
+        const {postsData,postsLoading,authUser,starLoading,postsState} = this.props;
         const {hash,eleWidth,itemPd,tagUrl,windowWidth,windowHeight,tagLeftScroll,tagRightScroll,searchScroll,initial,favActive,active} =this.state;
         return (
             <div className={`search-container ${searchScroll?'scroll':''}`}>
@@ -566,7 +567,7 @@ class Search extends Component{
                                 <span className="count">{postsData.length} Posts</span>
                                 <span>results for {tagUrl?`tag`:`title/body`}</span>
                             </div>
-                            {!initial && !postsLoading && postsData.length===0?
+                            {!initial && postsState==='success' && postsData.length===0?
                             <div className="no-data">
                                 <span>No matches found for</span>
                                 <b> "{this.props.match.params.keyword}"</b>

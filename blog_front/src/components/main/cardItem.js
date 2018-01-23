@@ -152,9 +152,11 @@ class CardItem extends Component {
                             </div>
                             <h3 style={{fontSize:`${this.props.responseFont}px`}}>{data.title}</h3>
                             <div className="avatar-wrap">                       
-                            <div className="avatar" style={{backgroundImage:`url(${data.user.profileImg.url})`}}/>
-                                <span>{data.user.userName}</span>
-                                <span className="date">{data.postDate}</span>
+                                <div className="avatar" style={{backgroundImage:`url(${data.user.profileImg.url})`}}/>
+                                <div className="avatar-info">
+                                    <span>{data.user.userName}</span>
+                                    <span className="date">{data.postDate}</span>
+                                </div>
                             </div>
                         </div>
                         

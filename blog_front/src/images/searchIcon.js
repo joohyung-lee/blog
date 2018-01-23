@@ -60,7 +60,11 @@ class SearchIcon extends Component {
             }}>
               <input type="text" placeholder="Search" 
               ref={(input) => { this.input = input; }}
-              onFocus={this.props.onFocus} onChange={this.props.onChange} value={this.props.value} onKeyDown={this.props.onKeyDown}/>
+              onFocus={this.props.onFocus} 
+              onChange={this.props.onChange} 
+              value={this.props.value} 
+              onKeyDown={this.props.onKeyDown}
+              />
               <div className="search-close" 
               style={{
                 transform:`rotate(${value.closeAction}deg) scale(${value.scale})`

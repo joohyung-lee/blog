@@ -21,11 +21,13 @@ class LikeContents extends Component {
                         </div>
                         <h3>{this.props.data.title}</h3>
                         <div className="avatar-wrap">                       
-                        <div className="avatar" 
-                           style={{backgroundImage:`url(${this.props.currentUser.profileImg.isDefault?defaultAvatar:this.props.currentUser.profileImg.url})`}}
-                        />
-                            <span>{this.props.currentUser.userName}</span>
-                            <span className="date">{this.props.data.postDate}</span>
+                            <div className="avatar" 
+                            style={{backgroundImage:`url(${this.props.currentUser.profileImg.isDefault?defaultAvatar:this.props.currentUser.profileImg.url})`}}
+                            />
+                            <div className="avatar-info">
+                                <span>{this.props.currentUser.userName}</span>
+                                <span className="date">{this.props.data.postDate}</span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -75,22 +75,30 @@ class Header extends Component {
         this.setState({
             searchValue:e.target.value
         })
-        const {handleHeader}=this.props;
+        const {handleHeader,common}=this.props;
+        let value=e.target.value;
         //check space
         let blank_pattern = /^\s+|\s+$/g;
-        if(e.target.value.replace( blank_pattern, '' ) === "" ){
-            handleHeader.searchValue({
-                searchValue:""
-            });
-            
+        if(value.replace( blank_pattern, '' ) === "" ){
+            setTimeout(()=>{
+                handleHeader.searchValue({
+                    searchValue:''
+                });
+                this.props.history.push(`/search`)
+            },0)
         }else{
-            handleHeader.searchValue({
-                searchValue:e.target.value
-            });
-            
+            setTimeout(()=>{
+                handleHeader.searchValue({
+                    searchValue:value
+                });
+                this.props.history.push(`/search/${value}`)
+            },0)
         }
         
+        
+        
     }
+
     searchClick=(e)=>{
         e.stopPropagation();
         this.moveSearch();
@@ -121,6 +129,7 @@ class Header extends Component {
     }
     handleSearch=(e)=>{
         const{common}=this.props;
+        
         if(e.keyCode === 13){
             if(this.props.location.pathname===`/search/${common.searchValue.toLowerCase()}`){
                 return false;
