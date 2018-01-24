@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import DefaultLoading from 'images/defaultLoading';
 import defaultAvatar from 'images/defaultAvatar.svg';
 import urlConfig from 'config/urlConfig';
-class LikeContents extends Component {
+class SimpleCard extends Component {
     render() {
         return (
-            <div className="card-item">
+            <div className="card-item simple">
                 <div className="card-item-box">
                     <div className="card-item-image">
                         <DefaultLoading color="white"/>
@@ -36,4 +36,4 @@ class LikeContents extends Component {
     }
 }
 
-export default LikeContents;
+export default SimpleCard;

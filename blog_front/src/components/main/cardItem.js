@@ -72,14 +72,18 @@ class CardItem extends Component {
         this.setState({
             itemPress:false
         });
-        return this.props.onMouseOut(e);        
+        return this.props.onMouseOut(e); 
     }
     handleDown=(e)=>{
-        let event=(e.type==='mouseup')?e:(e.type==='touchstart')?e.touches[0]:e;  
-        this.setState({
-            itemPress:true,
-            startX:event.pageX,
-        })
+        if (e.nativeEvent.which == 3) {
+            return false;
+        }else{
+            let event=(e.type==='mouseup')?e:(e.type==='touchstart')?e.touches[0]:e;  
+            this.setState({
+                itemPress:true,
+                startX:event.pageX,
+            })
+        }
     }  
     handleMove=(e)=>{
         const {startX,itemPress} = this.state;
@@ -102,7 +106,12 @@ class CardItem extends Component {
         }
     }
     handleUp=(e)=>{   
-        return (this.state.itemPress)?this.props.onMouseUp(e):false;
+        if (e.nativeEvent.which == 3) {
+            return false;
+        }else{
+            return (this.state.itemPress)?this.props.onMouseUp(e):false;
+        }
+        
         
     } 
     render() {

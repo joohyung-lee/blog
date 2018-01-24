@@ -75,8 +75,10 @@ class Header extends Component {
         this.setState({
             searchValue:e.target.value
         })
+    }
+    onKeyUp=(e)=>{
         const {handleHeader,common}=this.props;
-        let value=e.target.value;
+        let value=this.state.searchValue;
         //check space
         let blank_pattern = /^\s+|\s+$/g;
         if(value.replace( blank_pattern, '' ) === "" ){
@@ -94,16 +96,13 @@ class Header extends Component {
                 this.props.history.push(`/search/${value}`)
             },0)
         }
-        
-        
-        
     }
-
     searchClick=(e)=>{
         e.stopPropagation();
         this.moveSearch();
         this.setState({
-            searchView:true
+            searchView:true,
+            searchValue:''
         })
     }
     moveSearch=()=>{
@@ -159,7 +158,8 @@ class Header extends Component {
                         isBright={common.isBright}
                         onClick={this.searchClick}
                         onChange={this.handleChange} 
-                        value={common.searchValue} 
+                        onKeyUp={this.onKeyUp}
+                        value={this.state.searchValue} 
                         onKeyDown={this.handleSearch}
                         searchClose={this.backSearch}/>
 

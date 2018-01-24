@@ -62,6 +62,7 @@ class SearchIcon extends Component {
               ref={(input) => { this.input = input; }}
               onFocus={this.props.onFocus} 
               onChange={this.props.onChange} 
+              onKeyUp={this.props.onKeyUp}
               value={this.props.value} 
               onKeyDown={this.props.onKeyDown}
               />

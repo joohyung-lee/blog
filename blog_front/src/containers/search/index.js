@@ -4,7 +4,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 //config
 import urlConfig from 'config/urlConfig'
 //components
-import {CardItem} from 'components/main';
+import {SimpleCard} from 'components/main';
 //redux
 import * as commonAction from 'redux/common';
 import * as modalActions from 'redux/modal';
@@ -22,7 +22,6 @@ class Search extends Component{
         this.state={
             searchKeyowrdAni:[],
             hash:false,
-            eleWidth:0,
             tagUrl:false,
             contentsPd:0,
             searchScroll:false,
@@ -30,7 +29,6 @@ class Search extends Component{
             load:false,
             tagLeftScroll:false,
             tagRightScroll:false,
-            favActive:0,
             active:null,
             scrollLoad:false,
             
@@ -265,18 +263,8 @@ class Search extends Component{
         window.removeEventListener("resize", this.dimensions);
     }
     dimensions=()=>{
-        let eleWidth;
-        eleWidth=window.innerWidth>1200?
-        this.searchContents.clientWidth/4:
-        window.innerWidth<900?
-        window.innerWidth<670?
-        this.searchContents.clientWidth:
-        this.searchContents.clientWidth/2:
-        this.searchContents.clientWidth/3;
 
         this.setState({
-            eleWidth:eleWidth,
-            itemPd:10,
             windowWidth:document.documentElement.clientWidth,
             windowHeight:document.documentElement.clientHeight,
         })
@@ -371,12 +359,12 @@ class Search extends Component{
         tags.filter((item,pos)=>{
             return tags.indexOf(item)===pos;
         }).map((item,i)=>{
-            if(item.indexOf(common.searchValue?common.searchValue.toLowerCase():typeof keyword!=="undefined"?keyword.toLowerCase():'')!==-1){
+            if(common.searchValue!=='' && item.indexOf(common.searchValue?common.searchValue.toLowerCase():typeof keyword!=="undefined"?keyword.toLowerCase():'')!==-1){
                 let text='# '+item;
                 const textSize=text.match(/./g);
                 return tagData.push({
                     key:item,
-                    size:7*textSize.length+35,
+                    size:7*textSize.length+45,
                     data:text,
                 })
             }else{
@@ -406,7 +394,7 @@ class Search extends Component{
             if(this.state.tagRightScroll){
                 return false;
             }else{
-                if(value.left===1){
+                if(Math.floor(value.left)===1){
                     return this.setState({
                         tagRightScroll:false
                     }) 
@@ -423,7 +411,7 @@ class Search extends Component{
     tagsScrollFrame=(value)=>{
         if(value.scrollWidth>value.clientWidth){
             if(value.left>0){
-                if(value.left===1){
+                if(Math.floor(value.left)===1){
                     return this.setState({
                         tagLeftScroll:true,
                         tagRightScroll:false
@@ -488,7 +476,7 @@ class Search extends Component{
     }
     render(){
         const {postsData,postsLoading,authUser,starLoading,postsState} = this.props;
-        const {hash,eleWidth,itemPd,tagUrl,windowWidth,windowHeight,tagLeftScroll,tagRightScroll,searchScroll,initial,favActive,active} =this.state;
+        const {hash,tagUrl,windowWidth,windowHeight,tagLeftScroll,tagRightScroll,searchScroll,initial,active} =this.state;
         return (
             <div className={`search-container ${searchScroll?'scroll':''}`}>
                 <div className="search-title">
@@ -512,11 +500,8 @@ class Search extends Component{
                         </TransitionMotion>
                         <Scrollbars
                             universal 
+                            autoHeight
                             className={`tags-wrap ${tagLeftScroll?'left':''} ${tagRightScroll?'right':''}`}
-                            style={{
-                                height:60,
-                                
-                            }}
                             onScrollFrame={this.tagsScrollFrame}
                             onUpdate={this.tagsScrollUpdate}
                             >
@@ -553,9 +538,7 @@ class Search extends Component{
                     ref="scrollbars"
                     onScrollFrame={this.handleScroll}
                     renderThumbVertical={props => <div {...props} className="thumb-vertical"/>}
-                    style={{
-                        height:`${windowHeight-200}px`,
-                    }}>
+                   >
                     <div className="search-contents">
                         <div className="search-result" ref={(ref)=>{this.searchContents=ref}}>
                             {initial?
@@ -567,38 +550,19 @@ class Search extends Component{
                                 <span className="count">{postsData.length} Posts</span>
                                 <span>results for {tagUrl?`tag`:`title/body`}</span>
                             </div>
-                            {!initial && postsState==='success' && postsData.length===0?
-                            <div className="no-data">
-                                <span>No matches found for</span>
-                                <b> "{this.props.match.params.keyword}"</b>
+                            {!initial && postsLoading?
+                            <div className="loading">
+                                <span>Loading..</span>
                             </div>
                             :null}
                             <div className="search-result-contents"  >
                                 {
                                     postsData.map((item,i)=>{
-                                        let isFav = (item.starred.indexOf(authUser.user.userName) > -1) ? true : false ; 
-                                        const isGif=(typeof item.gif.data.path!=='undefined')?true:false;
-                                        return <CardItem key={item._id} 
+                                        return <SimpleCard
+                                            key={item._id}
                                             data={item}
-                                            className={`card-item ${active===i?'hover':''}`}
-                                            onMouseUp={this.itemUp.bind(this,item._id,i)}                                            
-                                            onMouseOver={this.handleMouseOver.bind(this,i)}
-                                            onMouseOut={this.handleMouseOut.bind(this,i)}
-                                            favOver={this.handleMouseOver.bind(this,i)}
-                                            favClick={this.favClick.bind(this,item._id,i)}
-                                            fav={isFav}
-                                            favLoading={favActive===i?starLoading?true:false:false}
-                                            thumbSrc={(item.thumbnail.data.path)?`${urlConfig.url}/api/${item.thumbnail.data.path}`:''}
-                                            isGif={isGif}
-                                            gifLoad={(active===i && isGif)?true:false}
-                                            gifSrc={(item.gif.data.path)?`${urlConfig.url}/api/${item.gif.data.path}`:''}
-                                            userImg={(!authUser.user.profileImg || authUser.user.profileImg==='')?defaultAvatar:authUser.user.profileImg}                                            
-                                            wrapStyle={{
-                                                width:`${eleWidth}px`,   
-                                                padding:`${itemPd}px`,                         
-                                            }} 
-                                            imgHeight={(eleWidth-itemPd*2)*3/4}
-                                        />
+                                            currentUser={authUser.user}
+                                            />
                                     })
                                 }
                             </div>

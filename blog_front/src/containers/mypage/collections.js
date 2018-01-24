@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
 //components
-import {ProfileContents,LikeContents} from 'components/mypage';
+import {ProfileContents} from 'components/mypage';
+import {SimpleCard} from 'components/main';
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -66,7 +67,7 @@ class Collections extends Component {
                 {
                     data.map((item,i)=>{
                         return (
-                            <LikeContents
+                            <SimpleCard
                             key={item._id}
                             data={item}
                             currentUser={user}

@@ -1,6 +1,8 @@
 .search-container{
     padding:0px;
     margin: 0px auto;
+    display: flex;
+    flex-flow: column nowrap;
     &.scroll{
         .search-title{
             &:before{
@@ -13,7 +15,7 @@
     
     .search-title{
         position: relative;
-        height: 200px;
+        width:100%;
         padding: 80px 0px 0px;
         margin: 0 auto;
         text-align: center;
@@ -40,7 +42,7 @@
         }
         h2{
             position: relative;
-            min-height: 40px;
+            margin-bottom: 30px;
             display: inline-block;
         }
         .hash-tag{
@@ -54,17 +56,18 @@
         span{
             display: inline-block;
             min-width: 10px;
-            font-size: 2rem;
-            font-weight: 400;
+            font-size: 2.8rem;
+            font-weight: 700;
             text-align: center;
         }
     }
     .search-contents-wrap{
+        flex-grow: 1;
         padding:20px;
     }
     .tags-wrap{
         position: absolute;
-        min-height: 40px;
+        min-height: auto;
         text-align: center;
         left:0;
         bottom:0;
@@ -103,26 +106,30 @@
             background: linear-gradient(to left, rgba(241,241,241,1) 0%,rgba(241,241,241,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         }
         ul{
+            display: block;
             text-align: center;
             font-size: 0;
-            white-space: nowrap;
+            @media screen and (max-width: $screen-pad-large) {
+                white-space: nowrap;
+            } 
         }
         li{
             display: inline-block;
-            padding:0 5px;
+            padding:0 10px;
             white-space: nowrap;
             overflow: hidden;
             span{
                 display: inline-block;
                 width:100%;
-                padding:5px 0px;
+                padding:8px 0px;
                 text-align: center;
                 font-size: 1.2rem;
                 background-color: $t-white-10;
                 color:$c-black-2;
-                font-weight: 300;
+                font-weight: 500;
                 border:1px solid transparent;
                 cursor: pointer;
+                border-radius: 50px;
                 transition: color 0.3s ease,border 0.3s ease;
                 &:hover{
                     color:$c-black-0;
@@ -171,40 +178,9 @@
             }
         }
         .search-result-contents{
+            display: flex;
+            flex-wrap:wrap;
             
-            .card-item{
-                position: relative;
-                display:inline-block;
-                padding:20px;
-                transition: transform 0.3s ease,opacity 0.3s ease;
-                &.hover{
-                    z-index: 1;
-                    transform: scale(1.03)
-                }
-                &.scale{
-                    transform: scale(0.96)
-                }
-                .card-item-box{
-                    position: relative;
-                    box-shadow: 0 5px 30px rgba(52, 73, 94, 0.2);
-                    border-radius: 0;
-                    .card-item-image{
-                        img{
-                            display: block;
-                        }
-                    }
-                    .card-item-bottom{
-                        position: relative;
-                        height: 140px;
-                    }
-                } 
-                .icon-fav{
-                    bottom:30px;
-                }  
-            }
-        &:after{
-            
-        }
         }
     }
 }
