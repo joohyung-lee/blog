@@ -6,7 +6,7 @@ class SimpleCard extends Component {
     render() {
         return (
             <div className="card-item simple">
-                <div className="card-item-box">
+                <div className="card-item-box" onClick={this.props.onClick}>
                     <div className="card-item-image">
                         <DefaultLoading color="white"/>
                         <div className="back-image"

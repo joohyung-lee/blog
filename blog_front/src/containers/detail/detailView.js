@@ -14,7 +14,8 @@ import * as motionActions from 'redux/main';
 import * as postsAction from 'redux/posts';
 
 //svg&images
-
+import IconPhone from 'images/iconPhone';
+import IconDesk from 'images/iconDesk';
 class DetailView extends Component {
     constructor(props){
         super(props);
@@ -403,16 +404,14 @@ class DetailView extends Component {
                             <div className="device-controll-wrap">
                                 <div className="device-controll">
                                     <div className="dic mobile" onClick={this.modeChange.bind(this,'mobile')}>
-                                        <span className="icon-device"></span>
-                                        <span className="icon-text">Phone</span>
+                                        <IconPhone isBright={common.isBright}/>
                                     </div>
                                     <div className="dic desk" onClick={this.modeChange.bind(this,'desk')}>
-                                        <span className="icon-device"></span>
-                                        <span className="icon-text">Desktop</span>
+                                        <IconDesk isBright={common.isBright}/>
                                     </div>
-                                    <div className="dic visit-site">
-                                        <a href={data.iframeUrl}>Visit Site</a>
-                                    </div>
+                                </div>
+                                <div className="visit-site">
+                                    <a href={data.iframeUrl}>Visit Site</a>
                                 </div>
                             </div>
                             

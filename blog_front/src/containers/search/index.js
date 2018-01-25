@@ -28,7 +28,7 @@ class Search extends Component{
             initial:false,
             load:false,
             tagLeftScroll:false,
-            tagRightScroll:false,
+            tagRightScroll:true,
             active:null,
             scrollLoad:false,
             
@@ -472,7 +472,6 @@ class Search extends Component{
     }
     itemUp=(id,i,e)=>{
         this.props.history.push(`/posts/motionlab/${id}`)
- 
     }
     render(){
         const {postsData,postsLoading,authUser,starLoading,postsState} = this.props;
@@ -561,7 +560,8 @@ class Search extends Component{
                                         return <SimpleCard
                                             key={item._id}
                                             data={item}
-                                            currentUser={authUser.user}
+                                            currentUser={item.user}
+                                            onClick={this.itemUp.bind(this,item._id)}
                                             />
                                     })
                                 }
