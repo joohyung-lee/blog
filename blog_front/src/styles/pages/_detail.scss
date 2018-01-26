@@ -1,4 +1,5 @@
-
+$darkness:#333;
+$brighten:#fff;
 .detail-page-wrap{
     &>div{
         background-color:#fff;
@@ -10,13 +11,73 @@
 }
 .detail-frame{
     background-color:$t-white-10;
-    height:100vh
+    height:100vh;
+    //when background is brighten,colors set darkness
+    &.bright {
+        .scroll-doc{
+            span{
+                color:$darkness;
+                &:before,&:after{
+                    background-color: $darkness;
+                }
+            }
+        }
+        .fullsize{
+            span{
+                background-color:$darkness;
+            }
+        }
+        .visit-site{
+            a{
+                color:$darkness;
+                border:1px solid $darkness;
+            }
+        }
+    }
+    //when background is darkness,colors set brighten
+    &.dark {
+        .scroll-doc{
+            span{
+                color:$brighten;
+                &:before,&:after{
+                    background-color: $brighten;
+                }
+            }
+        }
+        .fullsize{
+            span{
+                background-color: $brighten;
+            }
+        }
+        .visit-site{
+            a{
+                color:$brighten;
+                border:1px solid $brighten;
+            }
+        }
+    }
+}
+.go-back{
+    position: absolute;
+    top:78px;
+    left:50px;
+    width:42px;
+    height:24px;
+    z-index: 100;
+    transition: top 0.3s ease;
+    &.preview{
+        top:50px;
+    }
+    cursor: pointer;
+    svg{
+        transition: all 0.5s ease;
+    }
 }
 .detail-main{
     position: absolute;
     top:0;
     right:0;
-    padding:50px 50px 30px;
+    padding:50px 50px 50px;
     z-index: 10;
     overflow: hidden;
     background-color:$c-black-8;
@@ -30,41 +91,6 @@
     &.animate{
         transition:width 0.5s $ease-out,height 0.5s $ease-out,background-color 0.5s;
     }
-    // change color along bgcolor
-    @at-root .white .detail-main{
-        .loading-text{
-            h3{
-                color:$t-white-3;
-            }
-        }
-        .scroll-doc{
-            span{
-                color:$t-white-8;
-            }
-        }
-        .fullsize{
-            span{
-                background-color:$t-white-3
-            }
-        }
-    }
-    @at-root .black .detail-main{
-        .loading-text{
-            h3{
-                color:$t-black-3;      
-            }
-        }
-        .scroll-doc{
-            span{
-                color:$t-black-8; 
-            }
-        }
-        .fullsize{
-            span{
-                background-color:$t-black-3
-            }
-        }
-    }
     .loading-text{
         position: absolute;
         width:150px;
@@ -77,6 +103,7 @@
         opacity: 1;
         transition: opacity 0.4s;
         text-align: center;
+        opacity: 0.5;
         &.fade-out{
             opacity: 0;
         }
@@ -87,6 +114,7 @@
         }
     }
     .device-controll-wrap{
+        position: relative;
         padding-top:20px;
         .device-controll{
             display: flex;
@@ -97,21 +125,30 @@
                 min-width:40px;
                 height:40px;
                 margin:0 10px;
+                cursor: pointer;
+                &.active{
+                    svg{
+                        opacity: 1;
+                    }
+                }
                 svg{
-                    
+                    opacity: 0.5;
+                    transition: all 0.4s ease;
                     .back{
-                        opacity: 0.3;
+                        opacity: 0.2;
                     }
                 }
-                &.visit-site{
-                    display: flex;
-                    align-items: center;
-                    a{
-                        padding:5px 15px;
-                        background-color:#fff;
-                        border-radius: 30px;
-                    }
-                }
+            }
+        }
+        .visit-site{
+            position: absolute;
+            top:25px;
+            right:0;
+            display: flex;
+            align-items: center;
+            a{
+                padding:5px 15px;
+                border-radius: 30px;
             }
         }
     } 
@@ -130,7 +167,7 @@
     }
     .iframe-wrap{
         position: absolute;
-        top:55px;
+        top:40px;
         bottom:0;
         left:0px;
         right:0px;
@@ -173,18 +210,47 @@
         width:auto;
         left:0;
         right:0;
-        bottom:0;
+        bottom:20px;
         text-align: center;
+        
         &.fade-out{
             opacity: 0;
         }
         span{
+            position: relative;
             display: inline-block;
-            padding:10px 20px;
-            margin:20px 0;
-            color:$t-white-10;
+            padding:10px 20px 10px 30px;
+            margin:0px 0 0;
             font-weight: 500;
-            font-size:1.2rem
+            font-size:1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            &:before,&:after{
+                content:"";
+                position: absolute;
+                top:20px;
+                height: 2px;
+                width:12px;
+                transform-origin: center;
+                transition:transform 0.3s ease;
+                transition-delay: 0.3s;
+            }
+            &:before{
+                left:0px;
+                transform:rotate(45deg)
+            }
+            &:after{
+                left:8px;
+                transform:rotate(-45deg)
+            }
+            &.Preview{
+                &:before{
+                    transform:rotate(-45deg)
+                }
+                &:after{
+                    transform:rotate(45deg)
+                }
+            }
         }
     }
 }
@@ -199,7 +265,12 @@
     padding:10px 0;
     margin:auto 0;
     text-align: center;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
     cursor: pointer;
+    &:hover{
+        opacity: 1;
+    }
     &.fade-out{
         opacity: 0;
     }
@@ -239,7 +310,7 @@
     }
     
     .detail-contents{
-        padding:135px 50px 20px;
+        padding:130px 50px 20px;
         .header{
             margin:0 4px;
             h2{

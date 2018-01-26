@@ -16,6 +16,7 @@ import * as postsAction from 'redux/posts';
 //svg&images
 import IconPhone from 'images/iconPhone';
 import IconDesk from 'images/iconDesk';
+import IconBack from 'images/iconBack';
 class DetailView extends Component {
     constructor(props){
         super(props);
@@ -35,6 +36,7 @@ class DetailView extends Component {
             replyText:'',
             modifyIndex:null,
             commentView:'',
+            isBright:false
             
         }
     }
@@ -63,6 +65,7 @@ class DetailView extends Component {
             this.setState({
                 iframeLoad:false
             })
+            this.dimentions()
             if(this.props.loading!==loading && dataState==="success"){ 
                 let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);           
                 motionDispatch.motionActions({
@@ -74,6 +77,9 @@ class DetailView extends Component {
                 handleHeader.isBrightness({
                     isBright:isBright
                 });
+                this.setState({
+                    isBright:isBright
+                })
             }
         }
         //change commentsData
@@ -110,7 +116,7 @@ class DetailView extends Component {
             sizeY=600;
         }else{
             sizeX='100%';
-            sizeY=document.documentElement.clientHeight-200;
+            sizeY=document.documentElement.clientHeight-250;
         }
         this.setState({
             windowWidth:document.documentElement.clientWidth,
@@ -120,7 +126,7 @@ class DetailView extends Component {
             frameDivide:frameDivide,
             frameFull:document.documentElement.clientWidth<1400?true:false,
             frameWrap:frameWrap,
-            doc:false
+            doc:false,
         })
     }
   
@@ -175,7 +181,7 @@ class DetailView extends Component {
                 mobileMode:false,
                 deskMode:true,
                 frameSizeX:'100%',
-                frameSizeY:document.documentElement.clientHeight-200
+                frameSizeY:document.documentElement.clientHeight-250
             })
         }
     }
@@ -381,11 +387,17 @@ class DetailView extends Component {
        });
        return originalCount+replyCount;
     }
+    goBack=()=>{
+        this.props.history.goBack()
+    }
     render() {
         const {data,motion,get,authUser,commentsLoading,common}=this.props;
-        const {replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex} = this.state;
+        const {deskMode,mobileMode,replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex,isBright} = this.state;
         return (
-            <div className={`detail-frame ${common.isBright?'black':'white'}`}>
+            <div className={`detail-frame ${isBright?'bright':'dark'}`}>
+                <span className={`go-back ${doc?'preview':'documentation'}`} onClick={this.goBack}>
+                    <IconBack isBright={frameFull?isBright:true}/>
+                </span>
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
                     style={{
                         width:frameFull?`${windowWidth}px`:motion.detailLoad?`${frameWrap}px`:`${windowWidth}px`,
@@ -393,7 +405,11 @@ class DetailView extends Component {
                         backgroundColor:motion.bgColor
                     }}>
                     <div className={`loading-text ${iframeLoad?'fade-out':''}`}>
-                        <h3>Loading...</h3>
+                        <h3 
+                        style={{
+                            color:common.isBright?'#333':'#fff'
+                        }}
+                        >Loading...</h3>
                     </div>
                     {motion.detailLoad? 
                         <div key={data._id} className={`detail-simulate ${doc?'fade-out':''}`}>
@@ -403,11 +419,11 @@ class DetailView extends Component {
                             </div>
                             <div className="device-controll-wrap">
                                 <div className="device-controll">
-                                    <div className="dic mobile" onClick={this.modeChange.bind(this,'mobile')}>
-                                        <IconPhone isBright={common.isBright}/>
+                                    <div className={`dic mobile ${mobileMode?'active':'default'}`} onClick={this.modeChange.bind(this,'mobile')}>
+                                        <IconPhone isBright={isBright}/>
                                     </div>
-                                    <div className="dic desk" onClick={this.modeChange.bind(this,'desk')}>
-                                        <IconDesk isBright={common.isBright}/>
+                                    <div className={`dic desk ${deskMode?'active':'default'}`} onClick={this.modeChange.bind(this,'desk')}>
+                                        <IconDesk isBright={isBright}/>
                                     </div>
                                 </div>
                                 <div className="visit-site">
@@ -431,7 +447,7 @@ class DetailView extends Component {
                     :null} 
                     {motion.detailLoad?
                     <div className={`scroll-doc ${!frameFull?'fade-out':''}`}>
-                        <span onClick={this.scrollDown}>{doc?`Preview`:`Documentation`}</span>
+                        <span className={doc?`Preview`:`Documentation`}onClick={this.scrollDown}>{doc?`Preview`:`Documentation`}</span>
                     </div> :null
                     }
                     

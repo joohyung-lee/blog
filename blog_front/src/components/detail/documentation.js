@@ -11,12 +11,9 @@ export class Documentation extends Component {
             <div className="detail-contents">
                 <div className="header">
                     <span className="category">
-                        <i className="back"></i>{data.category}
+                        {data.category}
                     </span>
-                    <span className="page-control">
-                        <a></a>
-                        <a></a>
-                    </span>
+                    
                     <h2>{data.title}</h2>
                     <span className="date">{data.postDate}</span>
                     <p>{data.summary}</p>
