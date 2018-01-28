@@ -468,22 +468,22 @@ export const getCategoryPost = (type,category) => dispatch => {
 export const getOldPost = ({type,category,listType,id}) => dispatch => {    
     const actionType=actions(type);
     dispatch({type: actionType.PENDING});
-    return getOldPostAPI(category,listType,id).then(
-        (response) => {
-            dispatch({
-                type: actionType.SUCCESS,
-                payload: response
-            })
-        }
-    ).catch((error) => {
-        dispatch({
-            type: actionType.FAILURE,
-            payload:{
-                error:error.response.data.code,
-                msg:error.response.data.error,
-            }
-        });
-    });    
+    // return getOldPostAPI(category,listType,id).then(
+    //     (response) => {
+    //         dispatch({
+    //             type: actionType.SUCCESS,
+    //             payload: response
+    //         })
+    //     }
+    // ).catch((error) => {
+    //     dispatch({
+    //         type: actionType.FAILURE,
+    //         payload:{
+    //             error:error.response.data.code,
+    //             msg:error.response.data.error,
+    //         }
+    //     });
+    // });    
 }
 
 //write commments

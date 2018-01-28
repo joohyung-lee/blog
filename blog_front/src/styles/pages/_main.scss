@@ -269,3 +269,16 @@
         }
     }
 }
+//mobile version styles
+.mobile .main-wrapper .card-item-wrap > div{
+    display: flex;
+}
+.mobile .main-wrapper{
+    top:0;
+}
+.mobile .main-wrapper .card-item-wrap{
+    top:28vh;
+}
+.mobile .main-wrapper .card-item-wrap .old-posts-loading{
+    overflow: hidden;
+}
