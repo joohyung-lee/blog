@@ -5,6 +5,12 @@ const springConif={
   damping: 17
 }
 class SearchIcon extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      responseWidth:document.documentElement.clientWidth
+    }
+  }
   getStyle=()=>{
     const{open}=this.props;
     return{
@@ -13,17 +19,29 @@ class SearchIcon extends Component {
   }
   componentWillReceiveProps(nextProps){
     if(nextProps.open===true){
-    return this.input.focus()
+      return this.input.focus()
+    }
   }
+  componentDidMount(){     
+    window.addEventListener('resize',this.dimensions); 
+  }
+  componentWillUnmount(){
+      window.removeEventListener("resize", this.dimensions);
+  }
+  dimensions=()=>{
+    this.setState({
+      responseWidth:document.documentElement.clientWidth
+    })
   }
   render() {
     const{open,isBright}=this.props;
+    const {responseWidth} =this.state;
     return (
       <Motion 
       
       style={{
-        postion:spring(open?5:0,springConif),
-        size:spring(open?250:30,springConif),
+        postion:spring(open?0:0,springConif),
+        size:spring(open?responseWidth<450?responseWidth-110:250:40,springConif),
         array:spring(open?300:62,springConif),
         offset:spring(open?-62:0,springConif),
         closeAction:spring(open?0:-180,springConif),
@@ -39,7 +57,7 @@ class SearchIcon extends Component {
           width:`${value.size}px`,
         }}>
           <div className="search-svg" >
-            <svg x="0px" y="0px" width={250}  viewBox={`0 0 300 26`}fill={`none`} 
+            <svg x="0px" y="0px" width={320} height={30} viewBox={`0 0 300 25`}fill={`none`} 
             stroke={isBright?`#333`:'#fff'} 
             strokeWidth={1.2}
             strokeDasharray={`${value.array},${value.array}`}

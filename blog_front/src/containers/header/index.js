@@ -18,11 +18,10 @@ class Header extends Component {
         super(props);
         this.state={
             searchValue:'',
-            searchView:false
+            searchView:false,
         }
     }
     componentDidMount(){
-        
         window.addEventListener('click',this.outHide);
         let re = /(search)/;
         let isSearch = re.test(this.props.location.pathname);
@@ -118,13 +117,13 @@ class Header extends Component {
             searchView:false
         });
         
-        // if(this.props.history.action==='POP'){
-        //     return false;
-        // }else if(this.props.location.pathname==='/search'){
-        //     return this.props.history.goBack();
-        // }else{
-        //     return false;
-        // }
+        if(this.props.history.action==='POP'){
+            return false;
+        }else if(this.props.location.pathname==='/search'){
+            return this.props.history.goBack();
+        }else{
+            return false;
+        }
     }
     handleSearch=(e)=>{
         const{common}=this.props;
@@ -142,17 +141,15 @@ class Header extends Component {
         const{modal,common}=this.props;
         const {searchView}=this.state;
             return (
-                <div className="global-nav">
+                <div className={`global-nav ${searchView?'search':'default'}`}>
                     <div className="logo">
                         <a href='/home'><h1>JOOMATION</h1></a>
-                        
-                    </div>    
-                    <div className="nav-contents">
+                        <a className="simple-logo" href='/home'><h1>J</h1></a>
                         <ul>
                             <li>About</li>
-                            
                         </ul>
-                    </div>
+                    </div>    
+                        
                     <div className="right-contents">
                         <SearchIcon open={searchView} 
                         isBright={common.isBright}

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {Motion,TransitionMotion,spring} from 'react-motion';
 import MobileDetect from 'mobile-detect';
 import { Scrollbars } from 'react-custom-scrollbars';
-
 //config
 import urlConfig from 'config/urlConfig'
 // components
@@ -132,33 +131,34 @@ class Main extends Component {
             window.addEventListener('mouseup',this.handleUp);
             mobileVersion=false
         }
-        const eleResponse=window.innerWidth/3.5;
-        const mobileSize=window.innerWidth/1.2;
-        const minDesk=window.innerWidth/2.5;
-        const maxDesk=window.innerWidth/4.5;
+        let windowWidth=document.documentElement.clientWidth;
+        const eleResponse=windowWidth/3.5;
+        const mobileSize=windowWidth/1.2;
+        const minDesk=windowWidth/2.5;
+        const maxDesk=windowWidth/4.5;
         //full width padding
-        const wrapperPd=(window.innerWidth<1600)?
-            (window.innerWidth<1024)?
-            window.innerWidth<670?
+        const wrapperPd=(windowWidth<1600)?
+            (windowWidth<1024)?
+            windowWidth<670?
             30:
             50:
             50:
             70
         //card item padding
-        const itemPd=(window.innerWidth<1600)?
-            (window.innerWidth<1024)?
-            window.innerWidth<670?
+        const itemPd=(windowWidth<1600)?
+            (windowWidth<1024)?
+            windowWidth<670?
             15:
             15:
             15:
             20;
         //card item width
-        const eleWidthSize=(window.innerWidth>1600)?
+        const eleWidthSize=(windowWidth>1600)?
             (maxDesk>400)?
             400:
             maxDesk:
-            (window.innerWidth<1024)?
-            window.innerWidth<670?
+            (windowWidth<1024)?
+            windowWidth<670?
             mobileSize:
             minDesk:
             eleResponse;

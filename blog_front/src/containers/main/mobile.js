@@ -6,7 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 //config
 import urlConfig from 'config/urlConfig'
 // components
-import {StaticLoading} from 'components/common/loading';
+import DefaultLoading from 'images/defaultLoading';
 import {CardItem,Menu} from 'components/main';
 //redux
 import * as commonAction from 'redux/common';
@@ -249,14 +249,13 @@ class Main extends Component {
               });
           }
       }
-      if(active!==count){
-        return motionDispatch.motionActions({
-          motions:{
-              offsetX:value.scrollLeft,
-              active:count,
-          }
-        });
-    }
+    motionDispatch.motionActions({
+        motions:{
+            offsetX:value.scrollLeft,
+            active:count,
+        }
+    });
+
     }
     handleDown=(pos,e)=>{
         const{motionDispatch}=this.props; 
@@ -450,7 +449,7 @@ class Main extends Component {
                         data:item,
                         style: {
                             size:eleWidth*i,
-                            opacity:spring(1),
+                            opacity:spring((i===active)?1:0.78),
                             scale:spring((i===active)?1.07:1),
                             sizeX:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.sizeX),
                             sizeY:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.sizeY),
@@ -513,7 +512,7 @@ class Main extends Component {
                     <div className={`main-container ${(menuOpen?'menu':'')}`}> 
                     <div className="title-wrap"
                         style={{
-                            padding:`0 ${wrapperPd}px`
+                            padding:`0 ${wrapperPd+10}px`
                         }}
                     >
                         <div className="menu-title">
@@ -550,8 +549,8 @@ class Main extends Component {
                         <div ref={(ref)=>{this.scrollWidth=ref}} className="scroll-bar">
                             <div className="indicator"
                                 style={{
-                                    width:`${30}px`,
-                                    minWidth:`${30}px`
+                                    width:`${(indicator+offsetX)*relative}px`,
+                                    minWidth:`${0}px`
                                 }}
                             ></div>
                         </div>
@@ -562,6 +561,7 @@ class Main extends Component {
                         onScrollFrame={this.onScroll}    
                         className={`main-wrapper`} 
                         style={{
+                            width:menuOpen?'calc(100% - 200px)':'100%',
                         }}
                         >
                         <div className="card-item-wrap"
@@ -629,7 +629,7 @@ class Main extends Component {
                                             left:`${eleWidth*data.length}px`
                                         }}
                                         >
-                                            <StaticLoading/>
+                                            <DefaultLoading/>
                                         </div>:null
                                     }
                                     </div>

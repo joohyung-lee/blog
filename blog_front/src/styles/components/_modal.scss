@@ -33,6 +33,7 @@
     padding: 0 15px;
     border-radius: 10px;
     box-shadow: $box-shadow-modal;
+    z-index:9999;
     .avatar{
         align-self: center;
     }
