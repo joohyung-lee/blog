@@ -551,7 +551,7 @@ router.post('/star/:id', (req, res) => {
 
         if(!hasStarred) {
             // IF IT DOES NOT EXIST
-            post.starred.push(req.session.passport.user.oauthID);
+            post.starred.unshift(req.session.passport.user.oauthID);
         } else {
             // ALREADY starred
             post.starred.splice(index, 1);
