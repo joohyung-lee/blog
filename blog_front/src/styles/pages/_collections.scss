@@ -1,7 +1,9 @@
 .collections-wrap{
         max-width: 1400px;
-        padding:50px 20px 20px;
+        padding:50px 0px 20px;
         margin:0 auto;
+        display: flex;
+        flex-flow: column nowrap;
     .collections-header{
         padding:30px 0;
         text-align: center;
@@ -24,6 +26,7 @@
     .collections-contents{
         display: flex;
         flex-wrap:wrap;
-        
+        flex-grow: 1;
+        padding:0 20px;
     }
 }

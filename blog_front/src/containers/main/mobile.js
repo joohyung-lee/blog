@@ -135,10 +135,11 @@ class Main extends Component {
         let windowWidth=document.documentElement.clientWidth;
         const eleResponse=windowWidth/3.5;
         const mobileSize=windowWidth/1.2;
+        const mobileMax=windowWidth/1.6;
         const minDesk=windowWidth/2.5;
         const maxDesk=windowWidth/4.5;
         //full width padding
-        const wrapperPd=(windowWidth<1600)?
+        const wrapperPd=(windowWidth<1380)?
             (windowWidth<1024)?
             windowWidth<670?
             30:
@@ -146,7 +147,7 @@ class Main extends Component {
             50:
             70
         //card item padding
-        const itemPd=(windowWidth<1600)?
+        const itemPd=(windowWidth<1380)?
             (windowWidth<1024)?
             windowWidth<670?
             15:
@@ -154,13 +155,15 @@ class Main extends Component {
             15:
             20;
         //card item width
-        const eleWidthSize=(windowWidth>1600)?
+        const eleWidthSize=(windowWidth>1380)?
             (maxDesk>400)?
             400:
             maxDesk:
             (windowWidth<1024)?
-            windowWidth<670?
+            windowWidth<640?
+            windowWidth<450?
             mobileSize:
+            mobileMax:
             minDesk:
             eleResponse;
         const eleWidth=eleWidthSize;
@@ -557,87 +560,91 @@ class Main extends Component {
                         <span className="total">{this.countZero(total)}</span>
                             
                     </div>
-                    <Scrollbars ref={(ref)=>{this.wrapperWidth=ref}} 
-                        onScrollFrame={this.onScroll}  
-                        className={`main-wrapper`} 
+                    <Scrollbars
+                      onScrollFrame={this.onScroll}  
+                      renderView={props => <div {...props} 
+                      className="view"/>} 
+                    >
+                        <div className={`main-wrapper`} 
+                        ref={(ref)=>{this.wrapperWidth=ref}} 
                         style={{
-                            width:menuOpen?'calc(100% - 200px)':'100%'
-                        }}
-                        renderView={props => <div {...props} 
-                        className="view"/>} 
-                        >
-                        <div className="card-item-wrap"
-                          style={{
-                            padding:`${wrapperPd}px`
-                          }}
-                        >
-                                <TransitionMotion
-                                willEnter={this.willEnter}
-                                willLeave={this.willLeave}
-                                styles={prev=>this.getStyles(prev)}
-                                >
-                                {currentStyles =>{    
-                                    return(
-                                    <div>
-                                    {currentStyles.map((config, i) =>{
-                                        let isFav = (config.data.starred.indexOf(authUser.user.oauthID) > -1) ? true : false ; 
-                                        const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
-                                        return(
-                                            <CardItem key={config.key} 
-                                                data={config.data}
-                                                onMouseUp={this.itemUp.bind(this,config.data._id,i,config.data.bgColor,config.data.category)}
-                                                favClick={this.favClick.bind(this,config.data._id,i)}
-                                                fav={isFav}
-                                                favLoading={favActive===i?starLoading?true:false:false}
-                                                favOver={this.handleMouseOver.bind(this,i)}
-                                                isGif={isGif}
-                                                gifLoad={(active===i && isGif)?true:false}
-                                                onMouseOver={this.handleMouseOver.bind(this,i)} 
-                                                onMouseOut={this.handleMouseOut}
-                                                className={active===i?"card-item hover":"card-item"}
-                                                wrapStyle={{
-                                                    position:'relative',
-                                                    width:`${eleWidth}px`,
-                                                    height:`${eleHeight}px`,
-                                                    padding:`${itemPd}px`, 
-                                                    transform:` perspective(600px)
-                                                                rotateY(${config.style.rotate}deg) 
-                                                                scale(${config.style.scale})
-                                                                translate3d(${config.style.sizeX}px,${config.style.sizeY}px,0)`,
-                                                    zIndex:detailView===i?10:1,
-                                                    opacity:config.style.opacity
-                                                }}
-                                                style={{
-                                                    width:`100%`,
-                                                    height:`100%`,
-                                                    borderRadius:`10px`,
-                                                    boxShadow: `0 ${config.style.shadowSize1}px ${config.style.shadowSize2}px rgba(52, 73, 94, ${config.style.shadowColor})`,
-                                                    
-                                                }} 
-                                                responseFont={(eleWidth-itemPd*2)/21}
-                                                imgHeight={(eleWidth-itemPd*2)*3/4}
-                                                bottomHeight={(eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4}
-                                                thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}
-                                                gifSrc={(config.data.gif.data.path)?`${urlConfig.url}/api/${config.data.gif.data.path}`:''}
-                                            />
-                                        )}
-                                        )
-                                    }
-                                    {(oldLoading)?
-                                        <div className="old-posts-loading"
-                                        style={{
-                                            left:`${eleWidth*data.length}px`
-                                        }}
-                                        >
-                                            <DefaultLoading/>
-                                        </div>:null
-                                    }
-                                    </div>
-                                    )
-                                }
-                                }
-                                </TransitionMotion>
+                            width:menuOpen?'calc(100% - 200px)':'100%',
+                            padding:`0px ${wrapperPd}px`,
+                        }}>
+                          <div className="card-item-wrap"
+                            style={{
+                              width:`${blockWidth+wrapperPd}px`,
+                              height:`${eleHeight}px`,
+                            }}
+                          >
+                                  <TransitionMotion
+                                  willEnter={this.willEnter}
+                                  willLeave={this.willLeave}
+                                  styles={prev=>this.getStyles(prev)}
+                                  >
+                                  {currentStyles =>{    
+                                      return(
+                                      <div>
+                                      {currentStyles.map((config, i) =>{
+                                          let isFav = (config.data.starred.indexOf(authUser.user.oauthID) > -1) ? true : false ; 
+                                          const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
+                                          return(
+                                              <CardItem key={config.key} 
+                                                  data={config.data}
+                                                  onMouseUp={this.itemUp.bind(this,config.data._id,i,config.data.bgColor,config.data.category)}
+                                                  favClick={this.favClick.bind(this,config.data._id,i)}
+                                                  fav={isFav}
+                                                  favLoading={favActive===i?starLoading?true:false:false}
+                                                  favOver={this.handleMouseOver.bind(this,i)}
+                                                  isGif={isGif}
+                                                  gifLoad={(active===i && isGif)?true:false}
+                                                  onMouseOver={this.handleMouseOver.bind(this,i)} 
+                                                  onMouseOut={this.handleMouseOut}
+                                                  className={active===i?"card-item hover":"card-item"}
+                                                  wrapStyle={{
+                                                      width:`${eleWidth}px`,
+                                                      height:`${eleHeight}px`,
+                                                      padding:`${itemPd}px`, 
+                                                      left:`${config.style.size}px`,
+                                                      transform:` perspective(600px)
+                                                                  rotateY(${config.style.rotate}deg) 
+                                                                  scale(${config.style.scale})
+                                                                  translate3d(${config.style.sizeX}px,${config.style.sizeY}px,0)`,
+                                                      zIndex:detailView===i?10:1,
+                                                      opacity:config.style.opacity
+                                                  }}
+                                                  style={{
+                                                      width:`100%`,
+                                                      height:`100%`,
+                                                      borderRadius:`10px`,
+                                                      boxShadow: `0 ${config.style.shadowSize1}px ${config.style.shadowSize2}px rgba(52, 73, 94, ${config.style.shadowColor})`,
+                                                      
+                                                  }} 
+                                                  responseFont={(eleWidth-itemPd*2)/21}
+                                                  imgHeight={(eleWidth-itemPd*2)*3/4}
+                                                  bottomHeight={(eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4}
+                                                  thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}
+                                                  gifSrc={(config.data.gif.data.path)?`${urlConfig.url}/api/${config.data.gif.data.path}`:''}
+                                              />
+                                          )}
+                                          )
+                                      }
+                                      {(oldLoading)?
+                                          <div className="old-posts-loading"
+                                          style={{
+                                              left:`${eleWidth*data.length}px`
+                                          }}
+                                          >
+                                              <DefaultLoading/>
+                                          </div>:null
+                                      }
+                                      </div>
+                                      )
+                                  }
+                                  }
+                                  </TransitionMotion>
 
+                          </div>
                         </div>
                     </Scrollbars>
                   </div>

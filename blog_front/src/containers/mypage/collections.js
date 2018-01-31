@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 //components
 import {ProfileContents} from 'components/mypage';
@@ -60,22 +61,23 @@ class Collections extends Component {
                         />:null
                     }
                 </div>
+                <Scrollbars>
                 <div className="collections-contents">
-                    <div className="collections-contents-title">
-                        <span>Collections</span>
-                    </div>
-                {
-                    data.map((item,i)=>{
-                        return (
-                            <SimpleCard
-                            key={item._id}
-                            data={item}
-                            currentUser={user}
-                            />
-                        )
-                    })
-                }
+                    
+                    {
+                        data.map((item,i)=>{
+                            return (
+                                <SimpleCard
+                                key={item._id}
+                                data={item}
+                                currentUser={user}
+                                />
+                            )
+                        })
+                    }
+                    
                 </div>
+                </Scrollbars>
             </div>             
         )
     }

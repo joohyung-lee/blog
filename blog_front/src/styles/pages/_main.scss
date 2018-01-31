@@ -288,7 +288,7 @@
     }
     .main-container{
         .title-wrap{
-            top:14vh;
+            top:100px;
             .menu-title{
                 padding-left:40px;
                 .menu-icon{
@@ -304,13 +304,16 @@
             }
         }
         .main-wrapper{
-            top:14vh;
+            top:100px;
             padding:0;
+            min-height: 540px;
             > .view{
                 overflow-y: hidden !important;
             }
             .card-item-wrap{
-                top:50px;
+                top:0px;
+                bottom:0;
+                margin:auto;
                 >div{
                     display: flex;
                 }

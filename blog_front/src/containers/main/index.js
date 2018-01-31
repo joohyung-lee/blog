@@ -134,10 +134,11 @@ class Main extends Component {
         let windowWidth=document.documentElement.clientWidth;
         const eleResponse=windowWidth/3.5;
         const mobileSize=windowWidth/1.2;
+        const mobileMax=windowWidth/1.6;
         const minDesk=windowWidth/2.5;
         const maxDesk=windowWidth/4.5;
         //full width padding
-        const wrapperPd=(windowWidth<1600)?
+        const wrapperPd=(windowWidth<1380)?
             (windowWidth<1024)?
             windowWidth<670?
             30:
@@ -145,7 +146,7 @@ class Main extends Component {
             50:
             70
         //card item padding
-        const itemPd=(windowWidth<1600)?
+        const itemPd=(windowWidth<1380)?
             (windowWidth<1024)?
             windowWidth<670?
             15:
@@ -153,13 +154,15 @@ class Main extends Component {
             15:
             20;
         //card item width
-        const eleWidthSize=(windowWidth>1600)?
+        const eleWidthSize=(windowWidth>1380)?
             (maxDesk>400)?
             400:
             maxDesk:
             (windowWidth<1024)?
-            windowWidth<670?
+            windowWidth<640?
+            windowWidth<450?
             mobileSize:
+            mobileMax:
             minDesk:
             eleResponse;
         const eleWidth=eleWidthSize;

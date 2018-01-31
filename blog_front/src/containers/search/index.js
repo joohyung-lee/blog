@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {TransitionMotion,spring} from 'react-motion';
 import { Scrollbars } from 'react-custom-scrollbars';
 //config
-import urlConfig from 'config/urlConfig'
 //components
 import {SimpleCard} from 'components/main';
 //redux
@@ -14,7 +13,6 @@ import * as postsActions from 'redux/posts';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 //images
-import defaultAvatar from 'images/defaultAvatar.svg';
 
 class Search extends Component{
     constructor(props){
