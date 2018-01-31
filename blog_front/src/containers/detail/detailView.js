@@ -394,7 +394,11 @@ class DetailView extends Component {
         const {data,motion,get,authUser,commentsLoading,common}=this.props;
         const {deskMode,mobileMode,replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex,isBright} = this.state;
         return (
-            <div className={`detail-frame ${isBright?'bright':'dark'}`}>
+            <div className={`detail-frame ${isBright?'bright':'dark'}`}
+                style={{
+                    height:`${windowHeight}px`,
+                }}
+            >
                 <span className={`go-back ${doc?'preview':'documentation'}`} onClick={this.goBack}>
                     <IconBack isBright={frameFull?isBright:true}/>
                 </span>
@@ -459,7 +463,7 @@ class DetailView extends Component {
                     renderView={this.renderView}
                     style={{
                         width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,
-                        height:frameFull?`calc(100vh - 100px)`:`${windowHeight}px`,
+                        height:frameFull?`calc(100% - 100px)`:`${windowHeight}px`,
                     }}>
                         <Documentation 
                             className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} 
