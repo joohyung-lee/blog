@@ -82,7 +82,7 @@
     .title-wrap{
         position: absolute;
         display: flex;
-        top:16vh;
+        top:17vh;
         right:0;
         left:0;
         height:55px;
@@ -209,7 +209,7 @@
 }
 .main-wrapper{
     position: absolute;
-    top:16vh;
+    top:17vh;
     right:0;
     bottom:0;
     left:0;
@@ -288,6 +288,7 @@
     }
     .main-container{
         .title-wrap{
+            top:14vh;
             .menu-title{
                 padding-left:40px;
                 .menu-icon{
@@ -303,10 +304,13 @@
             }
         }
         .main-wrapper{
-            top:0;
+            top:14vh;
             padding:0;
+            > .view{
+                overflow-y: hidden !important;
+            }
             .card-item-wrap{
-                top:28vh;
+                top:50px;
                 >div{
                     display: flex;
                 }

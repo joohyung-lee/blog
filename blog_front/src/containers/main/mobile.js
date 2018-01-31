@@ -558,15 +558,17 @@ class Main extends Component {
                             
                     </div>
                     <Scrollbars ref={(ref)=>{this.wrapperWidth=ref}} 
-                        onScrollFrame={this.onScroll}    
+                        onScrollFrame={this.onScroll}  
                         className={`main-wrapper`} 
                         style={{
-                            width:menuOpen?'calc(100% - 200px)':'100%',
+                            width:menuOpen?'calc(100% - 200px)':'100%'
                         }}
+                        renderView={props => <div {...props} 
+                        className="view"/>} 
                         >
                         <div className="card-item-wrap"
                           style={{
-                            padding:`0 ${wrapperPd}px`
+                            padding:`${wrapperPd}px`
                           }}
                         >
                                 <TransitionMotion
@@ -576,9 +578,7 @@ class Main extends Component {
                                 >
                                 {currentStyles =>{    
                                     return(
-                                    <div style={{
-                                         height:`${eleHeight}px`,
-                                    }}>
+                                    <div>
                                     {currentStyles.map((config, i) =>{
                                         let isFav = (config.data.starred.indexOf(authUser.user.oauthID) > -1) ? true : false ; 
                                         const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
