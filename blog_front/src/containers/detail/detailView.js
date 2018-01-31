@@ -459,7 +459,7 @@ class DetailView extends Component {
                     renderView={this.renderView}
                     style={{
                         width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,
-                        height:frameFull?`calc(100% - 100px)`:`${windowHeight}px`,
+                        height:frameFull?`calc(100vh - 100px)`:`${windowHeight}px`,
                     }}>
                         <Documentation 
                             className={`detail-contents-wrap ${motion.detailLoad?'animate':''}`} 
