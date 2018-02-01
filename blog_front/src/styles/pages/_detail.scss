@@ -169,6 +169,8 @@ $brighten:#fff;
         will-change:width,height,transform,opacity;
         opacity: 0;
         margin:auto;
+        overflow:auto;
+        -webkit-overflow-scrolling:touch;
         &.animate{
             transition:width 0.5s $spring,
             height 0.5s $spring,

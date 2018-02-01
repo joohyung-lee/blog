@@ -444,7 +444,7 @@ class DetailView extends Component {
                                     width:frameSizeX,
                                     height:`${frameSizeY}px`,
                                     transform:`scale(${iframeLoad?1:0.3})`,
-                                    overflow:'hidden'
+                                    
                                 }}
                             >
                                 
