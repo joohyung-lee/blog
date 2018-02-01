@@ -443,14 +443,15 @@ class DetailView extends Component {
                                 style={{
                                     width:frameSizeX,
                                     height:`${frameSizeY}px`,
-                                    transform:`scale(${iframeLoad?1:0.3})`
+                                    transform:`scale(${iframeLoad?1:0.3})`,
+                                    overflow:'hidden'
                                 }}
                             >
                                 
                                 <iframe title="This is a detailView" key="i" src={data.iframeUrl}
                                     onLoad={this.iframeLoad} 
                                     scrolling="auto"
-                                    frameBorder="0" width={"100%"} height="100%"></iframe>
+                                    frameBorder="0" width={"100%"} height={`${frameSizeY}px`}></iframe>
                             </div>  
                         </div>
                     :null} 
