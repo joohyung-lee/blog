@@ -46,7 +46,6 @@ class DetailView extends Component {
     componentDidMount(){   
         this.dimentions();
         window.addEventListener('resize',this.dimentions);
-        window.addEventListener('touchmove',this.freezeVp,false);
         const {get}=this.props; 
         window.addEventListener('click',this.outHide);
         setTimeout(()=>{
@@ -55,7 +54,6 @@ class DetailView extends Component {
     }
     componentWillUnmount(){
         window.removeEventListener("resize", this.dimentions);  
-        window.removeEventListener('touchmove',this.freezeVp,false);
     }
     componentWillReceiveProps(nextProps) {
         const {get,data,motionDispatch,handleHeader,motion,loading,commentsLoading,dataState}=nextProps;
@@ -99,9 +97,6 @@ class DetailView extends Component {
         }
  
 
-    }
-    freezeVp=(e)=>{
-        e.preventDefault();
     }
     //window resize width
     dimentions=()=>{
