@@ -46,6 +46,7 @@ class DetailView extends Component {
     componentDidMount(){   
         this.dimentions();
         window.addEventListener('resize',this.dimentions);
+        window.addEventListener('touchmove',(e)=>e.preventDefault);
         const {get}=this.props; 
         window.addEventListener('click',this.outHide);
         setTimeout(()=>{
@@ -54,7 +55,7 @@ class DetailView extends Component {
     }
     componentWillUnmount(){
         window.removeEventListener("resize", this.dimentions);  
- 
+        window.removeEventListener('touchmove',(e)=>e.preventDefault);
     }
     componentWillReceiveProps(nextProps) {
         const {get,data,motionDispatch,handleHeader,motion,loading,commentsLoading,dataState}=nextProps;
