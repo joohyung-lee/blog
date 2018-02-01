@@ -81,13 +81,7 @@ $brighten:#fff;
     z-index: 10;
     overflow: hidden;
     background-color:$c-black-8;
-    @media screen and (max-width: $screen-1400) {
-       
-    }
-    @media screen and (max-width: $screen-pad) {
-        padding:50px 30px 30px;
-       
-    }
+   
     &.animate{
         transition:width 0.5s $ease-out,height 0.5s $ease-out,background-color 0.5s;
     }
@@ -115,7 +109,7 @@ $brighten:#fff;
     }
     .device-controll-wrap{
         position: relative;
-        padding-top:20px;
+        margin-top:20px;
         .device-controll{
             display: flex;
             align-items: center;
@@ -142,7 +136,7 @@ $brighten:#fff;
         }
         .visit-site{
             position: absolute;
-            top:25px;
+            top:5px;
             right:0;
             display: flex;
             align-items: center;
@@ -368,14 +362,38 @@ $brighten:#fff;
             }
         }
     }
-    @media screen and (max-width: $screen-1400) {
+}
+@media screen and (max-width: $screen-1400) {
+    .detail-doc{
+        &.full{
+            &.doc{
+                .detail-contents{
+                    padding:25px;
+                }
+            }
+        }
         .detail-contents{
-            padding:30px;
+            padding:25px;
             .header{
                 h2{
                     width:100%;
                 }
             }
         }
+    }
+}
+@media screen and (max-width: $screen-pad) {
+    .detail-main{
+        padding:50px 25px 25px;
+        .device-controll-wrap{
+            margin-top:5px;
+        }
+        .iframe-wrap{
+            top:0px;
+        }
+    }
+    .go-back{
+        top:62px;
+        left:25px;
     }
 }

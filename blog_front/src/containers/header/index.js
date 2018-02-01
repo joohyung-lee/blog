@@ -145,9 +145,9 @@ class Header extends Component {
                     <div className="logo">
                         <a href='/home'><h1>JOOMATION</h1></a>
                         <a className="simple-logo" href='/home'><h1>J</h1></a>
-                        <ul>
+                        {/* <ul>
                             <li>About</li>
-                        </ul>
+                        </ul> */}
                     </div>    
                         
                     <div className="right-contents">

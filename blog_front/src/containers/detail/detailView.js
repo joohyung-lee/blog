@@ -36,7 +36,8 @@ class DetailView extends Component {
             replyText:'',
             modifyIndex:null,
             commentView:'',
-            isBright:false
+            isBright:false,
+            deskView:true
             
         }
     }
@@ -101,32 +102,35 @@ class DetailView extends Component {
     dimentions=()=>{
         const{motionDispatch}=this.props;
         const {mobileMode} = this.state;
+        let windowWidth=document.documentElement.clientWidth;
+        let windowHeight=document.documentElement.clientHeight;
         let sizeX;
-        let sizeY;
-        const frameWrap=document.documentElement.clientWidth<1900?
-        document.documentElement.clientWidth<1600?
-        document.documentElement.clientWidth<1400?
-        document.documentElement.clientWidth:
+        let sizeY=windowHeight-200;
+        const frameWrap=windowWidth<1900?
+        windowWidth<1600?
+        windowWidth<1400?
+        windowWidth:
         900:
         900:
-        document.documentElement.clientWidth*0.6;
-        const frameDivide=document.documentElement.clientWidth<1400?false:true;
+        windowWidth*0.6;
+        const frameDivide=windowWidth<1400?false:true;
         if(mobileMode){
-            sizeX='375px';
-            sizeY=600;
+            sizeX=windowWidth<768?'100%':'375px';
         }else{
             sizeX='100%';
-            sizeY=document.documentElement.clientHeight-250;
         }
         this.setState({
-            windowWidth:document.documentElement.clientWidth,
+            windowWidth:windowWidth,
             windowHeight:document.documentElement.clientHeight,
             frameSizeX:sizeX,
             frameSizeY:sizeY,
             frameDivide:frameDivide,
-            frameFull:document.documentElement.clientWidth<1400?true:false,
+            frameFull:windowWidth<1400?true:false,
             frameWrap:frameWrap,
             doc:false,
+            deskView:windowWidth<768?false:true,
+            deskMode:windowWidth<768?false:true,
+            mobileMode:windowWidth<768?true:false,
         })
     }
   
@@ -174,14 +178,12 @@ class DetailView extends Component {
                 mobileMode:true,
                 deskMode:false,
                 frameSizeX:'375px',
-                frameSizeY:600
             });
         }else{
             this.setState({
                 mobileMode:false,
                 deskMode:true,
                 frameSizeX:'100%',
-                frameSizeY:document.documentElement.clientHeight-250
             })
         }
     }
@@ -392,7 +394,7 @@ class DetailView extends Component {
     }
     render() {
         const {data,motion,get,authUser,commentsLoading,common}=this.props;
-        const {deskMode,mobileMode,replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex,isBright} = this.state;
+        const {deskView,deskMode,mobileMode,replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex,isBright} = this.state;
         return (
             <div className={`detail-frame ${isBright?'bright':'dark'}`}
                 style={{
@@ -426,9 +428,11 @@ class DetailView extends Component {
                                     <div className={`dic mobile ${mobileMode?'active':'default'}`} onClick={this.modeChange.bind(this,'mobile')}>
                                         <IconPhone isBright={isBright}/>
                                     </div>
-                                    <div className={`dic desk ${deskMode?'active':'default'}`} onClick={this.modeChange.bind(this,'desk')}>
-                                        <IconDesk isBright={isBright}/>
-                                    </div>
+                                    {deskView?
+                                        <div className={`dic desk ${deskMode?'active':'default'}`} onClick={this.modeChange.bind(this,'desk')}>
+                                            <IconDesk isBright={isBright}/>
+                                        </div>:null
+                                    }
                                 </div>
                                 <div className="visit-site">
                                     <a href={data.iframeUrl}>Visit Site</a>
@@ -445,6 +449,7 @@ class DetailView extends Component {
                                 
                                 <iframe title="This is a detailView" key="i" src={data.iframeUrl}
                                     onLoad={this.iframeLoad} 
+                                    scrolling="auto"
                                     frameBorder="0" width={"100%"} height="100%"></iframe>
                             </div>  
                         </div>
