@@ -128,6 +128,7 @@ button{
     left:0;
     width: 100%;
     will-change: transform,opacity;
+    touch-action: none;
 }
 
 .page-size{
