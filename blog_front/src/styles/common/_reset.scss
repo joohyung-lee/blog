@@ -115,19 +115,18 @@ button{
     background-color: #f1f1f1;
 }
 .detail-page-wrap{
-    position: fixed;
+    position: absolute;
     top:0;
     left:0;
     width:100%;
     z-index: 10;
-    
+    touch-action: none;
 }
 .detail-page-wrap > div{
     position: absolute;
     top:0;
     left:0;
     width: 100%;
-    transform: translateZ(0);
     will-change: transform,opacity;
 }
 
