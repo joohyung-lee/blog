@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import dateFormat from 'dateformat';
+import MobileDetect from 'mobile-detect';
 //components
 import {Documentation} from 'components/detail';
 //redux
@@ -37,7 +38,8 @@ class DetailView extends Component {
             modifyIndex:null,
             commentView:'',
             isBright:false,
-            deskView:true
+            deskView:true,
+            mobileDetact:false
             
         }
     }
@@ -102,6 +104,16 @@ class DetailView extends Component {
     dimentions=()=>{
         const{motionDispatch}=this.props;
         const {mobileMode} = this.state;
+        let md = new MobileDetect(window.navigator.userAgent);
+        if(md.mobile()){
+            this.setState({
+                mobileDetact:true
+            })
+        }else{
+            this.setState({
+                mobileDetact:false
+            })
+        }
         let windowWidth=document.documentElement.clientWidth;
         let windowHeight=document.documentElement.clientHeight;
         let sizeX;
@@ -114,7 +126,7 @@ class DetailView extends Component {
         900:
         windowWidth*0.6;
         const frameDivide=windowWidth<1400?false:true;
-        if(mobileMode){
+        if(windowWidth<768){
             sizeX=windowWidth<768?'100%':'375px';
         }else{
             sizeX='100%';
@@ -394,7 +406,7 @@ class DetailView extends Component {
     }
     render() {
         const {data,motion,get,authUser,commentsLoading,common}=this.props;
-        const {deskView,deskMode,mobileMode,replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex,isBright} = this.state;
+        const {mobileDetact,deskView,deskMode,mobileMode,replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex,isBright} = this.state;
         return (
             <div className={`detail-frame ${isBright?'bright':'dark'}`}
                 style={{
@@ -406,8 +418,8 @@ class DetailView extends Component {
                 </span>
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
                     style={{
-                        width:frameFull?`${windowWidth}px`:motion.detailLoad?`${frameWrap}px`:`${windowWidth}px`,
-                        height:doc?`100px`:`${windowHeight}px`,
+                        width:frameFull?`100%`:motion.detailLoad?`${frameWrap}px`:`${windowWidth}px`,
+                        height:doc?`100px`:`100%`,
                         backgroundColor:motion.bgColor
                     }}>
                     <div className={`loading-text ${iframeLoad?'fade-out':''}`}>
@@ -439,7 +451,7 @@ class DetailView extends Component {
                                 </div>
                             </div>
                             
-                            <div key={data._id} className={`iframe-wrap ${iframeLoad?'animate':''}`}
+                            <div key={data._id} className={`iframe-wrap ${iframeLoad?'animate':'default'} ${mobileDetact?'mobile':'desk'}`}
                                 style={{
                                     width:frameSizeX,
                                     height:`${frameSizeY}px`,

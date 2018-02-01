@@ -94,12 +94,16 @@ class Main extends Component {
         if(locationChanged){        
             motionDispatch.motionActions({
                 motions:{
-                    offsetX:0,
                     active:0,
+                    offsetX:0
                 }
             });    
+            
             const url=this.props.location.pathname.replace('/','');
             get.getCategoryPost('POSTS/CATEGORY_GET',url);   
+            this.scrollbars.scrollLeft(0);
+
+            
             this.state.mainText.map((item,i)=>{
                 if(url===item.key){
                     return this.setState({
@@ -193,7 +197,7 @@ class Main extends Component {
                 relative:(scrollWidth/(maxScrollWidth+indicator)).toFixed(2),
                 wrapperPd:wrapperPd,//full width padding
                 itemPd:itemPd,//card item padding
-                offsetX:offset,//moved scroll
+                offsetX:this.scrollbars.scrollLeft(offset),//moved scroll
                 active:activeItem,
                 mobileVersion:mobileVersion
             }
@@ -429,6 +433,7 @@ class Main extends Component {
         const{data,motion,dataState}=this.props;
         const{eleWidth,active}=motion;
         if(dataState==="success"){
+            
             return data.map((item, i) => {
                 if(i===0){
                     return{
@@ -469,6 +474,7 @@ class Main extends Component {
         }
     }
     willEnter=(prev)=>{
+        
         return {
             sizeX:-150,
             sizeY:0,
@@ -492,6 +498,9 @@ class Main extends Component {
             shadowSize2:spring(0),
             shadowColor:spring(0),
         }
+    }
+    didLeave=()=>{
+       
     }
     countZero=(num)=>{
         if(num<10){
@@ -561,6 +570,7 @@ class Main extends Component {
                             
                     </div>
                     <Scrollbars
+                      ref={(ref)=>{this.scrollbars=ref}}
                       onScrollFrame={this.onScroll}  
                       renderView={props => <div {...props} 
                       className="view"/>} 
@@ -580,6 +590,7 @@ class Main extends Component {
                                   <TransitionMotion
                                   willEnter={this.willEnter}
                                   willLeave={this.willLeave}
+                                  didLeave={this.didLeave}
                                   styles={prev=>this.getStyles(prev)}
                                   >
                                   {currentStyles =>{    
