@@ -4,7 +4,7 @@ import IconFav from 'images/iconFav';
 import GifLoading from 'images/gifLoading';
 import DefaultLoading from 'images/defaultLoading';
 import MobileDetect from 'mobile-detect';
-import LinesEllipsis from 'react-lines-ellipsis'
+import Dotdotdot from 'react-dotdotdot';
 class CardItem extends Component {
     constructor(props) {
         super(props);
@@ -183,13 +183,11 @@ class CardItem extends Component {
                         </div>
                     </div>
                     <div className="summary-wrap">
-                        <LinesEllipsis
-                            text={data.summary}
-                            maxLine='2'
-                            ellipsis='...'
-                            trimRight
-                            basedOn='letters'
-                        />
+                        <Dotdotdot clamp={2}>
+                            <p>
+                            {data.summary}
+                            </p>
+                        </Dotdotdot>
                     </div>  
                 </div>  
             </div>
