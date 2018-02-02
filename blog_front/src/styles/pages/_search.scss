@@ -187,3 +187,17 @@
         }
     }
 }
+//media styles
+@media screen and (max-width: $screen-phone-large) {
+    .search-container{
+        .search-title{
+            padding:60px 0 0 0;
+            h2{
+                margin-bottom: 10px;
+            }
+            .title-wrap{
+                padding:0 0 10px;
+            }
+        }
+    }
+}
