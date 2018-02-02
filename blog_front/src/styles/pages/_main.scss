@@ -33,8 +33,9 @@
         }
     }
     ul{
+        position: relative;
         transform: translateZ(0);
-        margin-top:16vh;
+        top:17%;
         li{
             opacity: 0;
             padding: 4px 0 4px 40px;
@@ -79,18 +80,21 @@
     width:100%;
     height:100%;
     background:$c-black-8;
+    .view{
+        overflow-y: hidden !important;
+    }
     .title-wrap{
         position: absolute;
         display: flex;
-        top:17vh;
+        top:17%;
         right:0;
         left:0;
-        height:55px;
         padding:0 20px 0 0;
         z-index: 100;
         width:auto;
         transition:left 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
         will-change: left;
+        align-items: center;
         .pages{
             position: relative;
             align-self: center;
@@ -109,14 +113,12 @@
         }
         .menu-title{
             position: relative;
-            height:55px;            
             user-select: none;
             padding-left:60px;
             
             .main-txt{
                 position: relative;
                 padding-right:30px;
-                line-height: 55px;
                 *{
                     font-weight: 600;
                     font-size: 2.8rem;
@@ -188,8 +190,7 @@
         }
         .scroll-bar{
             position:relative;
-            flex:1;
-            top:calc(50% - 1px);
+            flex-grow:1;
             height:1px;
             background:$c-black-4;
             overflow:hidden;
@@ -209,7 +210,7 @@
 }
 .main-wrapper{
     position: absolute;
-    top:17vh;
+    top:17%;
     right:0;
     bottom:0;
     left:0;
@@ -270,11 +271,12 @@
         }
     }
 }
-//mobile version styles
-.mobile{
+//media styles
+@media screen and (max-width: $screen-phone-large) {
     .menu-list{
         width:200px;
         ul{
+            top:15%;
             li{
                 padding:4px 0 4px 20px;
                 a{
@@ -288,7 +290,7 @@
     }
     .main-container{
         .title-wrap{
-            top:100px;
+            top:15%;
             .menu-title{
                 padding-left:40px;
                 .menu-icon{
@@ -298,23 +300,18 @@
                     padding-right:15px;
                     h2{
                         font-size: 2rem;
-                        line-height: 55px;
                     }
                 }
             }
         }
-        .view{
-            overflow-y: hidden !important;
-        }
+        
         .main-wrapper{
-            top:100px;
+            top:13%;
             padding:0;
             min-height: 540px;
             
             .card-item-wrap{
-                top:0px;
-                bottom:0;
-                margin:auto;
+                top:80px;
                 >div{
                     display: flex;
                 }
@@ -332,4 +329,4 @@
             }
         } 
     }
-} 
+}
