@@ -115,7 +115,8 @@ button{
     background-color: #f1f1f1;
 }
 .detail-page-wrap{
-    position: fixed;
+    position: -webkit-sticky;
+    position: sticky;
     top:0;
     left:0;
     width:100%;
