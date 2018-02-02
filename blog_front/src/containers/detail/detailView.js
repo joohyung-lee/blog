@@ -45,7 +45,6 @@ class DetailView extends Component {
     }
     componentDidMount(){   
         this.dimentions();
-        this.detailPage.addEventListener('touchmove',this.preventMove); 
         window.addEventListener('resize',this.dimentions);
         const {get}=this.props; 
         window.addEventListener('click',this.outHide);
@@ -99,9 +98,6 @@ class DetailView extends Component {
  
 
     }
-    preventMove=(e)=>{
-        e.preventDefault();
-      }
     //window resize width
     dimentions=()=>{
         const{motionDispatch}=this.props;

@@ -89,9 +89,7 @@ class App extends Component {
       });
     }
   }
-  preventMove=(e)=>{
-    e.preventDefault();
-  }
+
   fade=(val)=>{
     return spring(val, {
       stiffness: 300,
