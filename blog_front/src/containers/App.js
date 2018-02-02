@@ -34,7 +34,7 @@ font.load().then(function () {
 class App extends Component {
   componentDidMount(){  
     const {handleHeader}=this.props;
-    window.addEventListener('touchmove',this.preventMove); 
+    
     let re = /(auth|loginPopup)/;
     let isAuth = re.test(this.props.location.pathname);
     if(isAuth){

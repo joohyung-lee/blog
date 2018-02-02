@@ -45,6 +45,7 @@ class DetailView extends Component {
     }
     componentDidMount(){   
         this.dimentions();
+        this.detailPage.addEventListener('touchmove',this.preventMove); 
         window.addEventListener('resize',this.dimentions);
         const {get}=this.props; 
         window.addEventListener('click',this.outHide);
@@ -98,6 +99,9 @@ class DetailView extends Component {
  
 
     }
+    preventMove=(e)=>{
+        e.preventDefault();
+      }
     //window resize width
     dimentions=()=>{
         const{motionDispatch}=this.props;
@@ -406,7 +410,9 @@ class DetailView extends Component {
         const {data,motion,get,authUser,commentsLoading,common}=this.props;
         const {mobileDetact,deskView,deskMode,mobileMode,replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex,isBright} = this.state;
         return (
-            <div className={`detail-frame ${isBright?'bright':'dark'}`}
+            <div 
+                ref={(ref)=>{this.detailPage=ref}}
+                className={`detail-frame ${isBright?'bright':'dark'}`}
                 style={{
                     height:`${windowHeight}px`,
                 }}
