@@ -34,7 +34,7 @@ font.load().then(function () {
 class App extends Component {
   componentDidMount(){  
     const {handleHeader}=this.props;
-
+    window.addEventListener('touchmove',preventMove); 
     let re = /(auth|loginPopup)/;
     let isAuth = re.test(this.props.location.pathname);
     if(isAuth){
@@ -88,6 +88,9 @@ class App extends Component {
         modalName:'login'
       });
     }
+  }
+  preventMove=(e)=>{
+    e.preventDefault();
   }
   fade=(val)=>{
     return spring(val, {
