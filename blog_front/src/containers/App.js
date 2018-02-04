@@ -46,10 +46,15 @@ class App extends Component {
   componentWillReceiveProps(nextProps) {
     // will be true
     const locationChanged = nextProps.location !== this.props.location;
-    const {modalView,motionDispatch,handleHeader}=this.props;
+    const {modalView,motionDispatch,handleHeader,motion}=this.props;
     const nextUrl=nextProps.location.pathname.split('/');
     const thisUrl=this.props.location.pathname.split('/');
     let isBright = (this.get_brightness(nextProps.motion.bgColor) > 160);
+    if(thisUrl[1]==='posts'){
+      handleHeader.isBrightness({
+        isBright:isBright
+      });  
+    }
     if(locationChanged){    
       if(nextUrl[1]==='posts'){
         motionDispatch.motionActions({
@@ -58,6 +63,7 @@ class App extends Component {
               detailView:true
           }
         });
+        
         handleHeader.isBrightness({
             isBright:isBright
         });
@@ -69,14 +75,16 @@ class App extends Component {
             motionDispatch.motionActions({
               motions:{
                   scale:false,
-                  detailView:true
+                  detailView:true,
+                  
               }
             });
         }else{
           motionDispatch.motionActions({
             motions:{
                 scale:false,
-                detailView:false
+                detailView:false,
+                
             }
           });
         }
@@ -89,7 +97,7 @@ class App extends Component {
       });
     }
   }
-
+  
   fade=(val)=>{
     return spring(val, {
       stiffness: 300,

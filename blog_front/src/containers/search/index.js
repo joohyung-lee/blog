@@ -63,7 +63,6 @@ class Search extends Component{
     componentDidMount(){
         const {get}=this.props;
         this.dimensions();
-        
         window.addEventListener('resize',this.dimensions); 
         if(typeof this.props.match.params.keyword!=="undefined"){
             let result = this.props.match.params.keyword.match(/./g);                
@@ -468,12 +467,19 @@ class Search extends Component{
         })
        
     }
-    itemUp=(id,i,e)=>{
-        this.props.history.push(`/posts/motionlab/${id}`)
+    itemUp=(id,bgColor,category,e)=>{
+        const {motionDispatch} = this.props;
+        motionDispatch.motionActions({
+            motions:{
+                bgColor:bgColor,
+                detailLoad:false
+            }
+        });
+        this.props.history.push(`/posts/${category}/${id}`)
     }
     render(){
-        const {postsData,postsLoading,authUser,starLoading,postsState} = this.props;
-        const {hash,tagUrl,windowWidth,windowHeight,tagLeftScroll,tagRightScroll,searchScroll,initial,active} =this.state;
+        const {postsData,postsLoading} = this.props;
+        const {hash,tagUrl,tagLeftScroll,tagRightScroll,searchScroll,initial} =this.state;
         return (
             <div className={`search-container ${searchScroll?'scroll':''}`}>
                 <div className="search-title">
@@ -559,7 +565,7 @@ class Search extends Component{
                                             key={item._id}
                                             data={item}
                                             currentUser={item.user}
-                                            onClick={this.itemUp.bind(this,item._id)}
+                                            onClick={this.itemUp.bind(this,item._id,item.bgColor,item.category)}
                                             />
                                     })
                                 }

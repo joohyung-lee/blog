@@ -161,7 +161,7 @@ $brighten:#fff;
     }
     .iframe-wrap{
         position: absolute;
-        top:40px;
+        top:0px;
         bottom:0;
         left:0px;
         right:0px;
@@ -169,6 +169,7 @@ $brighten:#fff;
         will-change:width,height,transform,opacity;
         opacity: 0;
         margin:auto;
+        overflow:hidden;
         &.mobile{
             overflow: scroll;
             -webkit-overflow-scrolling: touch;

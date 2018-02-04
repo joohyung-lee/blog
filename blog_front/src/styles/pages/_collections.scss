@@ -30,3 +30,11 @@
         padding:0 20px;
     }
 }
+//media styles
+@media screen and (max-width: $screen-phone-large) {
+    .collections-wrap{
+        .collections-header{
+            padding:0 0 10px 0;
+        }
+    }
+}

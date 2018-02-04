@@ -50,25 +50,26 @@ class DetailView extends Component {
         window.addEventListener('click',this.outHide);
         setTimeout(()=>{
             get.getSinglePost('POSTS/SINGLE_GET',this.props.match.params.category,this.props.match.params.postId);
-        },400)
+        },400);
     }
     componentWillUnmount(){
         window.removeEventListener("resize", this.dimentions);  
     }
     componentWillReceiveProps(nextProps) {
-        const {get,data,motionDispatch,handleHeader,motion,loading,commentsLoading,dataState}=nextProps;
+        const {get,data,motionDispatch,motion,loading,commentsLoading,dataState}=nextProps;
         const locationChanged = nextProps.location !== this.props.location;
         if(locationChanged){
             setTimeout(()=>{
                 get.getSinglePost('POSTS/SINGLE_GET',nextProps.match.params.category,nextProps.match.params.postId);
             },400)
         }
+        
         if(!motion.detailLoad){
             this.setState({
                 iframeLoad:false
             })
-            this.dimentions()
-            if(this.props.loading!==loading && dataState==="success"){ 
+            this.dimentions();
+            if(this.props.loading!==loading && dataState==="success"){            
                 let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);           
                 motionDispatch.motionActions({
                     motions:{
@@ -76,9 +77,6 @@ class DetailView extends Component {
                         detailLoad:true
                     }
                 });  
-                handleHeader.isBrightness({
-                    isBright:isBright
-                });
                 this.setState({
                     isBright:isBright
                 })
@@ -95,13 +93,10 @@ class DetailView extends Component {
                 })
             }
         }
- 
 
     }
     //window resize width
     dimentions=()=>{
-        const{motionDispatch}=this.props;
-        const {mobileMode} = this.state;
         let md = new MobileDetect(window.navigator.userAgent);
         if(md.mobile()){
             this.setState({
@@ -182,23 +177,26 @@ class DetailView extends Component {
         
     }
     modeChange=(mode)=>{
-        const{frameWrap}=this.state;
+        let windowWidth=document.documentElement.clientWidth;
+        let windowHeight=document.documentElement.clientHeight;
         if(mode==="mobile"){
+            console.log('asdf')
             this.setState({
                 mobileMode:true,
                 deskMode:false,
                 frameSizeX:'375px',
+                frameSizeY:windowHeight>667?'667px':windowHeight-200+'px',
             });
         }else{
             this.setState({
                 mobileMode:false,
                 deskMode:true,
                 frameSizeX:'100%',
+                frameSizeY:windowHeight-200+'px'
             })
         }
     }
    get_brightness=(hexCode)=>{
-       
         hexCode = hexCode.replace('#', '');
         var c_r = parseInt(hexCode.substr(0, 2),16);
         var c_g = parseInt(hexCode.substr(2, 2),16);
@@ -403,7 +401,7 @@ class DetailView extends Component {
         this.props.history.goBack()
     }
     render() {
-        const {data,motion,get,authUser,commentsLoading,common}=this.props;
+        const {data,motion,authUser,common}=this.props;
         const {mobileDetact,deskView,deskMode,mobileMode,replyText,commentView,windowWidth,windowHeight,iframeLoad,frameWrap,frameSizeX,frameSizeY,frameDivide,frameFull,doc,commentsText,modifyIndex,isBright} = this.state;
         return (
             <div 
@@ -436,25 +434,25 @@ class DetailView extends Component {
                                 <span></span>
                             </div>
                             <div className="device-controll-wrap">
-                                <div className="device-controll">
-                                    <div className={`dic mobile ${mobileMode?'active':'default'}`} onClick={this.modeChange.bind(this,'mobile')}>
-                                        <IconPhone isBright={isBright}/>
-                                    </div>
-                                    {deskView?
+                                {deskView?
+                                    <div className="device-controll">
+                                        <div className={`dic mobile ${mobileMode?'active':'default'}`} onClick={this.modeChange.bind(this,'mobile')}>
+                                            <IconPhone isBright={isBright}/>
+                                        </div>
                                         <div className={`dic desk ${deskMode?'active':'default'}`} onClick={this.modeChange.bind(this,'desk')}>
                                             <IconDesk isBright={isBright}/>
-                                        </div>:null
-                                    }
-                                </div>
+                                        </div>
+                                    </div>:null
+                                }
                                 <div className="visit-site">
-                                    <a href={data.iframeUrl}>Visit Site</a>
+                                    <a href={data.iframeUrl} target="_blank">Visit Site</a>
                                 </div>
                             </div>
                             
                             <div key={data._id} className={`iframe-wrap ${iframeLoad?'animate':'default'} ${mobileDetact?'mobile':'desk'}`}
                                 style={{
                                     width:frameSizeX,
-                                    height:`${frameSizeY}px`,
+                                    height:frameSizeY,
                                     transform:`scale(${iframeLoad?1:0.3})`,
                                     
                                 }}
@@ -463,7 +461,7 @@ class DetailView extends Component {
                                 <iframe title="This is a detailView" key="i" src={data.iframeUrl}
                                     onLoad={this.iframeLoad} 
                                     scrolling="auto"
-                                    frameBorder="0" width={"100%"} height={`${frameSizeY}px`}></iframe>
+                                    frameBorder="0" width={"100%"} height={frameSizeY}></iframe>
                             </div>  
                         </div>
                     :null} 

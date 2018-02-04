@@ -20,7 +20,6 @@ class Collections extends Component {
         const {user,get} = this.props;
         const userId=user.oauthID;
         if(this.props.userSuccess==='success'){
-            console.log('didmount')
             return get.loadStar({
                 type:'POSTS/STAR_LOAD',
                 userId:userId
@@ -38,11 +37,11 @@ class Collections extends Component {
             });
         }
     }
-    itemUp=(id,i,bgColor,category,e)=>{
+    itemUp=(id,bgColor,category,e)=>{
+        console.log(bgColor)
         const {motionDispatch}=this.props;
             motionDispatch.motionActions({
                 motions:{
-                    active:i,
                     bgColor:bgColor,
                     detailLoad:false
                 }
@@ -50,8 +49,7 @@ class Collections extends Component {
             this.props.history.push(`/posts/${category}/${id}`);            
     }
     render() {
-        const {user,userSuccess,data,motionDispatch} = this.props;
-        const {active} = this.state;
+        const {user,userSuccess,data} = this.props;
         return (
             <div className="collections-wrap">
                 <div className="collections-header">
@@ -71,6 +69,7 @@ class Collections extends Component {
                                 key={item._id}
                                 data={item}
                                 currentUser={user}
+                                onClick={this.itemUp.bind(this,item._id,item.bgColor,item.category)}
                                 />
                             )
                         })
