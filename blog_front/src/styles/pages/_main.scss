@@ -3,6 +3,7 @@
 .main-container.menu{
     .title-wrap{
         width:calc(100% - 330px);
+        transform: translate3d(330px,0,0);
     }
     .main-wrapper{
         transform: translate3d(330px,0,0) scale(0.92);
@@ -88,13 +89,13 @@
         display: flex;
         top:17%;
         right:0;
-        left:auto;
+        left:0;
         padding:0 20px 0 0;
         z-index: 100;
         width:100%;
-        transition:width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
-        will-change: width;
         align-items: center;
+        transition:transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+        will-change: transform,width;
         .pages{
             position: relative;
             align-self: center;
@@ -323,6 +324,7 @@
         &.menu{
             .title-wrap{
                 width:calc(100% - 200px);
+                transform: translate3d(200px, 0, 0);
             }
             .main-wrapper{
                 transform: translate3d(200px, 0, 0) scale(1)
