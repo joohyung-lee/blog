@@ -188,6 +188,7 @@ class Main extends Component {
         motionDispatch.motionActions({
             motions:{
                 isPressed:false,
+                windowWidth:windowWidth,
                 blockWidth:blockWidth,
                 max:maxScrollWidth,//possible width to scroll
                 eleWidth:eleWidth,//card item's width
@@ -516,7 +517,7 @@ class Main extends Component {
     render() {   
         const {menuOpen,favActive,mainIndex,detailView}=this.state;
         const {motion,authUser,data,loading,total,oldLoading,starLoading}=this.props;
-        const {mobileVersion,blockWidth,isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
+        const {windowWidth,blockWidth,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
 
         return (     
             <div className="main-wrap mobile">   

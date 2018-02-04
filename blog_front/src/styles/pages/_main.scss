@@ -2,7 +2,7 @@
 // open menu
 .main-container.menu{
     .title-wrap{
-        left:330px;
+        width:calc(100% - 330px);
     }
     .main-wrapper{
         transform: translate3d(330px,0,0) scale(0.92);
@@ -88,12 +88,12 @@
         display: flex;
         top:17%;
         right:0;
-        left:0;
+        left:auto;
         padding:0 20px 0 0;
         z-index: 100;
-        width:auto;
-        transition:left 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
-        will-change: left;
+        width:100%;
+        transition:width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+        will-change: width;
         align-items: center;
         .pages{
             position: relative;
@@ -322,7 +322,7 @@
         }
         &.menu{
             .title-wrap{
-                left:200px;
+                width:calc(100% - 200px);
             }
             .main-wrapper{
                 transform: translate3d(200px, 0, 0) scale(1)
