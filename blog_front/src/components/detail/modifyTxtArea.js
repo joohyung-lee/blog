@@ -69,9 +69,7 @@ class ModifyTxtArea extends Component {
         const {textareaFocus} = this.state;
         return (
             <div className={`commentsTxtArea modify ${textareaFocus?'focus':'default'}`}>
-                <div className={`avatar-info`}>
-                    <p className="name">Modify</p>                                
-                </div>
+                <p className="modify-title">Modify</p>                                
                 <textarea type="text" placeholder="Add comment..."
                     ref="modifyTxtArea"
                     className={`${this.state.textareaActive?'animate':''}`}

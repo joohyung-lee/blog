@@ -42,16 +42,6 @@ class Comments extends Component {
                                                             
                                                         </div>
                                                     </div>
-                                                    <div className="btn-group">
-                                                        <button className="btn-reply" onClick={this.props.writeMode.bind(this,'reply',i,null,null)}>Reply</button>
-                                                        {item.user.oauthID===this.props.currentUser.oauthID?
-                                                            <div className="my-comments">
-                                                                <button className="modify" onClick={this.props.writeMode.bind(this,'modify',i,null,item.body)}>Modify</button>
-                                                                <button className="delete" onClick={this.props.delComments.bind(this,'modify',i,null)}>지우기</button>
-                                                            </div>
-                                                            :null
-                                                        }
-                                                    </div>
                                                 </div>
                                                 {//modify comments
                                                     this.props.commentView==='modify' && this.props.modifyIndex===i?
@@ -72,24 +62,36 @@ class Comments extends Component {
                                                         return (<span key={i}>{line}<br/></span>)
                                                     })}</p>
                                                 }
+                                                
+                                                <div className="btn-group">
+                                                    <button className="reply" onClick={this.props.writeMode.bind(this,'reply',i,null,null)}>Reply</button>
+                                                    {item.user.oauthID===this.props.currentUser.oauthID?
+                                                            <button className="modify" onClick={this.props.writeMode.bind(this,'modify',i,null,item.body)}>Modify</button>
+                                                        :null
+                                                    }
+                                                    {item.user.oauthID===this.props.currentUser.oauthID?
+                                                            <button className="delete" onClick={this.props.delComments.bind(this,'modify',i,null)}>Delete</button>
+                                                        :null
+                                                    }
+                                                </div>
                                                 {//reply comments
                                                     this.props.commentView==='reply' && this.props.modifyIndex===i?
-                                                        <div className="comments-write reply">
-                                                            <CommentsTxtArea
-                                                            {...this.props}
-                                                            commentsText={this.props.replyText}
-                                                            type='reply'
-                                                            focus={true}
-                                                            commentsOnChange={this.props.commentsOnChange.bind(null,'reply')}
-                                                            >
-                                                            <div className="btn-group">
-                                                                <button className="submit" onClick={this.props.writeComments.bind(this,'reply',i,null)}>Submit</button>
-                                                                <button className="cancel" onClick={this.props.textareaCancel}>Cancle</button>
-                                                            </div>
-                                                            </CommentsTxtArea>
-                                                        </div>:
-                                                    null
-                                                }
+                                                    <div className="comments-write reply">
+                                                        <CommentsTxtArea
+                                                        {...this.props}
+                                                        commentsText={this.props.replyText}
+                                                        type='reply'
+                                                        focus={true}
+                                                        commentsOnChange={this.props.commentsOnChange.bind(null,'reply')}
+                                                        >
+                                                        <div className="btn-group">
+                                                            <button className="submit" onClick={this.props.writeComments.bind(this,'reply',i,null)}>Submit</button>
+                                                            <button className="cancel" onClick={this.props.textareaCancel}>Cancle</button>
+                                                        </div>
+                                                        </CommentsTxtArea>
+                                                    </div>:
+                                                null
+                                            }
                                         </div>
                                         {
                                         (item.reply && item.reply.length!==0)?
@@ -108,15 +110,7 @@ class Comments extends Component {
                                                                         <p className="date">{replyItem.date}</p>
                                                                     </div>
                                                                 </div>
-                                                                <div className="btn-group">
-                                                                    {replyItem.user.oauthID===this.props.currentUser.oauthID?
-                                                                        <div className="my-comments">
-                                                                            <button className="modify" onClick={this.props.writeMode.bind(this,'replyModify',i,rei,replyItem.body)}>Modify</button>
-                                                                            <button className="delete" onClick={this.props.delComments.bind(this,'reply',i,rei)}>지우기</button>
-                                                                        </div>
-                                                                        :null
-                                                                    }
-                                                                </div>
+                                                                
                                                             </div>
                                                             {//reply comments
                                                                 this.props.commentView==='replyModify' && this.props.modifyIndex===`${i}/${rei}`?
@@ -137,6 +131,14 @@ class Comments extends Component {
                                                                 })}</p>
                                                             }
                                                             
+                                                                {replyItem.user.oauthID===this.props.currentUser.oauthID?
+                                                                    <div className="btn-group">
+                                                                        <button className="modify" onClick={this.props.writeMode.bind(this,'replyModify',i,rei,replyItem.body)}>Modify</button>
+                                                                        <button className="delete" onClick={this.props.delComments.bind(this,'reply',i,rei)}>Delete</button>
+                                                                    </div>    
+                                                                    :null
+                                                                }
+                                                          
                                                         </li>
                                                     )
                                                 })}
