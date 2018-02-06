@@ -22,7 +22,7 @@ class GifLoading extends Component {
         opacity:spring(open?0:0.8,springConif)
       }}>
       {value => 
-        <div className={`gif-loading ${open?`animate`:``}`} >
+        <div className={`gif-loading ${open?value.w===20?`animate`:'':''}`} >
           <svg x="0px" y="0px" viewBox="0 0 50 25" 
           stroke={"rgba(255,255,255,0.8)"} 
           strokeWidth={open?1:0} 

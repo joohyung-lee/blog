@@ -106,7 +106,8 @@
         position: absolute;
         top:20px;
         right:20px;
-        transition: transform 0.2s ease;
+        opacity: 1;
+        transition: transform 0.2s ease,opacity 0.3s ease;
         &.in{
             opacity: 1;
             transform: translateX(15px)
@@ -122,7 +123,6 @@
         .gif-loading.animate{       
             margin-left:40px; 
             animation: loadingrotate .7s linear infinite;
-            animation-delay: 300ms;
         }
     }
     .fade-in{

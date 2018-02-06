@@ -51,23 +51,27 @@ class CardItem extends Component {
         }
     }      
     playVideo=(active)=>{
-        if(active){
-            let myVideo = this.videoSource;
-            myVideo.currentTime = '0';
-            myVideo.onloadstart=()=>{
-                this.setState({
-                    gifLoading:true,
-                });  
+        let myVideo = this.videoSource;
+        if(typeof myVideo!=='undefined'){
+            if(active){
+                myVideo.currentTime = '0';
+                myVideo.onloadstart=()=>{
+                    this.setState({
+                        gifLoading:true,
+                    });  
+                }
+                myVideo.oncanplay=()=>{
+                    this.setState({
+                        gifLoading:false,
+                    });  
+                }
+                if(myVideo.paused){
+                    myVideo.autoplay=true;
+                    myVideo.play()
+                }
+            }else{
+                myVideo.pause()
             }
-            myVideo.oncanplay=()=>{
-                this.setState({
-                    gifLoading:false,
-                });  
-            }
-            if(myVideo.paused){
-                myVideo.play();
-            }
-            
         }
     }
     handleMouseOut=(e)=>{
@@ -117,7 +121,7 @@ class CardItem extends Component {
     } 
     render() {
         const {thumbLoading,gifLoading,imgSrc,videoSrc,imgLoadState,itemPress}=this.state;
-        const {data}=this.props;
+        const {data,gifLoad}=this.props;
         return (
             <div className={(itemPress)?`scale ${this.props.className}`:this.props.className} 
                 style={this.props.wrapStyle}
@@ -144,14 +148,17 @@ class CardItem extends Component {
                             {
                                 thumbLoading?<DefaultLoading color="white"/>:null
                             }
-                            <video className="video-wrap" loop playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
-                            style={{
-                                visibility:this.props.gifLoad?'visible':'hidden'
-                            }}></video>
+                            {(this.props.isGif)?
+                                <video className="video-wrap" loop playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
+                                style={{
+                                    visibility:gifLoad?'visible':'visible'
+                                }}>
+                                </video>:null
+                            }
                             {(this.props.isGif)?
                             <div>
-                                <div className={`gif-loading-wrap ${(this.props.gifLoad)?(!gifLoading)?`out`:`in`:``}`}>
-                                    <GifLoading open={gifLoading && this.props.gifLoad}/>
+                                <div className={`gif-loading-wrap ${(gifLoad)?(!gifLoading)?`out`:`in`:``}`}>
+                                    <GifLoading open={gifLoading}/>
                                 </div>
                             </div>:null
                             }
