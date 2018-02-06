@@ -40,6 +40,7 @@ class CardItem extends Component {
         };
         setTimeout(()=>{
             this.playVideo(this.props.gifLoad);
+            alert(this.props.gifLoad)
         },300);
       }
     componentWillReceiveProps(nextProps){
@@ -157,7 +158,7 @@ class CardItem extends Component {
                             }
                             {(this.props.isGif)?
                             <div>
-                                <div className={`gif-loading-wrap ${(gifLoad)?(!gifLoading)?`out`:`in`:``}`}>
+                                <div className={`gif-loading-wrap ${(gifLoad)?(!gifLoading)?`out`:``:``}`}>
                                     <GifLoading open={gifLoading}/>
                                 </div>
                             </div>:null
