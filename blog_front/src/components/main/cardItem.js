@@ -51,9 +51,7 @@ class CardItem extends Component {
         }
     }      
     playVideo=(active)=>{
-        console.log(active)
         if(active){
-            
             let myVideo = this.videoSource;
             myVideo.currentTime = '0';
             myVideo.onloadstart=()=>{
@@ -66,7 +64,10 @@ class CardItem extends Component {
                     gifLoading:false,
                 });  
             }
-            myVideo.play();
+            if(myVideo.paused){
+                myVideo.play();
+            }
+            
         }
     }
     handleMouseOut=(e)=>{
