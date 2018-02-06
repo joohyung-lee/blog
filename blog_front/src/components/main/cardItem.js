@@ -10,6 +10,7 @@ class CardItem extends Component {
         super(props);
         this.thumImages = null;
         this.state={
+            load:false,
             thumbLoading:false,
             gifLoading:false,
             imgSrc:'',
@@ -19,8 +20,8 @@ class CardItem extends Component {
         }
       }
     componentDidMount() {
-       
         this.setState({
+            load:true,
             thumbLoading: true,
             itemPress:false
         });
@@ -37,12 +38,20 @@ class CardItem extends Component {
               videoSrc:videoSrc
             });
         };
+        setTimeout(()=>{
+            if(videoSrc!==''){
+                this.playVideo(this.props.gifLoad);
+            }
+        },400);
       }
     componentWillReceiveProps(nextProps){
-        
+        const {videoSrc,data} = nextProps;
         const gifChange=nextProps.gifLoad!==this.props.gifLoad;
+        if(data!==this.props.data){
+        }
         if(gifChange){
-            this.playVideo(nextProps.gifLoad);
+            this.playVideo(nextProps.gifLoad);    
+        }else{
             
         }
     }      
@@ -61,11 +70,6 @@ class CardItem extends Component {
                 });  
             }
             myVideo.play();
-        }else{
-            // let myVideoOther = this.videoSource;
-            // console.log(myVideoOther)
-            // myVideoOther.pause();
-            
         }
     }
     handleMouseOut=(e)=>{
