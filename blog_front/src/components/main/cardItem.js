@@ -72,7 +72,6 @@ class CardItem extends Component {
         this.setState({
             itemPress:false
         });
-        return this.props.onMouseOut(e); 
     }
     handleDown=(e)=>{
         if (e.nativeEvent.which == 3) {

@@ -236,6 +236,10 @@
                 border-top-left-radius: 10px;
                 border-top-right-radius: 10px; 
             }
+            video{
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px; 
+            }
         }
         .card-item-bottom{
             border-bottom-left-radius: 10px;
@@ -277,7 +281,7 @@
     .menu-list{
         width:200px;
         ul{
-            top:15%;
+            top:80px;
             li{
                 padding:4px 0 4px 20px;
                 a{
@@ -291,7 +295,7 @@
     }
     .main-container{
         .title-wrap{
-            top:15%;
+            top:80px;
             .menu-title{
                 padding-left:40px;
                 .menu-icon{
@@ -307,12 +311,12 @@
         }
         
         .main-wrapper{
-            top:13%;
+            top:80px;
             padding:0;
             min-height: 540px;
             
             .card-item-wrap{
-                top:80px;
+                top:60px;
                 >div{
                     display: flex;
                 }

@@ -78,13 +78,8 @@ class Main extends Component {
     componentWillUnmount(){
         window.removeEventListener("resize", this.dimensions);
         let md = new MobileDetect(window.navigator.userAgent);
-        if(md.mobile()){
-            window.removeEventListener('touchmove',this.handleMove);
-            window.removeEventListener('touchend',this.handleTouchUp);
-        }else{
-            window.removeEventListener('mousemove',this.handleMove);
-            window.removeEventListener('mouseup',this.handleUp);
-        }
+        window.removeEventListener('mousemove',this.handleMove);
+        window.removeEventListener('mouseup',this.handleUp);
         
     }
     componentDidUpdate(prevProps,prevState){
@@ -120,17 +115,8 @@ class Main extends Component {
         const{active,offsetX}=motion;
         let offset=offsetX; 
         const activeItem=active;
-        let mobileVersion=false;
-        let md = new MobileDetect(window.navigator.userAgent);
-        if(md.mobile()){
-            window.addEventListener('touchmove',this.handleMove);
-            window.addEventListener('touchend',this.handleTouchUp);
-            mobileVersion=true
-        }else{
-            window.addEventListener('mousemove',this.handleMove);
-            window.addEventListener('mouseup',this.handleUp);
-            mobileVersion=false
-        }
+        window.addEventListener('mousemove',this.handleMove);
+        window.addEventListener('mouseup',this.handleUp);
         let windowWidth=document.documentElement.clientWidth;
         const eleResponse=windowWidth/3.5;
         const mobileSize=windowWidth/1.2;
@@ -195,7 +181,6 @@ class Main extends Component {
                 itemPd:itemPd,//card item padding
                 offsetX:offset,//moved scroll
                 active:activeItem,
-                mobileVersion:mobileVersion
             }
         });
     }
@@ -233,9 +218,6 @@ class Main extends Component {
                 active:Math.round(mouseX/eleWidth)
             }
         });
-    }
-    onScroll=(e)=>{
-        console.dir(e.target.scrollLeft)
     }
     handleDown=(pos,e)=>{
         const{motionDispatch}=this.props; 
@@ -361,9 +343,6 @@ class Main extends Component {
             });
         }
     }
-    handleMouseOut=()=>{
-    }
-    
     favClick=(postId,i,e)=>{
         e.stopPropagation();
         const {motionDispatch,get,authUser,modalView}=this.props;        
@@ -484,7 +463,7 @@ class Main extends Component {
     render() {   
         const {menuOpen,favActive,mainIndex,detailView}=this.state;
         const {motion,authUser,data,loading,total,oldLoading,starLoading}=this.props;
-        const {windowWidth,mobileVersion,blockWidth,isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
+        const {windowWidth,blockWidth,isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
         const style=(isPressed)?{
                 x:offsetX,
             }:{
@@ -496,9 +475,8 @@ class Main extends Component {
                 <Motion style={style} onRest={this.onRest}>
                     {({x})=>
                     <div className={`main-container ${(menuOpen?'menu':'')}`}
-                        onTouchStart={mobileVersion?null:this.handleDown.bind(this,x)} 
-                        onMouseDown={mobileVersion?null:this.handleDown.bind(this,x)} 
-                        onWheel={mobileVersion?null:this.handleWheel.bind(this,x)}
+                        onMouseDown={this.handleDown.bind(this,x)} 
+                        onWheel={this.handleWheel.bind(this,x)}
                     > 
                     <div className="title-wrap"
                         style={{
@@ -583,7 +561,6 @@ class Main extends Component {
                                                 isGif={isGif}
                                                 gifLoad={(active===i && isGif)?true:false}
                                                 onMouseOver={this.handleMouseOver.bind(this,i)} 
-                                                onMouseOut={this.handleMouseOut}
                                                 className={active===i?"card-item hover":"card-item"}
                                                 wrapStyle={{
                                                     width:`${eleWidth}px`,
