@@ -44,9 +44,7 @@ class CardItem extends Component {
         
       }
     componentWillReceiveProps(nextProps){
-        const {videoSrc,data} = nextProps;
         const gifChange=nextProps.gifLoad!==this.props.gifLoad;
-  
         if(gifChange){
             this.playVideo(nextProps.gifLoad);    
         }
@@ -55,6 +53,7 @@ class CardItem extends Component {
         let myVideo = this.videoSource;
         if(typeof myVideo!=='undefined'){
             if(active){
+                myVideo.addEventListener('click', () => { myVideo.play(); })
                 myVideo.currentTime = '0';
                 myVideo.onloadstart=()=>{
                     this.setState({
@@ -65,10 +64,11 @@ class CardItem extends Component {
                     this.setState({
                         gifLoading:false,
                     });  
-                    myVideo.play()
+                    myVideo.click()
                 }
                 if(myVideo.paused){
-                    myVideo.play()
+                    myVideo.click()
+                    //myVideo.play()
                 }
             }else{
                 myVideo.pause()
@@ -150,7 +150,7 @@ class CardItem extends Component {
                                 thumbLoading?<DefaultLoading color="white"/>:null
                             }
                             {(this.props.isGif && videoSrc!=='')?
-                                <video className="video-wrap" controls loop playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
+                                <video className="video-wrap" loop playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
                                 style={{
                                     visibility:gifLoad?'visible':'hidden'
                                 }}>
