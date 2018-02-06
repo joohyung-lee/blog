@@ -39,24 +39,21 @@ class CardItem extends Component {
             });
         };
         setTimeout(()=>{
-            if(videoSrc!==''){
-                this.playVideo(this.props.gifLoad);
-            }
-        },400);
+            this.playVideo(this.props.gifLoad);
+        },300);
       }
     componentWillReceiveProps(nextProps){
         const {videoSrc,data} = nextProps;
         const gifChange=nextProps.gifLoad!==this.props.gifLoad;
-        if(data!==this.props.data){
-        }
+  
         if(gifChange){
             this.playVideo(nextProps.gifLoad);    
-        }else{
-            
         }
     }      
     playVideo=(active)=>{
+        console.log(active)
         if(active){
+            
             let myVideo = this.videoSource;
             myVideo.currentTime = '0';
             myVideo.onloadstart=()=>{
