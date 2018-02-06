@@ -37,10 +37,11 @@ class CardItem extends Component {
               imgSrc:imagePath,
               videoSrc:videoSrc
             });
+            setTimeout(()=>{
+                this.playVideo(this.props.gifLoad);
+            },300);
         };
-        setTimeout(()=>{
-            this.playVideo(this.props.gifLoad);
-        },300);
+        
       }
     componentWillReceiveProps(nextProps){
         const {videoSrc,data} = nextProps;
