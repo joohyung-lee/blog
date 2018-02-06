@@ -40,7 +40,6 @@ class CardItem extends Component {
         };
         setTimeout(()=>{
             this.playVideo(this.props.gifLoad);
-            alert(this.props.gifLoad)
         },300);
       }
     componentWillReceiveProps(nextProps){
