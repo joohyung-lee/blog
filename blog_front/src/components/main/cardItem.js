@@ -65,9 +65,9 @@ class CardItem extends Component {
                     this.setState({
                         gifLoading:false,
                     });  
+                    myVideo.play()
                 }
                 if(myVideo.paused){
-                    myVideo.autoplay=true;
                     myVideo.play()
                 }
             }else{
@@ -150,7 +150,7 @@ class CardItem extends Component {
                                 thumbLoading?<DefaultLoading color="white"/>:null
                             }
                             {(this.props.isGif && videoSrc!=='')?
-                                <video className="video-wrap" controls loop autoPlay playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
+                                <video className="video-wrap" controls loop playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
                                 style={{
                                     visibility:gifLoad?'visible':'hidden'
                                 }}>
