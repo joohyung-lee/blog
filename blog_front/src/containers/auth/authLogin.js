@@ -24,6 +24,9 @@ class AuthLogin extends Component {
             modalView.closeModal({
                 modalName:'mymenu'
             });    
+            modalView.closeModal({
+                modalName:'login'
+            });
             if(authUser.isLogin){
                 setTimeout(()=>{ 
                     modalView.closeModal({
@@ -31,6 +34,7 @@ class AuthLogin extends Component {
                     }); 
                 }, 1500);
             }else{
+                
                 modalView.openModal({
                     modalName:'toast'
                 });

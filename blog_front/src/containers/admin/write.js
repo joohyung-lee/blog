@@ -4,15 +4,16 @@ import * as httpRequest from 'redux/helper/httpRequest'
 import dateFormat from 'dateformat';
 import DefaultLoading from 'images/defaultLoading';
 import { Scrollbars } from 'react-custom-scrollbars';
-
 //config
 import urlConfig from 'config/urlConfig'
 //redux
+import * as modalActions from 'redux/modal';
 import * as adminAction from 'redux/admin';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 //components
 import {MarkdownEdit,ImageView} from 'components/admin';
+import AlertModal from 'components/common/modal/alertModal';
 //error
 class Write extends Component { 
     constructor(props){
@@ -36,11 +37,19 @@ class Write extends Component {
         if(typeof this.props.match.params.id!=="undefined"){
             writeupload.getSinglePost('ADMIN/ADMIN_SINGLE_GET','write',this.props.match.params.id);
         }
-        
     }
     componentWillUnmount(){
-        window.removeEventListener("resize", this.dimentions);  
- 
+        window.removeEventListener("resize", this.dimentions);   
+    }
+    componentWillReceiveProps(nextProps) {
+        const {writeLoading,modalView}=this.props;
+        if(writeLoading!==nextProps.writeLoading){
+            if(!nextProps.writeLoading){
+                modalView.openModal({
+                    modalName:'alert'
+                }); 
+            }
+        }
     }
     dimentions=()=>{
         this.setState({
@@ -215,13 +224,22 @@ class Write extends Component {
             })
         }
     }
+    alertClose=()=>{
+        const {modalView} = this.props;
+        modalView.closeModal({
+            modalName:'alert'
+        }); 
+    }
     render() {
-        const {writePost,thumb,gif,files,writeLoading,imageLoading}=this.props;
+        const {writePost,thumb,gif,files,writeLoading,imageLoading,modal}=this.props;
         return (
             <Scrollbars
             style={{
                 height:`${this.state.innerHeight}px`,
             }}>
+                <AlertModal open={modal['alert'].open} close={this.alertClose} 
+                title="Success"
+                msg="You have successfully posted"/>
                 <div className="admin-wrapper">
                     {writeLoading?<DefaultLoading color="black"/>:null}
                     <div className="header">
@@ -243,7 +261,7 @@ class Write extends Component {
                                 <option value="projects">projects</option>
                             </select>
                         </div>
-                        <button className="btn-save" onClick={this.handleSubmit}>저장</button>
+                        <button className="btn-save" onClick={this.handleSubmit}>Save</button>
                     </div>
                     <div className="summary">
                         <textarea type="text" rows="2" cols="50" onChange={this.handleSummary} value={writePost.summary} placeholder="summary를 입력해주세요"/>
@@ -328,6 +346,7 @@ export default withRouter(connect(
         const{id}=props.match.params; 
         const writeType=(typeof id==="undefined")?"createData":"modifyData" 
         return{
+            modal:state.modal.toJS(),
             isAuth:state.auth.getIn(['adminProfile']).toJS().error,
             writeLoading:state.admin.getIn([writeType]).toJS().pending,
             writePost:state.admin.getIn([writeType,'data']).toJS(),
@@ -342,5 +361,6 @@ export default withRouter(connect(
     (dispatch)=>({
         writeupload:bindActionCreators(httpRequest,dispatch),
         input: bindActionCreators(adminAction, dispatch),
+        modalView:bindActionCreators(modalActions,dispatch),
     })
 )(Write));

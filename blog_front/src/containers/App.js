@@ -8,6 +8,7 @@ import 'lib/arrayFind';
 import 'styles/joomation.scss';
 //components
 import LoginModal from 'components/common/modal/loginModal';
+
 import {MainRoute,SearchRoute,AdminRoute} from 'components/route';
 
 //pages
@@ -176,6 +177,7 @@ class App extends Component {
     return (
         <div className="app">
             <LoginModal open={modal['login'].open} close={this.loginClose}/>
+            
             <Header/>
               <Route render={({location}) => {
                 if(adminError===403 || postsError===403){

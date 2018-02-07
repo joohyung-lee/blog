@@ -66,8 +66,13 @@ class AlertModal extends Component {
                     >
                         <div onClick={this.deArea} className="modal-box">
                             <div className="modal-title">
-                                <h1>Alert</h1>
+                                <h1>{this.props.title}</h1>
+                            </div>
+                            <div className="modal-contents">
                                 <p className="msg">{this.props.msg}</p>
+                            </div>
+                            <div className="modal-bottom">
+                                <button className="success"onClick={this.props.close}>Ok</button>
                             </div>
                         </div>
                     </div>

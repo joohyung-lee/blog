@@ -45,17 +45,46 @@ class LoginModal extends Component {
     deArea=(e)=>{
         e.stopPropagation();
     }
+    openDialog = (uri, name, options, closeCallback)=>{
+        let win = window.open(uri, name, options);
+        let interval = window.setInterval(function() {
+            try {
+                if (win == null || win.closed) {
+                    window.clearInterval(interval);
+                    closeCallback(win);
+                }
+            }
+            catch (e) {
+            }
+        }, 100);
+        return win;
+    };
     //구글 로그인
     googleLogin=()=>{
-        window.open('/auth/loginPopup/google','google','_blank'); 
+        const uri='/auth/loginPopup/google';
+        const popupName='google login';
+        const options='_blank';
+        this.openDialog(uri, popupName, options, function(win) {
+            return window.loginSuccess();
+        });        
     }
     //페이스북 로그인
     facebookLogin=()=>{
-        window.open('/auth/loginPopup/facebook','facebook','_blank'); 
+        const uri='/auth/loginPopup/facebook';
+        const popupName='facebook login';
+        const options='_blank';
+        this.openDialog(uri, popupName, options, function(win) {
+            return window.loginSuccess();
+        });    
     }
     //github 로그인
     githubLogin=()=>{
-        window.open('/auth/loginPopup/github','github','_blank'); 
+        const uri='/auth/loginPopup/github';
+        const popupName='github login';
+        const options='_blank';
+        this.openDialog(uri, popupName, options, function(win) {
+            return window.loginSuccess();
+        });    
     }
     render() {
         
@@ -78,10 +107,17 @@ class LoginModal extends Component {
                         onClick={this.props.close}
                     >
                         <div onClick={this.deArea} className="modal-box">
-                            <div className="login-title">
-                                <h1>Login</h1>
+                            <div className="btn-close" onClick={this.props.close}>
+                                <span></span>
+                                <span></span>
                             </div>
-                            <div className="login-content">
+                            <div className="modal-title">
+                                <h1>
+                                    <span className="logo">JOOMATION</span>
+                                    LOGIN
+                                </h1>
+                            </div>
+                            <div className="modal-contents">
                                 <ul>
                                     <li className='google'>
                                         <button onClick={this.googleLogin}>Google</button>
@@ -93,6 +129,10 @@ class LoginModal extends Component {
                                         <button onClick={this.githubLogin}>github</button>
                                     </li>
                                 </ul>
+                            </div>
+                            <div className="modal-bottom">
+                                <p className="text">Sign in to access this homepage, write comments and posts you love, and collect you love</p>
+                                <p className="contact">joomation@gmail.com</p>
                             </div>
                         </div>
                     </div>
