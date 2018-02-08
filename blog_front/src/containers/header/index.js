@@ -51,7 +51,6 @@ class Header extends Component {
     outHide=(e)=>{
         const {modalView,modal}=this.props;
         if(modal.mymenu.open){
-            console.log('close')
             modalView.closeModal({
                 modalName:'mymenu'
             });

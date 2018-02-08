@@ -52,8 +52,7 @@ class CardItem extends Component {
     playVideo=(active)=>{
         let myVideo = this.videoSource;
         if(typeof myVideo!=='undefined'){
-            if(active){
-                myVideo.addEventListener('click', () => { myVideo.play(); })
+            if(active){ 
                 myVideo.currentTime = '0';
                 myVideo.onloadstart=()=>{
                     this.setState({
@@ -64,11 +63,10 @@ class CardItem extends Component {
                     this.setState({
                         gifLoading:false,
                     });  
-                    myVideo.click()
+                    myVideo.play()
                 }
                 if(myVideo.paused){
-                    myVideo.click()
-                    //myVideo.play()
+                    myVideo.play()
                 }
             }else{
                 myVideo.pause()
