@@ -21,6 +21,7 @@ class AuthLogin extends Component {
     componentDidUpdate(prevProps, prevState){
         const {authUser,modalView,modal} =this.props;  
         if(prevProps.authUser.isLogin !== authUser.isLogin) {
+            console.log('loginstate')
             modalView.closeModal({
                 modalName:'mymenu'
             });    
