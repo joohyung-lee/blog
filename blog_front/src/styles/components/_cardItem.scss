@@ -111,6 +111,7 @@
         right:20px;
         opacity: 1;
         transition: transform 0.2s ease;
+        z-index: 1;
         &.in{
             opacity: 1;
             transform: translateX(15px)
@@ -122,10 +123,16 @@
             width:50px;
             height:25px;  
             transform-origin: 50% 50%;
+            
         }
-        .gif-loading.animate{       
-            margin-left:40px; 
-            animation: loadingrotate .7s linear infinite;
+        .gif-loading.animate{     
+            svg{
+                rect{
+                    animation: loadingrotate .7s linear infinite;
+                    transform-origin: center center;
+                }
+            }  
+            
         }
     }
     .fade-in{

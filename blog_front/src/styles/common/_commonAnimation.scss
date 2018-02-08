@@ -77,7 +77,14 @@
 }
 
 /* other animations */
-
+@keyframes fadeOut {
+  50% {
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
 @-webkit-keyframes loadingrotate {
   100% {
     -webkit-transform: rotate(360deg);

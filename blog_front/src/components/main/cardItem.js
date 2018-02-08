@@ -53,17 +53,14 @@ class CardItem extends Component {
         let myVideo = this.videoSource;
         if(typeof myVideo!=='undefined'){
             if(active){ 
+                this.setState({
+                    gifLoading:true
+                });
                 myVideo.currentTime = '0';
-                myVideo.onloadstart=()=>{
-                    this.setState({
-                        gifLoading:true,
-                    });  
-                }
                 myVideo.oncanplay=()=>{
                     this.setState({
                         gifLoading:false,
                     });  
-                    myVideo.play()
                 }
                 if(myVideo.paused){
                     myVideo.play()
@@ -155,11 +152,9 @@ class CardItem extends Component {
                                 </video>:null
                             }
                             {(this.props.isGif)?
-                            <div>
-                                <div className={`gif-loading-wrap ${(gifLoad)?(!gifLoading)?`out`:``:``}`}>
+                                <div className={`gif-loading-wrap ${(gifLoad&&!gifLoading)?`out`:``}`}>
                                     <GifLoading open={gifLoading}/>
-                                </div>
-                            </div>:null
+                                </div>:null
                             }
                         </div>
                         <div className="card-item-bottom" style={{height:`${this.props.bottomHeight}px`}}>
