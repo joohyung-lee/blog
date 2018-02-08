@@ -19,8 +19,8 @@ class AuthLogin extends Component {
     }
 
     componentDidUpdate(prevProps, prevState){
-        if(prevProps.authUser.isLogin !== this.props.authUser.isLogin) {
-            const {authUser,modalView} =this.props;  
+        const {authUser,modalView,modal} =this.props;  
+        if(prevProps.authUser.isLogin !== authUser.isLogin) {
             modalView.closeModal({
                 modalName:'mymenu'
             });    
@@ -44,7 +44,16 @@ class AuthLogin extends Component {
                     }); 
                 }, 1500);
             }
-        } 
+        }else{
+            if(prevProps.modal.toast.open!==modal.toast.open){
+                setTimeout(()=>{ 
+                    modalView.closeModal({
+                        modalName:'toast'
+                    }); 
+                }, 1500);
+            }
+        }
+        
     }
     //logout
     logOut=()=>{
