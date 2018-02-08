@@ -160,8 +160,8 @@ class Main extends Component {
             20;
         //card item width
         const eleWidthSize=(windowWidth>1380)?
-            (maxDesk>400)?
-            400:
+            (maxDesk>380)?
+            380:
             maxDesk:
             (windowWidth<1024)?
             windowWidth<640?
@@ -170,7 +170,7 @@ class Main extends Component {
             mobileMax:
             minDesk:
             eleResponse;
-        const eleWidth=eleWidthSize;
+        const eleWidth=eleWidthSize>380?380:eleWidthSize;
         //card item height 
         const eleHeight=eleWidth*1.2;
         //full width
@@ -632,7 +632,7 @@ class Main extends Component {
                                                       boxShadow: `0 ${config.style.shadowSize1}px ${config.style.shadowSize2}px rgba(52, 73, 94, ${config.style.shadowColor})`,
                                                       
                                                   }} 
-                                                  responseFont={(eleWidth-itemPd*2)/21}
+                                                  responseFont={(eleWidth-itemPd*2)/21<15?15:(eleWidth-itemPd*2)/21}
                                                   imgHeight={(eleWidth-itemPd*2)*3/4}
                                                   bottomHeight={(eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4}
                                                   thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}

@@ -1,16 +1,18 @@
 .card-item{
     position: relative;
     .card-item-boxWrap{
+        position: relative;
         width:100%;
         height:100%;
     }
     .icon-fav{
         position: absolute;
-        right:40px;
-        bottom:45px;
+        right:20px;
+        bottom:25px;
         display: inline-block;  
         @media screen and (max-width: $screen-desktop) {
-            right:35px;
+            right:15px;
+            bottom:20px;
         } 
         .svg-wrap{
             position: relative;
@@ -136,12 +138,16 @@
         
     }
     .card-item-bottom{
+        position: absolute;
+        left:0;
+        bottom:0;
+        display: flex;
+        flex-flow: column nowrap;
         width: 100%;
-        padding:20px 20px 50px 20px;
+        padding:20px;
         background-color: $t-white-10;
         @media screen and (max-width: $screen-desktop) {
-            padding:15px 15px 50px 15px;
-           
+            padding:15px;
         }
         .post-meta{
             
@@ -151,30 +157,33 @@
                 transform: translateZ(0);
             }
         }
+        .post-title{
+            flex-grow: 1;
+        }
         h3{
-            margin-top:4px;
+            flex-grow: 1;
+            margin:4px 0;
             font-size: 1.2rem;
+            line-height: 1.2;
             font-weight: 600;
             color:$c-black-0;
             white-space: normal;
-            word-break: keep-all;
             transform: translateZ(0);
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .avatar-wrap{
-            position: absolute;
+            align-self: flex-end;
             display:flex;
-            left:0;
-            bottom:20px;
-            padding:0 0 0 20px;
+            width:100%;
             span{
                 display: block;
-                line-height: 1.4;
-                font-size:1rem;
+                line-height: 1.3;
+                font-size:13px;
                 color:$c-black-0;
                 transform: translateZ(0)
             }
             .date{
-                font-size:0.9rem;
                 color:$c-black-2;
             }
             .avatar{
@@ -194,7 +203,7 @@
         width: 100%;
         top: 100%;
         left: 0;
-        padding:0 22px;
+        padding:20px 0;
         white-space: normal;
         word-break: keep-all;
         >div{

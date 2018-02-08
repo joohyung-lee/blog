@@ -9,6 +9,10 @@ const springOption={
     leave:{
         stiffness: 120, 
         damping: 18
+    },
+    spring:{
+        stiffness: 120, 
+        damping: 15
     }
 }
 class LoginModal extends Component {
@@ -25,7 +29,8 @@ class LoginModal extends Component {
                 {
                     key: 'loginModal',
                     style:{
-                        opacity:spring(1,springOption.enter)
+                        opacity:spring(1,springOption.enter),
+                        scale:spring(1,springOption.spring)
                     },
                 },
 
@@ -34,12 +39,14 @@ class LoginModal extends Component {
     }
     willEnter=()=>{
         return {
-            opacity:0
+            opacity:0,
+            scale:1.1
         }
     }
     willLeave=()=>{
         return{
-            opacity:spring(0,springOption.leave)
+            opacity:spring(0,springOption.leave),
+            scale:spring(1.1,springOption.spring)
         }
     }
     deArea=(e)=>{
@@ -106,7 +113,11 @@ class LoginModal extends Component {
                         }}
                         onClick={this.props.close}
                     >
-                        <div onClick={this.deArea} className="modal-box">
+                        <div onClick={this.deArea} className="modal-box"
+                        style={{
+                            transform:`scale(${config.style.scale})`
+                        }}
+                        >
                             <div className="btn-close" onClick={this.props.close}>
                                 <span></span>
                                 <span></span>

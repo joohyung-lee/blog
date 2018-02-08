@@ -19,7 +19,7 @@
                     font-size: 1.3rem;
                 }
                 h1{
-
+                    font-weight: 500
                 }
             }
             .modal-contents{
@@ -129,6 +129,7 @@
         box-shadow: $box-shadow-modal;
         border-radius: 10px;
         overflow: hidden;
+        will-change: transform;
         .modal-title{
             margin-bottom:30px;
             padding:25px 25px 0;

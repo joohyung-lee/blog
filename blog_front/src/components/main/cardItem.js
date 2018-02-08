@@ -168,7 +168,13 @@ class CardItem extends Component {
                             <div className="post-meta">
                                 <span className="category">{data.category}</span>
                             </div>
-                            <h3 style={{fontSize:`${this.props.responseFont}px`}}>{data.title}</h3>
+                                
+                                <Dotdotdot clamp={this.props.bottomHeight<140?1:2} className="post-title">
+                                    <h3 style={{
+                                        fontSize:`${this.props.responseFont}px`
+                                    }}>{data.title}</h3>
+                                </Dotdotdot>
+       
                             <div className="avatar-wrap">                       
                                 <div className="avatar" style={{backgroundImage:`url(${data.user.profileImg.url})`}}/>
                                 <div className="avatar-info">
