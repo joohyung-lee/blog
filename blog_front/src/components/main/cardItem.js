@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconFav from 'images/iconFav';
-import GifLoading from 'images/gifLoading';
+import VideoLoading from 'images/videoLoading';
 import DefaultLoading from 'images/defaultLoading';
 import MobileDetect from 'mobile-detect';
 import Dotdotdot from 'react-dotdotdot';
+import { setTimeout } from 'timers';
 class CardItem extends Component {
     constructor(props) {
         super(props);
         this.thumImages = null;
-        this.state={
+        this.state={ 
             load:false,
             thumbLoading:false,
             gifLoading:false,
@@ -41,7 +42,6 @@ class CardItem extends Component {
                 this.playVideo(this.props.gifLoad);
             },300);
         };
-        
       }
     componentWillReceiveProps(nextProps){
         const gifChange=nextProps.gifLoad!==this.props.gifLoad;
@@ -57,17 +57,22 @@ class CardItem extends Component {
                     gifLoading:true
                 });
                 myVideo.currentTime = '0';
-                myVideo.oncanplay=()=>{
-                    this.setState({
-                        gifLoading:false,
-                    });  
-                }
+                this.checkLoad(myVideo);
                 if(myVideo.paused){
-                    myVideo.play()
+                    myVideo.play();
                 }
             }else{
                 myVideo.pause()
             }
+        }
+    }
+    checkLoad=(target)=>{
+        if(target.readyState===4){
+            this.setState({
+                gifLoading:false,
+            });  
+        }else{
+            setTimeout(this.checkLoad.bind(this,target),100);
         }
     }
     handleMouseOut=(e)=>{
@@ -153,7 +158,7 @@ class CardItem extends Component {
                             }
                             {(this.props.isGif)?
                                 <div className={`gif-loading-wrap ${(gifLoad&&!gifLoading)?`out`:``}`}>
-                                    <GifLoading open={gifLoading}/>
+                                    <VideoLoading open={gifLoading}/>
                                 </div>:null
                             }
                         </div>

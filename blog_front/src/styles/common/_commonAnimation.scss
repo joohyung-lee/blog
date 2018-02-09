@@ -85,6 +85,21 @@
     opacity: 1;
   }
 }
+$videoArray:100;
+@keyframes videoStroke {
+  0% {
+    stroke-dashoffset: -$videoArray;
+    stroke-dasharray:$videoArray,$videoArray
+  }
+  80%{
+    stroke-dashoffset: $videoArray/4;
+    stroke-dasharray:$videoArray/4,$videoArray
+  }
+  100%{
+    stroke-dashoffset: $videoArray;
+    stroke-dasharray:$videoArray,$videoArray
+  }
+}
 @-webkit-keyframes loadingrotate {
   100% {
     -webkit-transform: rotate(360deg);

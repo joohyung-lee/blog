@@ -120,17 +120,23 @@
             opacity: 0;
         }
         .gif-loading{
-            width:50px;
-            height:25px;  
+            width:20px;
+            height:20px;  
             transform-origin: 50% 50%;
-            
+            opacity: 0.5;
+            svg{
+                width:100%;
+                fill:$t-white-10;
+                stroke-width: 2px;
+                stroke:$t-white-10;
+                
+            }
         }
         .gif-loading.animate{     
             svg{
-                rect{
-                    animation: loadingrotate .7s linear infinite;
-                    transform-origin: center center;
-                }
+                fill:none;
+                stroke-dasharray: 100,100;
+                animation: videoStroke 1.5s $ease-out infinite; 
             }  
             
         }
