@@ -129,9 +129,7 @@
                 fill:$t-white-10;
                 stroke-width: 2px;
                 stroke:$t-white-10;
-                fill:none;
-                stroke-dasharray: 100,100;
-                animation: videoStroke 1.5s $ease-out infinite; 
+                
             }
         }
         .gif-loading.animate{     
