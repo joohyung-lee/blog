@@ -123,7 +123,7 @@
             width:20px;
             height:20px;  
             transform-origin: 50% 50%;
-            opacity: 0.5;
+            opacity: 0.6;
             svg{
                 width:100%;
                 fill:$t-white-10;
@@ -269,6 +269,7 @@
         flex:1;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
+        overflow:hidden;
         .back-image{
             position:relative;
             width: 100%;
