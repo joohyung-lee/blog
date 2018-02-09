@@ -36,7 +36,7 @@
     ul{
         position: relative;
         transform: translateZ(0);
-        top:17%;
+        top:calc(50px + 10%);
         li{
             opacity: 0;
             padding: 4px 0 4px 40px;
@@ -88,7 +88,7 @@
     .title-wrap{
         position: absolute;
         display: flex;
-        top:17%;
+        top:calc(50px + 10%);
         right:0;
         left:0;
         padding:0 20px 0 0;
@@ -212,7 +212,7 @@
 }
 .main-wrapper{
     position: absolute;
-    top:17%;
+    top:calc(50px + 10%);
     right:0;
     bottom:0;
     left:0;
@@ -279,11 +279,27 @@
     }
 }
 //media styles
+@media screen and (max-width: $screen-pad) {
+    .menu-list{
+        ul{
+            top:calc(50px + 5%);
+        }
+    }
+    .main-container{
+        .title-wrap{
+            top:calc(50px + 5%);
+        }
+        
+        .main-wrapper{
+            top:calc(50px + 5%);
+        } 
+    }
+}
 @media screen and (max-width: $screen-phone-large) {
     .menu-list{
         width:200px;
         ul{
-            top:80px;
+            top:calc(50px + 5%);
             li{
                 padding:4px 0 4px 20px;
                 a{
