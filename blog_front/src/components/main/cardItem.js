@@ -156,7 +156,7 @@ class CardItem extends Component {
                                 thumbLoading?<DefaultLoading color="white"/>:null
                             }
                             {(this.props.isGif && videoSrc!=='')?
-                                <video className="video-wrap" loop playsInline src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
+                                <video className="video-wrap" loop playsInline muted src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
                                 style={{
                                     visibility:gifLoad?'visible':'hidden'
                                 }}>
