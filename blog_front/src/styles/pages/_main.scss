@@ -295,6 +295,11 @@
         } 
     }
 }
+@media screen and (max-height: 560px) {
+    .summary-wrap{
+        display: none;
+    }
+}
 @media screen and (max-width: $screen-phone-large) {
     .menu-list{
         width:200px;
