@@ -58,6 +58,12 @@ class CardItem extends Component {
                 });
                 myVideo.currentTime = '0';
                 this.checkLoad(myVideo);
+                myVideo.oncanplay=()=>{
+                    this.setState({
+                        gifLoading:false
+                    });
+                    myVideo.play();
+                }
                 if(myVideo.paused){
                     myVideo.play();
                 }

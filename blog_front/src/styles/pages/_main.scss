@@ -83,6 +83,7 @@
     background:$c-black-8;
     .view{
         overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch;
     }
     .title-wrap{
         position: absolute;
@@ -296,7 +297,7 @@
     }
     .main-container{
         .title-wrap{
-            top:80px;
+            top:calc(50px + 5%);
             .menu-title{
                 padding-left:40px;
                 .menu-icon{
@@ -312,7 +313,7 @@
         }
         
         .main-wrapper{
-            top:80px;
+            top:calc(50px + 5%);
             padding:0;
             min-height: 540px;
             
