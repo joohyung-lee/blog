@@ -46,6 +46,7 @@ class Main extends Component {
             ],
             searchKeyowrdAni:[],
             mainIndex:0,
+            ratioH:false
         };
         
     }
@@ -62,6 +63,7 @@ class Main extends Component {
         })
     }
     componentDidMount(){     
+        
         const{get,common,handleHeader}=this.props;
         const url=this.props.location.pathname.split('/')[1];
         if(!common.mainLoad){
@@ -137,11 +139,8 @@ class Main extends Component {
             mobileVersion=false
         }
         let windowWidth=document.documentElement.clientWidth;
-        const eleResponse=windowWidth/3.5;
-        const mobileSize=windowWidth/1.2;
-        const mobileMax=windowWidth/1.6;
-        const minDesk=windowWidth/2.5;
-        const maxDesk=windowWidth/4.5;
+        let windowHeight=document.documentElement.clientHeight;
+        
         //full width padding
         const wrapperPd=(windowWidth<1380)?
             (windowWidth<1024)?
@@ -149,7 +148,7 @@ class Main extends Component {
             30:
             50:
             50:
-            70
+            70;
         //card item padding
         const itemPd=(windowWidth<1380)?
             (windowWidth<1024)?
@@ -159,6 +158,11 @@ class Main extends Component {
             15:
             20;
         //card item width
+        const eleResponse=windowWidth/3.5;
+        const mobileSize=windowWidth-wrapperPd*2;
+        const mobileMax=windowWidth/1.6;
+        const minDesk=windowWidth/2.5;
+        const maxDesk=windowWidth/4.5;
         const eleWidthSize=(windowWidth>1380)?
             (maxDesk>380)?
             380:
@@ -170,9 +174,25 @@ class Main extends Component {
             mobileMax:
             minDesk:
             eleResponse;
-        const eleWidth=eleWidthSize>380?380:eleWidthSize;
-        //card item height 
-        const eleHeight=eleWidth*1.2;
+        let eleWidth=eleWidthSize>380?380:eleWidthSize;
+        let eleHeight=eleWidth*1.2;
+        let offsetTop=windowWidth>768?windowHeight*0.18+100:windowHeight*0.12+60;
+        let eleWrapHeight=Math.floor(eleHeight+offsetTop+85);
+        if(windowHeight>eleWrapHeight){
+            eleWidth=eleWidthSize>380?380:eleWidthSize;
+            eleHeight=eleWidth*1.2;
+            this.setState({
+                ratioH:false
+            })
+        }else{
+            eleHeight=windowHeight*0.6;
+            eleWidth=eleHeight*4/3>windowWidth-(itemPd*2+wrapperPd*2)?windowWidth-wrapperPd*2:eleHeight*4/3;
+            eleWidth=eleWidth>420?420:eleWidth;
+            this.setState({
+                ratioH:true
+            })
+        }
+        
         //full width
         let wrapperWidth=Math.floor(windowWidth-wrapperPd*2);
         
@@ -204,41 +224,6 @@ class Main extends Component {
             }
         });
     }
-    handleWheel=(pos,e)=>{
-        e.preventDefault();
-        e.stopPropagation();
-        const{motionDispatch,motion}=this.props; 
-        const {min,max,eleWidth,offsetX} = motion;
-        let mouseX=offsetX+e.deltaX+e.deltaY;
-        //when scrolling less than elewidth, data load old posts
-        if(max-offsetX<eleWidth){
-            if(!this.state.loadingState && max!==0){
-                this.loadOldPosts();
-                this.setState({
-                    loadingState: true
-                });
-            }
-        }else{
-            if(this.state.loadingState){
-                this.setState({
-                    loadingState: false
-                });
-            }
-        }
-        if(mouseX > max){
-            mouseX=max;
-        }else if(mouseX < min){
-            mouseX=min;
-        }else{
-            mouseX=offsetX+e.deltaX+e.deltaY;
-        }
-        motionDispatch.motionActions({
-            motions:{
-                offsetX:mouseX,
-                active:Math.round(mouseX/eleWidth)
-            }
-        });
-    }
     onScroll=(value)=>{
       const{motion,motionDispatch}=this.props;   
       const {max,eleWidth,offsetX,active} = motion;             
@@ -265,56 +250,7 @@ class Main extends Component {
     });
 
     }
-    handleDown=(pos,e)=>{
-        const{motionDispatch}=this.props; 
-        let event=(e.type==='mousedown')?e:(e.type==='touchstart')?e.touches[0]:e;
-        motionDispatch.motionActions({
-            motions:{
-                isPressed:true,
-                startX:event.pageX,
-                posX:event.pageX,
-                offsetX:pos,
-                deltaX:0,
-            }
-        });
-    }
-    
-    handleMove=(e)=>{  
-        let event=(e.type==='mousemove')?e:(e.type==='touchmove')?e.touches[0]:e; 
-        const{motion,motionDispatch}=this.props;   
-        const {max,posX,isPressed,eleWidth,offsetX,startX,active} = motion;       
-        const distance=startX-event.pageX;
-        if(isPressed){
-            let count=(Math.round(offsetX/eleWidth)<0)?0:Math.round(offsetX/eleWidth);
-            //when scrolling less than elewidth, data load old posts
-            if(max-offsetX<eleWidth){
-                if(!this.state.loadingState && max>0){
-                    this.loadOldPosts();
-                    this.setState({
-                        loadingState: true
-                    });
-                }
-            }else{
-                if(this.state.loadingState){
-                    this.setState({
-                        loadingState: false
-                    });
-                }
-            }
-            const deltaX=posX-event.pageX;
-            if (deltaX > 2 || deltaX < -2) {
-                
-                motionDispatch.motionActions({
-                    motions:{
-                        posX:event.pageX,    
-                        deltaX:deltaX,
-                        offsetX:offsetX+deltaX,
-                        active:(Math.abs(distance) > 20)?count:active,
-                    }
-                });
-            }
-        }
-    }
+   
     loadOldPosts=()=>{
         const {isLast,get,data,dataState}=this.props;
         const url=this.props.location.pathname.split('/')[1];
@@ -338,30 +274,6 @@ class Main extends Component {
             });
         }
     }
-    handleUp=(e)=>{
-        const{motionDispatch,motion}=this.props;   
-        const {min,max,isPressed,offsetX,deltaX} = motion;   
-        if(isPressed){
-            const accel=offsetX+(deltaX*4.2);
-            let mouseX;
-            if(accel>max){
-                mouseX=max;
-            }else if(accel<min){
-                mouseX=min;
-            }else{
-                mouseX=accel;
-            }
-            motionDispatch.motionActions({
-                motions:{
-                    isPressed:false,
-                    offsetX:mouseX,
-                    deltaX:0
-                }
-            });
-        }
-
-    }
-
     itemUp=(id,i,bgColor,category,e)=>{
         const {motion,motionDispatch}=this.props;
         const {offsetX}=motion;
@@ -374,9 +286,6 @@ class Main extends Component {
                 }
             });
             this.props.history.push(`/posts/${category}/${id}`);            
-    }
-    handleTouchUp=(e)=>{
-        this.handleUp();
     }
     handleMouseOver=(i,e)=>{
         const{motion,motionDispatch}=this.props;
@@ -515,12 +424,12 @@ class Main extends Component {
     }
     
     render() {   
-        const {menuOpen,favActive,mainIndex,detailView}=this.state;
+        const {menuOpen,favActive,mainIndex,detailView,ratioH}=this.state;
         const {motion,authUser,data,loading,total,oldLoading,starLoading}=this.props;
         const {windowWidth,blockWidth,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
 
         return (     
-            <div className="main-wrap mobile">   
+            <div className={`main-wrap mobile ${ratioH?'horizontal':''}`}>   
                 <Menu open={menuOpen} linkLoading={loading}/>
                     <div className={`main-container ${(menuOpen?'menu':'')}`}> 
                     <div className="title-wrap"
@@ -583,6 +492,7 @@ class Main extends Component {
                             padding:`0px ${wrapperPd}px`,
                         }}>
                           <div className="card-item-wrap"
+                          ref={(ref)=>{this.cardItemWrap=ref}} 
                             style={{
                               width:`${blockWidth+wrapperPd}px`,
                               height:`${eleHeight}px`,
@@ -630,11 +540,10 @@ class Main extends Component {
                                                       height:`100%`,
                                                       borderRadius:`10px`,
                                                       boxShadow: `0 ${config.style.shadowSize1}px ${config.style.shadowSize2}px rgba(52, 73, 94, ${config.style.shadowColor})`,
-                                                      
                                                   }} 
                                                   responseFont={(eleWidth-itemPd*2)/21<15?15:(eleWidth-itemPd*2)/21}
                                                   imgHeight={(eleWidth-itemPd*2)*3/4}
-                                                  bottomHeight={(eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4}
+                                                  bottomHeight={((eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4)}
                                                   thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}
                                                   gifSrc={(config.data.gif.data.path)?`${urlConfig.url}/api/${config.data.gif.data.path}`:''}
                                               />

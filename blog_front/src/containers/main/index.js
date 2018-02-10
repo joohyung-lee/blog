@@ -45,6 +45,7 @@ class Main extends Component {
             ],
             searchKeyowrdAni:[],
             mainIndex:0,
+            ratioH:false
         };
         
     }
@@ -118,11 +119,8 @@ class Main extends Component {
         window.addEventListener('mousemove',this.handleMove);
         window.addEventListener('mouseup',this.handleUp);
         let windowWidth=document.documentElement.clientWidth;
-        const eleResponse=windowWidth/3.5;
-        const mobileSize=windowWidth/1.2;
-        const mobileMax=windowWidth/1.6;
-        const minDesk=windowWidth/2.5;
-        const maxDesk=windowWidth/4.5;
+        let windowHeight=document.documentElement.clientHeight;
+        
         //full width padding
         const wrapperPd=(windowWidth<1380)?
             (windowWidth<1024)?
@@ -130,7 +128,7 @@ class Main extends Component {
             30:
             50:
             50:
-            70
+            70;
         //card item padding
         const itemPd=(windowWidth<1380)?
             (windowWidth<1024)?
@@ -140,6 +138,11 @@ class Main extends Component {
             15:
             20;
         //card item width
+        const eleResponse=windowWidth/3.5;
+        const mobileSize=windowWidth-wrapperPd*2;
+        const mobileMax=windowWidth/1.6;
+        const minDesk=windowWidth/2.5;
+        const maxDesk=windowWidth/4.5;
         const eleWidthSize=(windowWidth>1380)?
             (maxDesk>380)?
             380:
@@ -151,9 +154,24 @@ class Main extends Component {
             mobileMax:
             minDesk:
             eleResponse;
-        const eleWidth=eleWidthSize>380?380:eleWidthSize;
-        //card item height 
-        const eleHeight=eleWidth*1.2;
+        let eleWidth=eleWidthSize>380?380:eleWidthSize;
+        let eleHeight=eleWidth*1.2;
+        let offsetTop=windowWidth>768?windowHeight*0.18+100:windowHeight*0.12+60;
+        let eleWrapHeight=Math.floor(eleHeight+offsetTop+85);
+        if(windowHeight>eleWrapHeight){
+            eleWidth=eleWidthSize>380?380:eleWidthSize;
+            eleHeight=eleWidth*1.2;
+            this.setState({
+                ratioH:false
+            })
+        }else{
+            eleHeight=windowHeight*0.6;
+            eleWidth=eleHeight*4/3>windowWidth-(itemPd*2+wrapperPd*2)?windowWidth-wrapperPd*2:eleHeight*4/3;
+            eleWidth=eleWidth>420?420:eleWidth;
+            this.setState({
+                ratioH:true
+            })
+        }
         //full width
         let wrapperWidth=Math.floor(this.wrapperWidth.clientWidth-wrapperPd*2);
         
@@ -461,7 +479,7 @@ class Main extends Component {
     }
     
     render() {   
-        const {menuOpen,favActive,mainIndex,detailView}=this.state;
+        const {ratioH,menuOpen,favActive,mainIndex,detailView}=this.state;
         const {motion,authUser,data,loading,total,oldLoading,starLoading}=this.props;
         const {windowWidth,blockWidth,isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
         const style=(isPressed)?{
@@ -470,7 +488,7 @@ class Main extends Component {
                 x:spring(offsetX),
             };
         return (     
-            <div className="main-wrap">   
+            <div className={`main-wrap ${ratioH?'horizontal':''}`}>   
                 <Menu open={menuOpen} linkLoading={loading}/>
                 <Motion style={style} onRest={this.onRest}>
                     {({x})=>

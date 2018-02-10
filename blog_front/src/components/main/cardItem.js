@@ -18,14 +18,18 @@ class CardItem extends Component {
             videoSrc:'',
             imgLoadState:'wating',
             startX:0,
+            isBright:false
         }
       }
     componentDidMount() {
+        let isBright = (parseInt(this.get_brightness(this.props.data.bgColor),10) > 160);
         this.setState({
             load:true,
             thumbLoading: true,
-            itemPress:false
+            itemPress:false,
+            isBright:isBright
         });
+        
         const imagePath = this.props.thumbSrc;
         const videoSrc=this.props.gifSrc;
         const img = new Image();
@@ -123,17 +127,22 @@ class CardItem extends Component {
         }else{
             return (this.state.itemPress)?this.props.onMouseUp(e):false;
         }
-        
-        
     } 
+    get_brightness=(hexCode)=>{
+        hexCode = hexCode.replace('#', '');
+        var c_r = parseInt(hexCode.substr(0, 2),16);
+        var c_g = parseInt(hexCode.substr(2, 2),16);
+        var c_b = parseInt(hexCode.substr(4, 2),16);
+        return ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+    }
     render() {
-        const {thumbLoading,gifLoading,imgSrc,videoSrc,imgLoadState,itemPress}=this.state;
+        const {thumbLoading,gifLoading,imgSrc,videoSrc,imgLoadState,itemPress,isBright}=this.state;
         const {data,gifLoad}=this.props;
         return (
             <div className={(itemPress)?`scale ${this.props.className}`:this.props.className} 
                 style={this.props.wrapStyle}
             >
-                <div className={`card-item-boxWrap`}>
+                <div className={`card-item-boxWrap ${isBright?'dark':'white'}`}>
                     <div className="card-item-box" 
                         onMouseOver={this.props.onMouseOver} 
                         onMouseOut={this.handleMouseOut}
@@ -145,7 +154,11 @@ class CardItem extends Component {
                         onTouchMove={this.handleMove}
                         onTouchEnd={this.handleUp}
                         
-                        style={this.props.style}
+                        style={{
+                            ...this.props.style,
+                            backgroundColor:(typeof data.bgColor!=='undefined')?data.bgColor:null
+                            }
+                        }
                     >    
                         <div className="card-item-image" style={{
                             height:`${this.props.imgHeight}px`,
@@ -153,7 +166,7 @@ class CardItem extends Component {
                             }}>
                             <img className={`${(imgLoadState==='success')?`fade-in`:`fade-out`}`} src={imgSrc} alt={imgSrc}/>
                             {
-                                thumbLoading?<DefaultLoading color="white"/>:null
+                                thumbLoading?<DefaultLoading color={isBright?'black':'white'}/>:null
                             }
                             {(this.props.isGif && videoSrc!=='')?
                                 <video className="video-wrap" loop playsInline muted src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
@@ -196,7 +209,7 @@ class CardItem extends Component {
                         </div>
                         <div className="svg-wrap" onClick={this.props.favClick}>
                             {
-                                (this.props.favLoading)?<DefaultLoading color="black" size={20} r={8} stroke={1}/>
+                                (this.props.favLoading)?<DefaultLoading color={isBright?'black':'white'} size={20} r={8} stroke={1}/>
                                 :<IconFav/>
                             }
                         </div>
