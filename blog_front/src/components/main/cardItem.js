@@ -214,13 +214,15 @@ class CardItem extends Component {
                             }
                         </div>
                     </div>
-                    <div className="summary-wrap">
-                        <Dotdotdot clamp={2}>
-                            <p>
-                            {data.summary}
-                            </p>
-                        </Dotdotdot>
-                    </div>  
+                    {(this.props.summaryView)?
+                        <div className="summary-wrap">
+                            <Dotdotdot clamp={2}>
+                                <p>
+                                {data.summary}
+                                </p>
+                            </Dotdotdot>
+                        </div>:null
+                    }  
                 </div>  
             </div>
         );

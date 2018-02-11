@@ -46,7 +46,8 @@ class Main extends Component {
             ],
             searchKeyowrdAni:[],
             mainIndex:0,
-            ratioH:false
+            ratioH:false,
+            summaryView:true
         };
         
     }
@@ -177,7 +178,17 @@ class Main extends Component {
         let eleWidth=eleWidthSize>380?380:eleWidthSize;
         let eleHeight=eleWidth*1.2;
         let offsetTop=windowWidth>768?windowHeight*0.18+100:windowHeight*0.12+60;
-        let eleWrapHeight=Math.floor(eleHeight+offsetTop+85);
+        let eleWrapHeight=Math.floor(eleHeight+offsetTop);
+        let summaryView=Math.floor(eleHeight+offsetTop+85);
+        if(windowHeight>summaryView){
+            this.setState({
+                summaryView:true
+            })
+        }else{
+            this.setState({
+                summaryView:false
+            })
+        }
         if(windowHeight>eleWrapHeight){
             eleWidth=eleWidthSize>380?380:eleWidthSize;
             eleHeight=eleWidth*1.2;
@@ -424,7 +435,7 @@ class Main extends Component {
     }
     
     render() {   
-        const {menuOpen,favActive,mainIndex,detailView,ratioH}=this.state;
+        const {menuOpen,favActive,mainIndex,detailView,ratioH,summaryView}=this.state;
         const {motion,authUser,data,loading,total,oldLoading,starLoading}=this.props;
         const {windowWidth,blockWidth,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
 
@@ -546,7 +557,8 @@ class Main extends Component {
                                                   bottomHeight={((eleHeight-itemPd*2)-(eleWidth-itemPd*2)*3/4)}
                                                   thumbSrc={(config.data.thumbnail.data.path)?`${urlConfig.url}/api/${config.data.thumbnail.data.path}`:''}
                                                   gifSrc={(config.data.gif.data.path)?`${urlConfig.url}/api/${config.data.gif.data.path}`:''}
-                                              />
+                                                  summaryView={summaryView}
+                                                />
                                           )}
                                           )
                                       }
