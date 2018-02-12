@@ -176,7 +176,7 @@ class Main extends Component {
             })
         }else{
             eleWidth=eleWidthSize>380?380:eleWidthSize;
-            eleHeight=eleWidth*3/4;
+            eleHeight=eleWidth*3/4+5;
             this.setState({
                 ratioH:true
             })
