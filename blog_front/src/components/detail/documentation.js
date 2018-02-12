@@ -9,29 +9,30 @@ export class Documentation extends Component {
       return (
         <div className={this.props.className}>
             <div className="detail-contents">
-                <div className="header">
-                    <span className="category">
-                        {data.category}
-                    </span>
-                    
-                    <h2>{data.title}</h2>
-                    <span className="date">{data.postDate}</span>
-                    <p>{data.summary}</p>
-                </div>
-                <div className="tags-wrap">
-                <ul>
-                    {data.tags.map((tagsdata,i)=>{
-                        return (
-                            <li key={i}>
-                                <Link to={`/search/tags/${tagsdata}`}>{tagsdata}</Link>
-                            </li>
-                        )
-                    })}
-                </ul>
-                </div>
-                <div className="body">   
-                    <h3 className="title">Documentation</h3> 
-                    <MarkdownView source={data.body}/>
+                <div className="detail-text">
+                    <div className="header">
+                        <h2>{data.title}</h2>
+                        <span className="category">
+                            {data.category}
+                        </span>
+                        <span className="date">{data.postDate}</span>
+                        <p>{data.summary}</p>
+                    </div>
+                    <div className="tags-wrap">
+                    <ul>
+                        {data.tags.map((tagsdata,i)=>{
+                            return (
+                                <li key={i}>
+                                    <Link to={`/search/tags/${tagsdata}`}>{tagsdata}</Link>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                    </div>
+                    <div className="body">   
+                        <h3 className="title">Documentation</h3> 
+                        <MarkdownView source={data.body}/>
+                    </div>
                 </div>
                 <Comments
                     {...this.props}

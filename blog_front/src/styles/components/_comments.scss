@@ -1,5 +1,6 @@
 .comments-wrap{
-    margin:15px 0 200px;
+    padding:50px;
+    background-color: $c-black-10;
     .category-title{
         display: flex;
         padding:15px 0;
@@ -10,6 +11,7 @@
             background:url('../images/icon-reply.svg') left center no-repeat;
             background-size: 18px;
             padding:0 0 0 22px;
+            color:$c-black-2;
         }
         .comments-count{
             display: inline-block;
@@ -19,6 +21,7 @@
             font-weight: 700;
             line-height: 23px;
             height:23px;
+            color:$c-black-2;
         }
     }
     .comments-body{
@@ -31,9 +34,9 @@
             }
             .commentsTxtArea{
                 display:flex;
-                border:1px solid $c-black-6;
+                border:1px solid $c-black-7;
                 border-radius: 5px;
-                background-color:$c-black-9;
+                background-color:$t-white-10;
                 overflow: hidden;
                 .modify-title{
                     position: absolute;
@@ -122,7 +125,8 @@
                     opacity: 0;
                     transition: opacity 0.1s,transform 0.2s;
                     p{
-                        font-weight: 500;
+                        font-weight: 700;
+                        color:$c-black-1;
                     }
                 }
             }
@@ -130,7 +134,7 @@
                 flex:1;
                 width:100%;
                 display: block;
-                padding:20px 15px 15px 15px;
+                padding:20px 15px 15px 10px;
                 resize:none;
                 outline: none;
                 overflow-y: hidden;
@@ -153,11 +157,14 @@
             margin-top:20px;
             > ul{
                 > li{
-                    border-bottom:1px solid $c-black-6;
-                    padding:0 0 15px;
+                    margin-bottom: 6px;
+                    border:1px solid $c-black-7;
+                    padding:15px;
+                    border-radius: 5px;
+                    background-color:$t-white-10;
                     .user-header{
                         display: flex;
-                        padding:15px 0 10px 0;
+                        padding:0px 0 10px 0;
                         .btn-group{
 
                         }
@@ -167,10 +174,13 @@
                             .avatar-info{
                                 margin-left:15px;
                                 .name{
-                                    font-weight: 500;
+                                    font-weight: 700;
+                                    color:$c-black-1;
                                 }
                                 .date{
-                                    color:$c-black-2;
+                                    color:$c-black-1;
+                                    font-size: 0.9rem;
+                                    opacity: 0.7;
                                 }
                             }
                         }
@@ -226,6 +236,7 @@
                         }
                         .commentsTxtArea{
                             margin:15px 0 0;
+                            background-color:$c-black-9;
                             &.modify:before{
                                 content:none;
                             }
@@ -242,7 +253,7 @@
                     }
                     .reply-comments{
                         position: relative;
-                        padding:0px 15px 0px 15px;
+                        padding:15px;;
                         margin-top:15px;
                         background-color:$c-black-9;
                         border-radius: 5px;
@@ -257,7 +268,7 @@
                         }
                         ul{
                             li{
-                                padding:0 0 10px;
+                                
                                 border-bottom:1px solid $c-black-5;
                                 &:last-child{
                                     border:none;
@@ -280,8 +291,16 @@
                             }
                         }
                     }
+                    &:last-child{
+                        margin:0;
+                    }
                 }
             }
         }
+    }
+}
+@media screen and (max-width: $screen-1400) {
+    .comments-wrap{
+        padding:25px;
     }
 }

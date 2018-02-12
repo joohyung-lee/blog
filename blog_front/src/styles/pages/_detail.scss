@@ -295,7 +295,9 @@ $brighten:#fff;
         &.doc{
             transform: translate3d(0,100px,0);
             .detail-contents{
-                padding:50px 50px 20px;
+                .detail-text{
+                    padding:50px 50px 25px;
+                }
             }
         }
     }
@@ -309,7 +311,9 @@ $brighten:#fff;
     }
     
     .detail-contents{
-        padding:130px 50px 20px;
+        .detail-text{
+            padding:130px 50px 25px;
+        }
         .header{
             margin:0 4px;
             h2{
@@ -373,12 +377,16 @@ $brighten:#fff;
         &.full{
             &.doc{
                 .detail-contents{
-                    padding:25px;
+                    .detail-text{
+                        padding:25px;
+                    }
                 }
             }
         }
         .detail-contents{
-            padding:25px;
+            .detail-text{
+                padding:25px;
+            }
             .header{
                 h2{
                     width:100%;
