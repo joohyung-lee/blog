@@ -85,7 +85,8 @@
     }
     .card-item-box{
         position: relative;
-        cursor: pointer;   
+        cursor: pointer; 
+        overflow: hidden;  
         will-change: box-shadow;
        
     }

@@ -230,21 +230,14 @@
             position: relative;
         }
         .card-item-image{
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px; 
             overflow:hidden;
             img{
-                border-top-left-radius: 10px;
-                border-top-right-radius: 10px; 
             }
             video{
-                border-top-left-radius: 10px;
-                border-top-right-radius: 10px; 
             }
         }
         .card-item-bottom{
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px; 
+
             z-index: 1;
         }
         .old-posts-loading{
