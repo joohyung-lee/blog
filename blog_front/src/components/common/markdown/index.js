@@ -8,7 +8,7 @@ class MarkdownView extends Component {
          html:         true,        // Enable HTML tags in source
          xhtmlOut:     false,        // Use '/' to close single tags (<br />)
          breaks:       false,        // Convert '\n' in paragraphs into <br>
-         langPrefix:   'language-',  // CSS language prefix for fenced blocks
+         langPrefix:   'hljs\ ',  // CSS language prefix for fenced blocks
          linkify:      true,         // autoconvert URL-like texts to links
          linkTarget:   '',           // set target to open link in
  

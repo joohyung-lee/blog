@@ -3,9 +3,10 @@
     .category-title{
         display: flex;
         padding:15px 0;
+        align-items: center;
         h4{
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             background:url('../images/icon-reply.svg') left center no-repeat;
             background-size: 18px;
             padding:0 0 0 22px;
@@ -178,7 +179,7 @@
                         padding:0 0 10px 0;
                     }
                     .text-body *{
-                        font-size: 1rem;
+                        font-size: 1.1rem;
                         font-weight: 500;
                     }
                     .btn-group{
