@@ -230,6 +230,9 @@
             position: relative;
         }
         .card-item-image{
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
             overflow:hidden;
             img{
             }
@@ -302,9 +305,7 @@
                 top:0;
                 bottom:0;
                 margin:auto 0;
-                border-radius:0;
                 img{
-                    border-radius:0
                 }
             }
         }
