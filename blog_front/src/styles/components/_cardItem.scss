@@ -87,6 +87,9 @@
         position: relative;
         cursor: pointer; 
         overflow: hidden;  
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
         will-change: box-shadow;
        
     }
