@@ -156,7 +156,6 @@ class CardItem extends Component {
                         
                         style={{
                             ...this.props.style,
-                            backgroundColor:(typeof data.bgColor!=='undefined')?data.bgColor:null
                             }
                         }
                     >    
