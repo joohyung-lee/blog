@@ -62,10 +62,9 @@ class App extends Component {
           motions:{
               scale:true,
               detailView:true,
-              frameFull:false
+              frameFull:false,
           }
         });
-        
         handleHeader.isBrightness({
             isBright:isBright
         });

@@ -17,7 +17,6 @@ import * as postsAction from 'redux/posts';
 //svg&images
 import IconPhone from 'images/iconPhone';
 import IconDesk from 'images/iconDesk';
-import IconBack from 'images/iconBack';
 class DetailView extends Component {
     constructor(props){
         super(props);
@@ -111,7 +110,7 @@ class DetailView extends Component {
         let windowWidth=document.documentElement.clientWidth;
         let windowHeight=document.documentElement.clientHeight;
         let sizeX;
-        let sizeY=windowHeight-200;
+        let sizeY=windowHeight-180;
         const frameWrap=windowWidth<1900?
         windowWidth<1600?
         windowWidth<1400?
@@ -190,14 +189,14 @@ class DetailView extends Component {
                 mobileMode:true,
                 deskMode:false,
                 frameSizeX:'375px',
-                frameSizeY:windowHeight>667?'667px':windowHeight-200+'px',
+                frameSizeY:windowHeight>667?'667px':windowHeight-180+'px',
             });
         }else{
             this.setState({
                 mobileMode:false,
                 deskMode:true,
                 frameSizeX:'100%',
-                frameSizeY:windowHeight-200+'px'
+                frameSizeY:windowHeight-180+'px'
             })
         }
     }
@@ -422,9 +421,7 @@ class DetailView extends Component {
                     height:`${windowHeight}px`,
                 }}
             >
-                <span className={`go-back ${doc?'preview':'documentation'}`} onClick={this.goBack}>
-                    <IconBack isBright={isBright}/>
-                </span>
+                
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
                     style={{
                         width:frameFull?`100%`:motion.detailLoad?`${frameWrap}px`:`${windowWidth}px`,
@@ -438,14 +435,21 @@ class DetailView extends Component {
                         }}
                         >Loading...</h3>
                     </div>
+                    {this.props.history.action==='PUSH'?
+                        <span className={`go-back ${doc?'preview':'documentation'}`} onClick={this.goBack}>
+                            <span className="icon"></span>
+                            <span>Back</span>
+                        </span>:null
+                    }
                     {motion.detailLoad? 
                         <div key={data._id} className={`detail-simulate ${doc?'fade-out':''}`}>
                             <div className={`fullsize ${!frameDivide?'fade-out':''} ${frameFull?'full':'simple'}`} onClick={this.fullSize}>
                                 <span></span>
                                 <span></span>
                             </div>
-                            <div className="device-controll-wrap">
-                                {deskView?
+                            <div className={`device-controll-wrap`}>
+                                <div className="center">
+                                    {deskView?
                                     <div className="device-controll">
                                         <div className={`dic mobile ${mobileMode?'active':'default'}`} onClick={this.modeChange.bind(this,'mobile')}>
                                             <IconPhone isBright={isBright}/>
@@ -454,8 +458,9 @@ class DetailView extends Component {
                                             <IconDesk isBright={isBright}/>
                                         </div>
                                     </div>:null
-                                }
-                                <div className="visit-site">
+                                    }
+                                </div>
+                                <div className="right visit-site">
                                     <a href={data.iframeUrl} target="_blank">Visit Site</a>
                                 </div>
                             </div>

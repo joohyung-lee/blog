@@ -30,7 +30,15 @@ $brighten:#fff;
         .visit-site{
             a{
                 color:$darkness;
-                border:1px solid $darkness;
+                background-color:$t-black-3;
+            }
+        }
+        .go-back{
+            span{
+                color:$darkness;
+                &:before,&:after{
+                    background-color:$darkness;
+                }
             }
         }
     }
@@ -52,25 +60,17 @@ $brighten:#fff;
         .visit-site{
             a{
                 color:$brighten;
-                border:1px solid $brighten;
+                background-color:$t-white-3;
             }
         }
-    }
-}
-.go-back{
-    position: absolute;
-    top:78px;
-    left:50px;
-    width:42px;
-    height:24px;
-    z-index: 100;
-    transition: top 0.3s ease;
-    &.preview{
-        top:50px;
-    }
-    cursor: pointer;
-    svg{
-        transition: all 0.5s ease;
+        .go-back{
+            span{
+                color:$brighten;
+                &:before,&:after{
+                    background-color:$brighten;
+                }
+            }
+        }
     }
 }
 .detail-main{
@@ -107,11 +107,62 @@ $brighten:#fff;
             font-weight: 600;
         }
     }
+    .go-back{
+        position: absolute;
+        top:0;
+        display: flex;
+        transform:translateY(80px);
+        align-items: center;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        opacity: 0.8;
+        z-index: 100;
+        &.preview{
+            transform:translateY(62px);
+        }
+        span{
+            font-weight: 500;
+        }
+        .icon{
+            position: relative;
+            width: 20px;
+            height:20px;
+            &:before,&:after{
+                content: "";
+                position: absolute;
+                top:6px;
+                width: 10px;
+                height: 2px;
+            }
+            &:before{
+                transform:translateY(0) rotate(-45deg);
+            }
+            &:after{
+                transform:translateY(6px) rotate(45deg);
+            }
+        }
+    }
     .device-controll-wrap{
         position: relative;
+        display: flex;
+        align-items: center;
         margin-top:20px;
+        >div{
+            &.center{
+                flex:1;
+                flex-grow: 1;
+                padding-left:100px;
+            }
+            &.right{
+                width:100px;
+                text-align: right;
+            }
+        }
+        
         .device-controll{
             display: flex;
+            flex:1;
+            flex-grow: 1;
             align-items: center;
             justify-content: center;
             text-align: center;
@@ -135,11 +186,6 @@ $brighten:#fff;
             }
         }
         .visit-site{
-            position: absolute;
-            top:5px;
-            right:0;
-            display: flex;
-            align-items: center;
             a{
                 padding:5px 15px;
                 border-radius: 30px;
@@ -265,7 +311,7 @@ $brighten:#fff;
     margin:auto 0;
     text-align: center;
     opacity: 0.5;
-    transition: opacity 0.3s ease,transform 0.3s ease;
+    transition: opacity 0.2s ease,transform 0.2s ease;
     cursor: pointer;
     &:hover{
         opacity: 1;
@@ -300,7 +346,7 @@ $brighten:#fff;
         text-align: center;
         background-color: $t-black-7;
         border-radius: 2px;
-        transition: width 0.3s ease,transform 0.3s ease;
+        transition: width 0.2s ease,transform 0.2s ease;
         &+span{
             margin-left:6px;
         }
@@ -428,17 +474,22 @@ $brighten:#fff;
     .detail-main{
         padding:50px 25px 25px;
         .device-controll-wrap{
-            margin-top:5px;
+            margin-top:0px;
+            padding-top:20px;
         }
         .iframe-wrap{
-            top:0px;
+            top:60px;
+            margin:0;
         }
         .scroll-doc{
-            bottom:20px;
+            bottom:15px;
+        }
+        .go-back{
+            transform:translateY(70px);
+            &.preview{
+                transform:translateY(52px);
+            }
         }
     }
-    .go-back{
-        top:62px;
-        left:25px;
-    }
+    
 }
