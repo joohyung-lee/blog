@@ -14,6 +14,12 @@
         transform: translate3d(0,0,0);
         transition: transform 0.4s $ease-out;
         will-change: transform;
+        &.white h1{
+            color:$t-white-10;
+        }
+        &.black h1{
+            color:$c-black-0;
+        }
         .simple-logo{
             position: absolute;
             top:0;
@@ -163,7 +169,7 @@
         
         &.search{
             .logo{
-                transform: translate3d(-100px,0,0);
+                transform: translate3d(-120px,0,0);
             }
             .nav-contents{
     

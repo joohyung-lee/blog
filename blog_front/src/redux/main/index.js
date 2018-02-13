@@ -17,7 +17,8 @@ const initialState=Map({
         active:0,
         locationState:false,
         scale:false,
-        bgColor:'#ffffff'
+        bgColor:'#ffffff',
+        frameFull:false
     })
 })
 

@@ -10,7 +10,7 @@ $brighten:#fff;
     height:100%;
 }
 .detail-frame{
-    background-color:$t-white-10;
+    background-color:$c-black-10;
     height:100%;
     //when background is brighten,colors set darkness
     &.bright {
@@ -76,7 +76,7 @@ $brighten:#fff;
 .detail-main{
     position: absolute;
     top:0;
-    right:0;
+    left:0;
     padding:50px 50px 50px;
     z-index: 10;
     overflow: hidden;
@@ -161,7 +161,7 @@ $brighten:#fff;
     }
     .iframe-wrap{
         position: absolute;
-        top:0px;
+        top:30px;
         bottom:0;
         left:0px;
         right:0px;
@@ -209,7 +209,7 @@ $brighten:#fff;
         width:auto;
         left:0;
         right:0;
-        bottom:20px;
+        bottom:5px;
         text-align: center;
         
         &.fade-out{
@@ -260,18 +260,38 @@ $brighten:#fff;
     height:50px;
     top:0;
     bottom:0;
-    left:-50px;
+    right:-50px;
     padding:10px 0;
     margin:auto 0;
     text-align: center;
     opacity: 0.5;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease,transform 0.3s ease;
     cursor: pointer;
     &:hover{
         opacity: 1;
     }
     &.fade-out{
         opacity: 0;
+    }
+    &.full:hover{
+        transform:translateX(5px) rotate(-90deg);
+        span{
+            transform: rotate(45deg);
+            height:13px;
+            &:nth-child(2){
+                transform: rotate(-45deg);
+            }
+        }
+    }
+    &.simple:hover{
+        transform:translateX(-5px) rotate(90deg);
+        span{
+            transform: rotate(45deg);
+            height:13px;
+            &:nth-child(2){
+                transform: rotate(-45deg);
+            }
+        }
     }
     span{
         display: inline-block;
@@ -280,6 +300,7 @@ $brighten:#fff;
         text-align: center;
         background-color: $t-black-7;
         border-radius: 2px;
+        transition: width 0.3s ease,transform 0.3s ease;
         &+span{
             margin-left:6px;
         }
@@ -313,6 +334,7 @@ $brighten:#fff;
     .detail-contents{
         .detail-text{
             padding:130px 50px 25px;
+            background-color:$t-white-10;
         }
         .header{
             margin:0 4px;
@@ -323,11 +345,18 @@ $brighten:#fff;
                 font-weight: 700;
                 word-break: keep-all;
             }
-            .category{
+            span{
+                
                 font-size: 1.2rem;
             }
+            .category{
+                text-transform: capitalize;
+                font-weight: 500;
+                opacity: 0.7;
+            }
             .date{
-
+                margin-left:10px;
+                opacity: 0.7;
             }
             p{
                 margin-top:80px;
@@ -403,6 +432,9 @@ $brighten:#fff;
         }
         .iframe-wrap{
             top:0px;
+        }
+        .scroll-doc{
+            bottom:20px;
         }
     }
     .go-back{

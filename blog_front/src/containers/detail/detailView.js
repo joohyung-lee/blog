@@ -97,6 +97,7 @@ class DetailView extends Component {
     }
     //window resize width
     dimentions=()=>{
+        const {motionDispatch} = this.props;
         let md = new MobileDetect(window.navigator.userAgent);
         if(md.mobile()){
             this.setState({
@@ -136,7 +137,12 @@ class DetailView extends Component {
             deskView:windowWidth<768?false:true,
             deskMode:windowWidth<768?false:true,
             mobileMode:windowWidth<768?true:false,
-        })
+        });
+        motionDispatch.motionActions({
+            motions:{
+                frameFull:windowWidth<1400?true:false
+            }
+        }); 
     }
   
     //바깥 클릭 시 메뉴드랍 접기
@@ -180,7 +186,6 @@ class DetailView extends Component {
         let windowWidth=document.documentElement.clientWidth;
         let windowHeight=document.documentElement.clientHeight;
         if(mode==="mobile"){
-            console.log('asdf')
             this.setState({
                 mobileMode:true,
                 deskMode:false,
@@ -209,9 +214,15 @@ class DetailView extends Component {
         );
     }
     fullSize=()=>{
+        const {motionDispatch} = this.props;
         this.setState({
             frameFull:!this.state.frameFull
-        })
+        });
+        motionDispatch.motionActions({
+            motions:{
+                frameFull:!this.state.frameFull
+            }
+        });  
     }
     scrollDown=()=>{
         this.setState({
@@ -412,7 +423,7 @@ class DetailView extends Component {
                 }}
             >
                 <span className={`go-back ${doc?'preview':'documentation'}`} onClick={this.goBack}>
-                    <IconBack isBright={frameFull?isBright:true}/>
+                    <IconBack isBright={isBright}/>
                 </span>
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
                     style={{
@@ -429,7 +440,7 @@ class DetailView extends Component {
                     </div>
                     {motion.detailLoad? 
                         <div key={data._id} className={`detail-simulate ${doc?'fade-out':''}`}>
-                            <div className={`fullsize ${!frameDivide?'fade-out':''}`} onClick={this.fullSize}>
+                            <div className={`fullsize ${!frameDivide?'fade-out':''} ${frameFull?'full':'simple'}`} onClick={this.fullSize}>
                                 <span></span>
                                 <span></span>
                             </div>
@@ -478,6 +489,9 @@ class DetailView extends Component {
                     className={`detail-doc ${frameFull?'full':'divide'} ${doc?'doc':'preview'}`}
                     renderView={this.renderView}
                     style={{
+                        position:'absolute',
+                        top:0,
+                        right:0,
                         width:frameFull?`100%`:`calc(100% - ${frameWrap}px)`,
                         height:frameFull?`calc(100% - 100px)`:`${windowHeight}px`,
                     }}>

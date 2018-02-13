@@ -61,7 +61,8 @@ class App extends Component {
         motionDispatch.motionActions({
           motions:{
               scale:true,
-              detailView:true
+              detailView:true,
+              frameFull:false
           }
         });
         

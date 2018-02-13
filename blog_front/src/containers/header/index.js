@@ -138,13 +138,12 @@ class Header extends Component {
         }
     }
     render(){
-        const{modal,common}=this.props;
+        const{modal,common,motion}=this.props;
         const {searchView}=this.state;
             return (
                 <div className={`global-nav ${searchView?'search':'default'}`}>
-                    <div className="logo">
+                    <div className={`logo ${common.isBright?'black':'white'}`}>
                         <a href='/home'><h1>JOOMATION</h1></a>
-                        <a className="simple-logo" href='/home'><h1>J</h1></a>
                         {/* <ul>
                             <li>About</li>
                         </ul> */}
@@ -152,7 +151,7 @@ class Header extends Component {
                         
                     <div className="right-contents">
                         <SearchIcon open={searchView} 
-                        isBright={common.isBright}
+                        isBright={motion.frameFull?common.isBright:true}
                         onClick={this.searchClick}
                         onChange={this.handleChange} 
                         onKeyUp={this.onKeyUp}
@@ -177,6 +176,7 @@ export default withRouter(connect(
     (state)=>({
         common:state.common.toJS(),
         modal:state.modal.toJS(),
+        motion:state.main.toJS().motions,
     }),
     (dispatch)=>({
         modalView: bindActionCreators(modalActions, dispatch),

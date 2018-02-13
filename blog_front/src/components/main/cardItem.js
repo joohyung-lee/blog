@@ -153,11 +153,7 @@ class CardItem extends Component {
                         onTouchStart={this.handleDown}
                         onTouchMove={this.handleMove}
                         onTouchEnd={this.handleUp}
-                        
-                        style={{
-                            ...this.props.style,
-                            }
-                        }
+                        style={this.props.style}
                     >    
                         <div className="card-item-image" style={{
                             height:`${this.props.imgHeight}px`,
