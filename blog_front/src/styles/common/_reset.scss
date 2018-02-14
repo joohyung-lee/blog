@@ -21,6 +21,9 @@
 *:before,*:after{
     box-sizing: border-box;
 }
+svg{
+    width:100%;
+}
 .view::-webkit-scrollbar {
     display: none;
   }

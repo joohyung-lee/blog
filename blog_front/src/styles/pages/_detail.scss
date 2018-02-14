@@ -147,32 +147,32 @@ $brighten:#fff;
     }
     .device-controll-wrap{
         position: relative;
-        display: flex;
-        align-items: center;
         margin-top:20px;
         >div{
             &.center{
-                flex:1;
-                flex-grow: 1;
-                padding-left:100px;
+                display: inline-block;
+                width:calc(100% - 200px);
+                margin-left:100px;
+                vertical-align: middle;
             }
             &.right{
+                display: inline-block;
                 width:100px;
                 text-align: right;
+                vertical-align: middle;
             }
         }
         
         .device-controll{
-            display: flex;
-            flex:1;
-            flex-grow: 1;
-            align-items: center;
-            justify-content: center;
+            display:block;
+            width:100%;
             text-align: center;
             .dic{
-                min-width:40px;
+                display: inline-block;
+                width:40px;
                 height:40px;
                 margin:0 10px;
+                vertical-align: middle;
                 cursor: pointer;
                 &.active{
                     svg{
@@ -420,6 +420,8 @@ $brighten:#fff;
                 display: flex;
                 flex-wrap: wrap;
                 li{
+                    display: inline-block;
+                    vertical-align: middle;
                     a{
                         display: inline-block;
                         padding:4px 20px;
