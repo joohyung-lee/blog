@@ -13,7 +13,7 @@ import * as postsActions from 'redux/posts';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 //images
-
+import DefaultLoading from 'images/defaultLoading';
 class Search extends Component{
     constructor(props){
         super(props);
@@ -327,7 +327,7 @@ class Search extends Component{
             }
         })
     }
-    handleTagsSearch=(target)=>{
+    handleTagsSearch=(target,i)=>{
         const {handleHeader}=this.props;
         handleHeader.searchValue({
             searchValue:target
@@ -341,6 +341,7 @@ class Search extends Component{
                 }
             }),
             hash:true,
+            active:i
         });
         if(this.props.location.pathname===`/search/tags/${target}`){
             return false;
@@ -429,50 +430,13 @@ class Search extends Component{
             return false
         }
     }
-    favClick=(postId,i,e)=>{
-        e.stopPropagation();
-        const {get,authUser,modalView}=this.props;        
-        if(!authUser.isLogin){
-            modalView.openModal({
-                modalName:'login'
-              });
-        }else{
-            this.setState({
-                favActive:i
-            });
-            get.saveStar({   
-                postId:postId,
-                index:i,
-                type:'POSTS/SEARCH_STAR_SAVE'
-            });
-        }
-        
-    }
-
-    handleMouseOver=(i,e)=>{
-        e.stopPropagation();
-        const{active}=this.state;
-        if(active===i){
-            return false;
-            
-        }else{
-            this.setState({
-                active:i
-            })
-        }
-    }
-    handleMouseOut=(i,e)=>{
-        this.setState({
-            active:null
-        })
-       
-    }
     itemUp=(id,bgColor,category,e)=>{
         const {motionDispatch} = this.props;
         motionDispatch.motionActions({
             motions:{
                 bgColor:bgColor,
-                detailLoad:false
+                detailLoad:false,
+                backUrl:true
             }
         });
         this.props.history.push(`/posts/${category}/${id}`)
@@ -521,10 +485,12 @@ class Search extends Component{
                                                         width:`${config.style.width}px`,
                                                         padding:`${config.style.padding}px`
                                                     }}>
-                                                        <span onClick={this.handleTagsSearch.bind(this,config.key)}
-                                                        style={{
-                                                            opacity:config.style.opacity,
-                                                        }}>{config.data}
+                                                        <span className={tagUrl?this.props.match.params.keyword===config.key?'active':'':''}
+                                                            onClick={this.handleTagsSearch.bind(this,config.key,i)}
+                                                            style={{
+                                                                opacity:config.style.opacity,
+                                                            }}>
+                                                        {config.data}
                                                         </span>
                                                     </li>
                                         })}
@@ -552,12 +518,12 @@ class Search extends Component{
                             <div className="search-result-title">
                                 <span className="count">{postsData.length} Posts</span>
                                 <span>results for {tagUrl?`tag`:`title/body`}</span>
+                                {!initial && postsLoading?
+                                <span className="search-loading">
+                                    <DefaultLoading color={'black'} size={20} r={8} stroke={1}/>
+                                </span>
+                                :null}
                             </div>
-                            {!initial && postsLoading?
-                            <div className="loading">
-                                <span>Loading..</span>
-                            </div>
-                            :null}
                             <div className="search-result-contents"  >
                                 {
                                     postsData.map((item,i)=>{

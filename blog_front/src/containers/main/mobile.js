@@ -292,7 +292,8 @@ class Main extends Component {
                     active:i,
                     offsetX:offsetX,
                     bgColor:bgColor,
-                    detailLoad:false
+                    detailLoad:false,
+                    backUrl:true
                 }
             });
             this.props.history.push(`/posts/${category}/${id}`);            
@@ -308,9 +309,6 @@ class Main extends Component {
             });
         }
     }
-    handleMouseOut=()=>{
-    }
-    
     favClick=(postId,i,e)=>{
         e.stopPropagation();
         const {motionDispatch,get,authUser,modalView}=this.props;        
@@ -435,7 +433,7 @@ class Main extends Component {
     
     render() {   
         const {menuOpen,favActive,mainIndex,detailView,ratioH,summaryView}=this.state;
-        const {motion,authUser,data,loading,total,oldLoading,starLoading}=this.props;
+        const {motion,authUser,data,loading,total,oldLoading,starLoading,dataState}=this.props;
         const {windowWidth,blockWidth,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
 
         return (     
@@ -501,6 +499,11 @@ class Main extends Component {
                             width:menuOpen?'calc(100% - 200px)':'100%',
                             padding:`0px ${wrapperPd}px`,
                         }}>
+                            {
+                                (dataState==='success' && data.length===0)?
+                                    <div className="no-data">{this.props.location.pathname.split('/')[1]} is Empty.</div>
+                                :null
+                            }
                           <div className="card-item-wrap"
                           ref={(ref)=>{this.cardItemWrap=ref}} 
                             style={{
@@ -508,6 +511,7 @@ class Main extends Component {
                               height:`${eleHeight}px`,
                             }}
                           >
+                            
                                   <TransitionMotion
                                   willEnter={this.willEnter}
                                   willLeave={this.willLeave}
@@ -520,6 +524,7 @@ class Main extends Component {
                                       {currentStyles.map((config, i) =>{
                                           let isFav = (config.data.starred.indexOf(authUser.user.oauthID) > -1) ? true : false ; 
                                           const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
+                                          
                                           return(
                                               <CardItem key={config.key} 
                                                   data={config.data}
@@ -564,10 +569,15 @@ class Main extends Component {
                                       {(oldLoading)?
                                           <div className="old-posts-loading"
                                           style={{
-                                              left:`${eleWidth*data.length}px`
+                                              left:`${eleWidth*data.length}px`,
+                                              height:`${eleHeight}px`,
                                           }}
                                           >
-                                              <DefaultLoading/>
+                                            <div className="bar-loading">
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                            </div>
                                           </div>:null
                                       }
                                       </div>

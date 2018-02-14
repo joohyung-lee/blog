@@ -56,13 +56,12 @@ class App extends Component {
         isBright:isBright
       });  
     }
-    if(locationChanged){    
+    if(locationChanged){
       if(nextUrl[1]==='posts'){
         motionDispatch.motionActions({
           motions:{
               scale:true,
               detailView:true,
-              frameFull:false,
           }
         });
         handleHeader.isBrightness({
@@ -85,7 +84,7 @@ class App extends Component {
             motions:{
                 scale:false,
                 detailView:false,
-                
+                frameFull:false,
             }
           });
         }

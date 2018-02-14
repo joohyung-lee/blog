@@ -407,8 +407,15 @@ class DetailView extends Component {
        });
        return originalCount+replyCount;
     }
-    goBack=()=>{
-        this.props.history.goBack()
+    goBack=(link)=>{
+        const {data}=this.props;
+        if(link=='none'){
+            this.props.history.goBack();
+        }else{
+            this.props.history.push(`/${link}`); 
+            
+        }
+        
     }
     render() {
         const {data,motion,authUser,common}=this.props;
@@ -435,11 +442,15 @@ class DetailView extends Component {
                         }}
                         >Loading...</h3>
                     </div>
-                    {this.props.history.action==='PUSH'?
-                        <span className={`go-back ${doc?'preview':'documentation'}`} onClick={this.goBack}>
+                    {motion.backUrl?
+                        <span className={`go-back ${doc?'preview':'documentation'}`} onClick={this.goBack.bind(this,'none')}>
                             <span className="icon"></span>
                             <span>Back</span>
-                        </span>:null
+                        </span>:
+                        <span className={`go-back ${doc?'preview':'documentation'}`} onClick={this.goBack.bind(this,data.category)}>
+                            <span className="icon"></span>
+                            <span>{data.category}</span>
+                        </span>
                     }
                     {motion.detailLoad? 
                         <div key={data._id} className={`detail-simulate ${doc?'fade-out':''}`}>

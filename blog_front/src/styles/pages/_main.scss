@@ -197,7 +197,7 @@
             overflow:hidden;
             .indicator{
                 position: absolute;
-                width:30px;
+                width:0px;
                 height:1px;
                 background: #000;
             }
@@ -221,6 +221,23 @@
     transform-origin: left top 0;
     transition:transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),width 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
     will-change: transform,width;
+    .no-data{
+        position: absolute;
+        top:0px;
+        right:0;
+        bottom:0;
+        left:0;
+        width:auto;
+        height: auto;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color:$t-black-1;
+        text-transform: capitalize;
+        white-space: nowrap;
+    }
     .card-item-wrap{
         position: absolute;
         top:100px;
@@ -248,7 +265,37 @@
             display: inline-block;
             width: 50px;
             height: 100%;
-            z-index: 10
+            z-index: 10;
+            @keyframes bar_scale{0%{transform:scaleY(1)}50%{transform:scaleY(0.2)}100%{transform:scaleY(1)}}
+            .bar-loading{
+                display:flex;
+                margin: auto;
+                width: 24px;
+                height: 20px;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0px;
+                bottom:0;
+                align-items:center;
+                justify-content:center;
+                span{
+                    width:5px;
+                    margin:0 2px;
+                    height:100%;
+                    background-color:$t-black-3;
+                    animation: bar_scale 0.7s infinite linear;
+                }
+                span:nth-child(1){
+                    animation-delay:0s;
+                }
+                span:nth-child(2){
+                    animation-delay:0.1s;
+                }
+                span:nth-child(3){
+                    animation-delay:0.2s;
+                }
+            }
         }
         .card-item{
            
@@ -419,7 +466,9 @@
         .main-wrapper{
             padding:0;
             min-height: 540px;
-            
+            .no-data{
+                font-size: 2rem
+            }
             .card-item-wrap{
                 >div{
                     display: flex;
@@ -435,7 +484,8 @@
                 transform: translate3d(200px, 0, 0);
             }
             .main-wrapper{
-                transform: translate3d(200px, 0, 0) scale(1)
+                transform: translate3d(200px, 0, 0) scale(1);
+                
             }
         } 
     }

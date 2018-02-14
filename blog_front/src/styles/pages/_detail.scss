@@ -114,9 +114,12 @@ $brighten:#fff;
         transform:translateY(80px);
         align-items: center;
         cursor: pointer;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease,opacity 0.3s ease;
         opacity: 0.8;
         z-index: 100;
+        &:hover{
+            opacity: 1;
+        }
         &.preview{
             transform:translateY(62px);
         }
@@ -379,7 +382,7 @@ $brighten:#fff;
     
     .detail-contents{
         .detail-text{
-            padding:130px 50px 25px;
+            padding:110px 50px 25px;
             background-color:$t-white-10;
         }
         .header{

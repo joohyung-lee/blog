@@ -5,7 +5,6 @@ import { Scrollbars } from 'react-custom-scrollbars';
 //config
 import urlConfig from 'config/urlConfig'
 // components
-import {StaticLoading} from 'components/common/loading';
 import {CardItem,Menu} from 'components/main';
 //redux
 import * as commonAction from 'redux/common';
@@ -351,7 +350,8 @@ class Main extends Component {
                     active:i,
                     offsetX:offsetX,
                     bgColor:bgColor,
-                    detailLoad:false
+                    detailLoad:false,
+                    backUrl:true
                 }
             });
             this.props.history.push(`/posts/${category}/${id}`);            
@@ -489,7 +489,7 @@ class Main extends Component {
     
     render() {   
         const {menuOpen,favActive,mainIndex,detailView,ratioH,summaryView}=this.state;
-        const {motion,authUser,data,loading,total,oldLoading,starLoading}=this.props;
+        const {motion,authUser,data,loading,total,oldLoading,starLoading,dataState}=this.props;
         const {windowWidth,blockWidth,isPressed,offsetX,eleWidth,eleHeight,itemPd,wrapperPd,relative,active,indicator} = motion;
         const style=(isPressed)?{
                 x:offsetX,
@@ -559,11 +559,17 @@ class Main extends Component {
                             padding:`0px ${wrapperPd}px`,
                         }}
                         >
+                        {
+                            (dataState==='success' && data.length===0)?
+                            <div className="no-data">{this.props.location.pathname.split('/')[1]} is Empty.</div>
+                            :null
+                        }
                         <div className="card-item-wrap" 
                             style={{
                                 transform:`translate3d(${-x}px,0,0)`,
                                 width:`${blockWidth+wrapperPd}px`
                                 }}>
+                               
                                 <TransitionMotion
                                 willEnter={this.willEnter}
                                 willLeave={this.willLeave}
@@ -577,6 +583,7 @@ class Main extends Component {
                                     {currentStyles.map((config, i) =>{
                                         let isFav = (config.data.starred.indexOf(authUser.user.oauthID) > -1) ? true : false ; 
                                         const isGif=(typeof config.data.gif.data.path!=='undefined')?true:false;
+                                        
                                         return(
                                             <CardItem key={config.key} 
                                                 data={config.data}
@@ -624,7 +631,11 @@ class Main extends Component {
                                             left:`${eleWidth*data.length}px`
                                         }}
                                         >
-                                            <StaticLoading/>
+                                           <div className="bar-loading">
+                                                <span></span>
+                                                <span></span>
+                                                <span></span>
+                                            </div>
                                         </div>:null
                                     }
                                     </div>

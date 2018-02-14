@@ -43,7 +43,8 @@ class Collections extends Component {
             motionDispatch.motionActions({
                 motions:{
                     bgColor:bgColor,
-                    detailLoad:false
+                    detailLoad:false,
+                    backUrl:true
                 }
             });
             this.props.history.push(`/posts/${category}/${id}`);            

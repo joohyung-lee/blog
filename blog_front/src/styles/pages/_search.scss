@@ -46,12 +46,9 @@
             display: inline-block;
         }
         .hash-tag{
-            position: absolute;
-            left:-20px;
-            top:0.2rem;
-            color:$c-black-3;
-            font-weight: 300;
-            font-size: 1.8rem
+            color:$c-black-4;
+            font-size: 2.5rem;
+            margin-right:5px;
         }
         span{
             display: inline-block;
@@ -124,19 +121,21 @@
             span{
                 display: inline-block;
                 width:100%;
-                padding:8px 0px;
+                padding:5px 0px;
                 text-align: center;
                 font-size: 1.2rem;
                 background-color: $t-white-10;
-                color:$c-black-2;
+                color:$c-black-3;
                 font-weight: 500;
                 border:1px solid transparent;
                 cursor: pointer;
                 border-radius: 50px;
                 transition: color 0.3s ease,border 0.3s ease;
                 &:hover{
-                    color:$c-black-0;
-                    border:1px solid $c-black-0;
+                    color:$c-black-1;
+                }
+                &.active{
+                    color:$c-black-1;
                 }
             }
         }
@@ -144,13 +143,17 @@
     }
     .search-result-title{
         text-align: left;
-        margin-top:15px;
+        margin-bottom:15px;
         padding:0 10px;
         
         span{
             font-size:1.2rem;
             color:$c-black-2;
             font-weight: 300;
+        }
+        .search-loading{
+            position: relative;;
+            margin-left:10px;
         }
         .count{
             font-weight: 400;
