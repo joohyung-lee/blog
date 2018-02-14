@@ -30,7 +30,7 @@ $brighten:#fff;
         .visit-site{
             a{
                 color:$darkness;
-                background-color:$t-black-3;
+                background-color:$t-black-1;
             }
         }
         .go-back{
@@ -60,7 +60,7 @@ $brighten:#fff;
         .visit-site{
             a{
                 color:$brighten;
-                background-color:$t-white-3;
+                background-color:$t-white-2;
             }
         }
         .go-back{
@@ -113,10 +113,10 @@ $brighten:#fff;
         display: flex;
         transform:translateY(80px);
         align-items: center;
-        cursor: pointer;
         transition: transform 0.3s ease,opacity 0.3s ease;
-        opacity: 0.8;
+        opacity: 0.7;
         z-index: 100;
+        cursor: pointer;
         &:hover{
             opacity: 1;
         }
@@ -192,6 +192,11 @@ $brighten:#fff;
             a{
                 padding:5px 15px;
                 border-radius: 30px;
+                opacity: 0.7;
+                transition: opacity 0.3s ease;
+                &:hover{
+                    opacity: 1;
+                }
             }
         }
     } 
