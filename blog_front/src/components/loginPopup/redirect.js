@@ -23,7 +23,7 @@ class RedirectLogin extends Component {
     render() {
         return (
             <div>
-                <div className="login-state">
+                <div className="login-redirect">
                     <DefaultLoading/>
                     <p>Joomation Login...</p>
                 </div>
