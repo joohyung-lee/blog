@@ -291,7 +291,7 @@ class Main extends Component {
                 motions:{
                     active:i,
                     offsetX:offsetX,
-                    bgColor:bgColor,
+                    bgColor:bgColor===''?'#ffffff':bgColor,
                     detailLoad:false,
                     backUrl:true
                 }

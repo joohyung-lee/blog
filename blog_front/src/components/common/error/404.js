@@ -2,20 +2,25 @@ import React, { Component } from 'react';
 import * as commonAction from 'redux/common';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import IconBack from 'images/iconBack';
 class NotFound extends Component {
-    componentWillMount(){
-       
-        const {handleHeader}=this.props;
-        console.log(handleHeader)
-        handleHeader.isHeader({
-            visible:false
-        });
+    componentDidMount(){
+
     }
     render() {
         return (
             <div>
-                <h1>404</h1>
-                <a href="/home">home으로 가기</a>
+                <div className="error-wrap">
+                    <h1>404</h1>
+                    <p>This page could not be found.</p>
+                    <a href="/home">
+                        <span className="arrow-link">
+                            <IconBack isBright={true}/>
+                        </span>
+                        Back to home
+                    </a>
+                    
+                </div>
             </div>
         );
     }

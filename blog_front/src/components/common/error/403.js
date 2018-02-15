@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import * as commonAction from 'redux/common';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import IconBack from 'images/iconBack';
+
 class Forbidden extends Component {
-    componentWillMount(){
-        const {handleHeader}=this.props;
-        handleHeader.isHeader({
-            visible:false
-        });
-    }
     render() {
         return (
             <div>
-                <h1>403</h1>
-                <p>{this.props.pathname}</p>
-                <a href="/home">home으로 가기</a>
+                <div className="error-wrap">
+                    <h1>403</h1>
+                    <p>This data not exist.</p>
+                    <a href="/home">
+                        <span className="arrow-link">
+                            <IconBack isBright={true}/>
+                        </span>
+                        Back to home
+                    </a>
+                    
+                </div>
             </div>
         );
     }

@@ -167,3 +167,17 @@ button{
     height: 953px;
     transform: translateY(0px);
 }
+.login-state{
+    position: relative;
+    top:calc(50% - 100px);
+    p{
+        position: relative;
+        margin-top:15px;
+        font-size: 1.5rem;
+        text-align: center;
+        color:$t-black-3;
+    }
+    .image-loader{
+        position: relative;
+    }
+}

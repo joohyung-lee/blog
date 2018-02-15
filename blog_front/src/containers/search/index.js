@@ -434,7 +434,7 @@ class Search extends Component{
         const {motionDispatch} = this.props;
         motionDispatch.motionActions({
             motions:{
-                bgColor:bgColor,
+                bgColor:bgColor===''?'#ffffff':bgColor,
                 detailLoad:false,
                 backUrl:true
             }

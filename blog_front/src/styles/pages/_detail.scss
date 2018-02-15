@@ -386,12 +386,19 @@ $brighten:#fff;
     }
     
     .detail-contents{
-        .detail-text{
-            padding:110px 50px 25px;
+        .detail-text-wrap{
             background-color:$t-white-10;
         }
+        .detail-text{
+            padding:110px 50px 25px;
+            
+        }
+        .detail-text,.comments-wrap{
+            max-width: 1024px;
+            margin:0 auto;
+        }
         .header{
-            margin:0 4px;
+            
             h2{
                 width:80%;
                 font-size: 2.8rem;

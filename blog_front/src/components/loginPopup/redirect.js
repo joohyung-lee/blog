@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StaticLoading} from 'components/common/loading';
+import DefaultLoading from 'images/defaultLoading';
 import urlConfig from 'config/urlConfig';
 class RedirectLogin extends Component {
     componentDidMount(){
@@ -22,8 +22,11 @@ class RedirectLogin extends Component {
     }
     render() {
         return (
-            <div className="login-state">
-                <StaticLoading msg="Login Redirection..."/>
+            <div>
+                <div className="login-state">
+                    <DefaultLoading/>
+                    <p>Joomation Login...</p>
+                </div>
             </div>
         );
     }
