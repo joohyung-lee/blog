@@ -359,7 +359,7 @@ class Main extends Component {
                         data:item,
                         style: {
                             size:eleWidth*i,
-                            opacity:spring(1),
+                            opacity:spring((i===active)?1:0.78),
                             scale:spring((i===active)?1.07:1),
                             sizeX:spring(0),
                             sizeY:spring(0),
@@ -375,7 +375,7 @@ class Main extends Component {
                         data:item,
                         style: {
                             size:eleWidth*i,
-                            opacity:spring(1),
+                            opacity:spring((i===active)?1:0.78),
                             scale:spring((i===active)?1.07:1),
                             sizeX:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.sizeX),
                             sizeY:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.sizeY),
