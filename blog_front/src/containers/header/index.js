@@ -6,6 +6,7 @@ import {AuthLogin} from 'containers/auth'
 
 //containers
 //images
+import Logo from 'images/logo';
 import SearchIcon from 'images/searchIcon';
 //redux
 import * as httpRequest from 'redux/helper/httpRequest';
@@ -143,7 +144,7 @@ class Header extends Component {
             return (
                 <div className={`global-nav ${searchView?'search':'default'}`}>
                     <div className={`logo ${common.isBright?'black':'white'}`}>
-                        <a href='/home'><h1>JOOMATION</h1></a>
+                        <a href='/home'><h1><Logo/></h1></a>
                         {/* <ul>
                             <li>About</li>
                         </ul> */}
