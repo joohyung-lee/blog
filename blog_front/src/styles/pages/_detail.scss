@@ -83,7 +83,7 @@ $brighten:#fff;
     background-color:$c-black-8;
    
     &.animate{
-        transition:width 0.5s $ease-out,height 0.5s $ease-out,background-color 0.5s;
+        transition:width 0.5s $ease-out,height 0.5s $ease-in-out,background-color 0.5s;
     }
     .loading-text{
         position: absolute;
@@ -366,7 +366,7 @@ $brighten:#fff;
     }
     &.full{
         transform: translate3d(0,calc(100% + 100px),0);
-        transition:transform 0.5s $ease-out,width 0s $ease-out 0.5s;
+        transition:transform 0.5s $ease-in-out,width 0s $ease-out 0.5s;
         &.doc{
             transform: translate3d(0,100px,0);
             .detail-contents{
@@ -400,8 +400,9 @@ $brighten:#fff;
         .header{
             
             h2{
-                width:80%;
-                font-size: 2.8rem;
+                width:100%;
+                margin-bottom: 10px;
+                font-size: 2.5rem;
                 line-height: 1.3;
                 font-weight: 700;
                 word-break: keep-all;
@@ -506,6 +507,19 @@ $brighten:#fff;
             &.preview{
                 transform:translateY(52px);
             }
+        }
+    }
+    .detail-contents-wrap{
+        .detail-contents {
+            .header{
+                h2{
+                    font-size: 2rem;
+                }
+                p{
+                    margin-top:40px;
+                }
+            }
+
         }
     }
     
