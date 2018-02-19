@@ -16,11 +16,11 @@
         transform: translate3d(0,0,0);
         transition: transform 0.4s $ease-out;
         will-change: transform;
-        &.white h1{
-            color:$t-white-10;
+        &.white svg .logo-svg{
+            stroke:$t-white-10;
         }
-        &.black h1{
-            color:$c-black-0;
+        &.black svg .logo-svg{
+            stroke:$c-black-0;
         }
         .simple-logo{
             position: absolute;
@@ -51,7 +51,7 @@
     
     .right-contents{
         position: absolute;
-        top:12px;
+        top:7px;
         right:25px;
     }
     .search-icon{

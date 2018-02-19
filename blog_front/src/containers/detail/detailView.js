@@ -423,7 +423,7 @@ class DetailView extends Component {
         return (
             <div 
                 ref={(ref)=>{this.detailPage=ref}}
-                className={`detail-frame ${isBright?'bright':'dark'}`}
+                className={`detail-frame ${common.isBright?'bright':'dark'}`}
                 style={{
                     height:`${windowHeight}px`,
                 }}
@@ -463,10 +463,10 @@ class DetailView extends Component {
                                     {deskView?
                                     <div className="device-controll">
                                         <div className={`dic mobile ${mobileMode?'active':'default'}`} onClick={this.modeChange.bind(this,'mobile')}>
-                                            <IconPhone isBright={isBright}/>
+                                            <IconPhone isBright={common.isBright}/>
                                         </div>
                                         <div className={`dic desk ${deskMode?'active':'default'}`} onClick={this.modeChange.bind(this,'desk')}>
-                                            <IconDesk isBright={isBright}/>
+                                            <IconDesk isBright={common.isBright}/>
                                         </div>
                                     </div>:null
                                     }
