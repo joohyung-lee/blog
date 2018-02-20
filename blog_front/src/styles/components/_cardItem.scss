@@ -132,19 +132,23 @@
             height:18px;  
             transform-origin: 50% 50%;
             opacity: 0.3;
+            transition: opacity 0.3s;
             svg{
                 width:100%;
                 fill:$t-black-10;
                 stroke-width: 2px;
                 stroke:$t-black-10;
-                
+                stroke-dasharray: 100,100;
+                stroke-dashoffset:100;
+                transition: stroke-dashoffset 1s ease;
             }
         }
-        .gif-loading.animate{     
+        .gif-loading.animate{  
+            transition-delay: 0.5s;
+            opacity: 0 !important;
             svg{
                 fill:none !important;
-                stroke-dasharray: 100,100;
-                animation: videoStroke 1.5s infinite; 
+                stroke-dashoffset:40;
             }  
             
         }
