@@ -126,7 +126,7 @@ class Main extends Component {
     dimensions=()=>{     
         const {motion,data,motionDispatch}=this.props;
         const{active,offsetX}=motion;
-        let offset=offsetX; 
+        
         const activeItem=active;
         let mobileVersion=false;
         let md = new MobileDetect(window.navigator.userAgent);
@@ -204,7 +204,7 @@ class Main extends Component {
         }
         
         //full width
-        let wrapperWidth=Math.floor(windowWidth-wrapperPd*2);
+        let wrapperWidth=Math.floor(windowWidth-wrapperPd);
         
         //contents width
         const blockWidth=Math.floor(data.length*eleWidth);  
@@ -212,7 +212,10 @@ class Main extends Component {
         const scrollWidth=Math.floor(this.scrollWidth.clientWidth);
         //possible width to scroll
         const maxScrollWidth=(blockWidth-wrapperWidth<0)?0:blockWidth-wrapperWidth;   
-        offset=offset>maxScrollWidth?maxScrollWidth:offset<0?0:offset
+        
+        let offset=offsetX>maxScrollWidth?maxScrollWidth:offsetX<0?0:offsetX;
+        this.scrollbars.scrollLeft(offset);
+
         //dispatch motions to redux
         const indicator=(maxScrollWidth<scrollWidth)?scrollWidth-maxScrollWidth:0;
         motionDispatch.motionActions({
@@ -228,7 +231,7 @@ class Main extends Component {
                 relative:(scrollWidth/(maxScrollWidth+indicator)).toFixed(2),
                 wrapperPd:wrapperPd,//full width padding
                 itemPd:itemPd,//card item padding
-                offsetX:this.scrollbars.scrollLeft(offset),//moved scroll
+                offsetX:offset,//moved scroll
                 active:activeItem,
                 mobileVersion:mobileVersion
             }
@@ -359,10 +362,11 @@ class Main extends Component {
                         data:item,
                         style: {
                             size:eleWidth*i,
-                            opacity:spring((i===active)?1:0.78),
-                            scale:spring((i===active)?1.07:1),
+                            opacity:spring(1),
+                            scale:spring(1),
                             sizeX:spring(0),
                             sizeY:spring(0),
+                            sizeZ:spring((i===active)?35:0),
                             rotate:spring(0),
                             shadowSize1:spring((i===active)?20:10),
                             shadowSize2:spring((i===active)?70:50),
@@ -375,10 +379,11 @@ class Main extends Component {
                         data:item,
                         style: {
                             size:eleWidth*i,
-                            opacity:spring((i===active)?1:0.78),
-                            scale:spring((i===active)?1.07:1),
+                            opacity:spring(1),
+                            scale:spring(1),
                             sizeX:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.sizeX),
                             sizeY:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.sizeY),
+                            sizeZ:spring((i===active)?35:0),
                             rotate:spring((typeof prev==="undefined" || typeof prev[i]==="undefined")?0:prev[i-1].style.rotate),
                             shadowSize1:spring((i===active)?20:10),
                             shadowSize2:spring((i===active)?70:50),
@@ -396,6 +401,7 @@ class Main extends Component {
         return {
             sizeX:-150,
             sizeY:0,
+            sizeZ:0,
             opacity:0,
             scale:0.9,
             rotate:-20,
@@ -409,6 +415,7 @@ class Main extends Component {
         return {
             sizeX:spring(0),
             sizeY:spring(0),
+            sizeZ:spring(0),
             opacity:spring(0),
             scale:spring(0.9),
             rotate:spring(0),
@@ -416,9 +423,6 @@ class Main extends Component {
             shadowSize2:spring(0),
             shadowColor:spring(0),
         }
-    }
-    didLeave=()=>{
-       
     }
     countZero=(num)=>{
         if(num<10){
@@ -546,7 +550,7 @@ class Main extends Component {
                                                       transform:` perspective(600px)
                                                                   rotateY(${config.style.rotate}deg) 
                                                                   scale(${config.style.scale})
-                                                                  translate3d(${config.style.sizeX}px,${config.style.sizeY}px,0)`,
+                                                                  translate3d(${config.style.sizeX}px,${config.style.sizeY}px,${config.style.sizeZ}px)`,
                                                       zIndex:detailView===i?10:1,
                                                       opacity:config.style.opacity
                                                   }}

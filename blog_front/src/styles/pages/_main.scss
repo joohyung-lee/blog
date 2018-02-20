@@ -303,15 +303,7 @@
             position: absolute;
             display: inline-block;
             will-change: transform,opacity;
-            .card-item-boxWrap.white{
-                .gif-loading{
-                    opacity: 0.4;
-                }
-                .gif-loading-wrap .gif-loading svg{
-                    stroke:#fff;
-                    fill:#fff;
-                }
-            }
+            
         }   
     }
 }

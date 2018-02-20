@@ -27,20 +27,20 @@
                 height:100%;
             }
             .svg-fav{
+                stroke-width: 2px;
+                opacity: 0.5;
+                transition: all .3s;
             }
             path{
                 fill:none;
-                stroke: $t-black-6;
-                transition: all .2s ease;
+                stroke: $c-black-0;
+                transition: all .3s;
             }
             &:hover{
                 .svg-fav{
+                    opacity: 1;
                 }
-                path{
-                    fill:none;
-                    stroke: $t-black-8;
-                    stroke-width: 1.3px; 
-                }
+
             }
         }
         .fav-info{
@@ -52,7 +52,7 @@
                 font-weight: 600;
                 text-align: right;
                 font-size: 1rem;
-                color:$t-black-8;
+                color:$c-black-0;
                  
             }
         }        
@@ -67,18 +67,10 @@
             animation:scale-bounce-up 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
             transform-origin: center center;
             path{
-                fill:$t-black-8;
-                
+                fill:$c-black-0; 
             }
-            &:hover{
-                .svg-fav{
-                }
-                path{
-                    
-                    fill:$t-black-8;
-                    stroke: $t-black-8;
-                    stroke-width: 1px; 
-                }
+            .svg-fav{
+                opacity: 1;
             }
         }
         
@@ -109,6 +101,7 @@
             width: 100%;
         }
     }
+    
     .gif-loading-wrap{
         position: absolute;
         top:20px;
@@ -135,21 +128,38 @@
             transition: opacity 0.3s;
             svg{
                 width:100%;
-                fill:$t-black-10;
-                stroke-width: 2px;
-                stroke:$t-black-10;
+                stroke-width: 3px;
+                stroke:$c-black-0;
+                fill:transparent;
                 stroke-dasharray: 100,100;
                 
             }
         }
         .gif-loading.animate{  
             transition-delay: 0.5s;
-            opacity: 0 !important;
+            opacity: 0;
             svg{
-                fill:none !important;
+                fill:$c-black-0;
             }  
-            
         }
+    }
+    .white{
+        .gif-loading{
+        }
+        .gif-loading-wrap {
+            .gif-loading{
+                svg{
+                    stroke:#fff;
+                    
+                }
+                &.animate{
+                    svg{
+                        fill:#fff;
+                    }
+                }
+            }
+            
+        } 
     }
     .fade-in{
         opacity: 1;

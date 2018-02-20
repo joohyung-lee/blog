@@ -217,7 +217,7 @@ class CardItem extends Component {
                         </div>
                         <div className="svg-wrap" onClick={this.props.favClick}>
                             {
-                                (this.props.favLoading)?<DefaultLoading color={isBright?'black':'white'} size={20} r={8} stroke={1}/>
+                                (this.props.favLoading)?<DefaultLoading color={'black'} size={20} r={8} stroke={1}/>
                                 :<IconFav/>
                             }
                         </div>

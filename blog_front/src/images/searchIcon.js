@@ -58,7 +58,7 @@ class SearchIcon extends Component {
         }}>
           <div className="search-svg" >
             <svg x="0px" y="0px" width={320} height={30} viewBox={`0 0 300 25`} fill={`none`} 
-            stroke={isBright?`#333`:'#fff'} 
+            stroke={isBright?`#353a40`:'#fff'} 
             strokeWidth={1.2}
             strokeDasharray={`${value.array},${value.array}`}
             strokeDashoffset={`${value.offset}`}
