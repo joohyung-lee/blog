@@ -60,7 +60,7 @@ class CardItem extends Component {
                 this.setState({
                     gifLoading:true
                 });
-                myVideo.currentTime = '0';
+                
                 this.checkLoad(myVideo);
                 myVideo.oncanplay=()=>{
                     this.setState({
@@ -68,11 +68,21 @@ class CardItem extends Component {
                     });
                     myVideo.play();
                 }
-                if(myVideo.paused){
+                let isPlaying = myVideo.currentTime > 0 && !myVideo.paused && !myVideo.ended && myVideo.readyState > 2;
+                if (!isPlaying) {
                     myVideo.play();
                 }
             }else{
-                myVideo.pause()
+                myVideo.currentTime = 0;
+                var playPromise = myVideo.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        myVideo.pause();
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    });
+                }
             }
         }
     }
@@ -164,7 +174,7 @@ class CardItem extends Component {
                                 thumbLoading?<DefaultLoading color={isBright?'black':'white'}/>:null
                             }
                             {(this.props.isGif && videoSrc!=='')?
-                                <video className="video-wrap" loop playsInline muted src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
+                                <video className="video-wrap" preload="auto" loop playsInline muted src={videoSrc} ref={(ref)=>{this.videoSource=ref}}  
                                 style={{
                                     visibility:gifLoad?'visible':'hidden'
                                 }}>

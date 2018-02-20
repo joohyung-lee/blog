@@ -298,12 +298,20 @@
             }
         }
         .card-item{
-           
             transform-style: preserve-3d;
             transform-origin: 50% 50% 0;
             position: absolute;
             display: inline-block;
             will-change: transform,opacity;
+            .card-item-boxWrap.white{
+                .gif-loading{
+                    opacity: 0.4;
+                }
+                .gif-loading-wrap .gif-loading svg{
+                    stroke:#fff;
+                    fill:#fff;
+                }
+            }
         }   
     }
 }
@@ -362,12 +370,12 @@
                 }
             }
         }
+        
         .card-item-boxWrap.white{
             *{
                 color:#fff !important;
             }
             .icon-fav{
-                
                 .svg-wrap path{
                     stroke:#fff;
                 }
