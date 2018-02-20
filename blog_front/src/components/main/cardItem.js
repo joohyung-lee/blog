@@ -13,7 +13,7 @@ class CardItem extends Component {
         this.state={ 
             load:false,
             thumbLoading:false,
-            gifLoading:false,
+            videoPlaying:false,
             imgSrc:'',
             videoSrc:'',
             imgLoadState:'wating',
@@ -37,7 +37,7 @@ class CardItem extends Component {
         img.onload = () => {
             this.setState({
               thumbLoading: false,
-              gifLoading:false,
+              videoPlaying:false,
               imgLoadState:'success',
               imgSrc:imagePath,
               videoSrc:videoSrc
@@ -58,13 +58,13 @@ class CardItem extends Component {
         if(typeof myVideo!=='undefined'){
             if(active){ 
                 this.setState({
-                    gifLoading:true
+                    videoPlaying:false
                 });
                 
                 this.checkLoad(myVideo);
                 myVideo.oncanplay=()=>{
                     this.setState({
-                        gifLoading:false
+                        videoPlaying:true
                     });
                     myVideo.play();
                 }
@@ -78,6 +78,9 @@ class CardItem extends Component {
                 if (playPromise !== undefined) {
                     playPromise.then(_ => {
                         myVideo.pause();
+                        this.setState({
+                            videoPlaying:false
+                        });
                     })
                     .catch(error => {
                         console.log(error)
@@ -89,7 +92,7 @@ class CardItem extends Component {
     checkLoad=(target)=>{
         if(target.readyState===4){
             this.setState({
-                gifLoading:false,
+                videoPlaying:true,
             });  
         }else{
             setTimeout(this.checkLoad.bind(this,target),100);
@@ -146,7 +149,7 @@ class CardItem extends Component {
         return ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
     }
     render() {
-        const {thumbLoading,gifLoading,imgSrc,videoSrc,imgLoadState,itemPress,isBright}=this.state;
+        const {thumbLoading,videoPlaying,imgSrc,videoSrc,imgLoadState,itemPress,isBright}=this.state;
         const {data,gifLoad}=this.props;
         return (
             <div className={(itemPress)?`scale ${this.props.className}`:this.props.className} 
@@ -181,8 +184,8 @@ class CardItem extends Component {
                                 </video>:null
                             }
                             {(this.props.isGif)?
-                                <div className={`gif-loading-wrap ${(gifLoad&&!gifLoading)?`out`:``}`}>
-                                    <VideoLoading open={gifLoading}/>
+                                <div className={`gif-loading-wrap`}>
+                                    <VideoLoading open={videoPlaying && gifLoad}/>
                                 </div>:null
                             }
                         </div>

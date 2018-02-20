@@ -116,6 +116,10 @@
         opacity: 1;
         transition: transform 0.2s ease;
         z-index: 1;
+        @media screen and (max-width: $screen-desktop) {
+            top:15px;
+            right:15px;
+        } 
         &.in{
             opacity: 1;
             transform: translateX(15px)
@@ -124,8 +128,8 @@
             opacity: 0;
         }
         .gif-loading{
-            width:20px;
-            height:20px;  
+            width:18px;
+            height:18px;  
             transform-origin: 50% 50%;
             opacity: 0.3;
             svg{
@@ -138,7 +142,7 @@
         }
         .gif-loading.animate{     
             svg{
-                fill:none;
+                fill:none !important;
                 stroke-dasharray: 100,100;
                 animation: videoStroke 1.5s $ease-out infinite; 
             }  
