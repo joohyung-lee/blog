@@ -40,7 +40,7 @@ class SearchIcon extends Component {
       <Motion 
       
       style={{
-        postion:spring(open?0:0,springConif),
+        postion:spring(open?5:0,springConif),
         size:spring(open?responseWidth<450?responseWidth-110:250:40,springConif),
         array:spring(open?300:62,springConif),
         offset:spring(open?-62:0,springConif),
@@ -57,8 +57,8 @@ class SearchIcon extends Component {
           width:`${value.size}px`,
         }}>
           <div className="search-svg" >
-            <svg x="0px" y="0px" width={320} height={30} viewBox={`0 0 300 25`} fill={`none`} 
-            stroke={isBright?`#353a40`:'#fff'} 
+            <svg x="0px" y="0px" width={265} height={30} viewBox={`0 0 300 25`} fill={`none`} 
+            stroke={isBright?`#434a50`:'#fff'} 
             strokeWidth={1.2}
             strokeDasharray={`${value.array},${value.array}`}
             strokeDashoffset={`${value.offset}`}
