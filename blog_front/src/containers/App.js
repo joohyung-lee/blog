@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { AnimatedSwitch,AnimatedRoute } from 'react-router-transition/lib/react-router-transition';
 import{spring} from 'react-motion';
 import {withRouter,Route,Redirect} from 'react-router-dom'
+import MobileDetect from 'mobile-detect';
+
 //polyfill
 import 'lib/arrayFind';
 //joomation style
@@ -33,9 +35,24 @@ font.load().then(function () {
 });
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      mobile:false
+    }
+  }
   componentDidMount(){  
     const {handleHeader}=this.props;
-    
+    let md = new MobileDetect(window.navigator.userAgent);
+    if(md.mobile()){
+      this.setState({
+        mobile:true
+      })
+    }else{
+      this.setState({
+        mobile:false
+      })
+    }
     let re = /(auth|loginPopup)/;
     let isAuth = re.test(this.props.location.pathname);
     if(isAuth){
@@ -144,7 +161,7 @@ class App extends Component {
   }
   render() {
     const {adminError,postsError,header,motion,modal}=this.props;
-    
+    const{mobile} = this.state;
     const pageTransitions = {
       atEnter: {
         opacity :0,
@@ -205,7 +222,7 @@ class App extends Component {
                       <Route path="/:category" component={MainRoute}/> 
                     </AnimatedSwitch>
                     <AnimatedRoute
-                      className={`detail-page-wrap`}
+                      className={`detail-page-wrap ${!mobile?'fixed':''}`}
                       path="/posts/:category/:postId"
                       component={DetailView}
                       {...detailLayer}

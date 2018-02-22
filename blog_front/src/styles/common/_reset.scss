@@ -129,6 +129,9 @@ button{
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
 }
+.detail-page-wrap.fixed{
+    position:fixed;
+}
 .detail-page-wrap > div{
     position: absolute;
     top:0;
