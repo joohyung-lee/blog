@@ -19,7 +19,7 @@
         padding: 80px 0px 0px;
         margin: 0 auto;
         text-align: center;
-        background-color: #f1f1f1;
+        background-color: $c-black-8;
         z-index: 1;
         &:before{
             content: "";
@@ -38,7 +38,7 @@
         }
         .title-wrap{
             padding:0 0 20px;
-            background-color:#f1f1f1;
+            background-color:$c-black-8;
         }
         h2{
             position: relative;
@@ -70,14 +70,14 @@
         bottom:0;
         max-width: 1600px;
         margin:0 auto;
-        background-color: #f1f1f1;
+        background-color: $c-black-8;
         &:before,&:after{
             content:'';
             position: absolute;
             top:0;
             width: 0px;
             height: 100%;
-            background-color: #f1f1f1;
+            background-color: $c-black-8;
             z-index: 10;
             transition:width 0.3s ease;
         }
