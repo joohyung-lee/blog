@@ -561,7 +561,11 @@ class Main extends Component {
                         >
                         {
                             (dataState==='success' && data.length===0)?
-                            <div className="no-data">{this.props.location.pathname.split('/')[1]} is Empty.</div>
+                            <div className="no-data"
+                                style={{
+                                    left:`${wrapperPd}px`,
+                                }}
+                            >{this.props.location.pathname.split('/')[1]} is empty.</div>
                             :null
                         }
                         <div className="card-item-wrap" 

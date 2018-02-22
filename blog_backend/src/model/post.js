@@ -15,6 +15,7 @@ var postSchema = new Schema({
     body:String,
     bgColor:String,
     iframeUrl:String,
+    blogType:String,
     category:String,
     starred: [Number],
     tags:[String],

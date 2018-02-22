@@ -89,6 +89,15 @@ class Write extends Component {
             iframeUrl:iframeUrl,
         })
     }
+    
+    handleBlogType=(e)=>{
+        const {input}=this.props;
+        const blogType= e.target.value;
+        return input.blogType({
+            writeType:this.writeType,
+            blogType:blogType,
+        })
+    }
     handleCategory=(e)=>{
         const {input}=this.props;
         const category= e.target.value;
@@ -250,11 +259,16 @@ class Write extends Component {
                             <input className="write-input" type="text" onChange={this.handleBgcolor} value={writePost.bgColor} placeholder="#a1b2c3"/>
                             <span className="color-box" style={{backgroundColor:writePost.bgColor}}/>
                         </div>
+                        <select value={writePost.blogType} onChange={this.handleBlogType}>
+                            <option value="simulate">simulate</option>
+                            <option value="blog">blog</option>
+                        </select>
                         <div className="iframe-url">
+                            
                             <input className="write-input" type="text" onChange={this.handleIframeUrl} value={writePost.iframeUrl} placeholder="iframe주소를 입력해주세요"/>
                         </div>
                         <div className="post-category">
-                            <select value={writePost.category}onChange={this.handleCategory}>
+                            <select value={writePost.category} onChange={this.handleCategory}>
                                 <option>전체</option>
                                 <option value="motionlab">motionlab</option>
                                 <option value="review">review</option>
@@ -300,7 +314,7 @@ class Write extends Component {
                         </div>
                         <div className="upload-wrap">
                             <input type="file" id="gifname" onChange={this.handleGifUpload} />
-                            <label className="btn-upload" htmlFor="gifname"><span>GIF 업로드</span></label>
+                            <label className="btn-upload" htmlFor="gifname"><span>Video 업로드</span></label>
                             <div className="file-preview">
                                 <ul>
                                 {

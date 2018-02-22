@@ -105,13 +105,13 @@ router.put('/:id', function (req, res) {
         post.summary = req.body.summary;
         post.bgColor = req.body.bgColor;
         post.iframeUrl = req.body.iframeUrl;
+        post.blogType = req.body.blogType;
         post.category = req.body.category;
         post.tags = req.body.tags;
         post.thumbnail = req.body.thumbnail;
         post.gif = req.body.gif;
         post.files = req.body.files;
         post.postDate=req.body.postDate;
-
         post.save(function (err) {
             if (err) res.status(500).json({
                 error: 'fail to update'
@@ -253,6 +253,7 @@ router.post('/', function (req, res) {
     post.summary = req.body.summary;
     post.bgColor = req.body.bgColor;
     post.iframeUrl = req.body.iframeUrl;
+    post.blogType = req.body.blogType;
     post.category = req.body.category;
     post.tags = req.body.tags;
     post.thumbnail = req.body.thumbnail;

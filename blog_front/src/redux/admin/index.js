@@ -10,6 +10,7 @@ const ADMIN_SUMMARY_WRITE = 'ADMIN/ADMIN_SUMMARY_WRITE';
 const ADMIN_POST_WRITE = 'ADMIN/ADMIN_POST_WRITE';
 const ADMIN_BGCOLOR_WRITE = 'ADMIN/ADMIN_BGCOLOR_WRITE';
 const ADMIN_IFRAMEURL_WRITE = 'ADMIN/ADMIN_IFRAMEURL_WRITE';
+const ADMIN_BLOG_TYPE = 'ADMIN/ADMIN_BLOG_TYPE';
 const ADMIN_CATEGORY_WRITE = 'ADMIN/ADMIN_CATEGORY_WRITE';
 const ADMIN_TAGS_WRITE = 'ADMIN/ADMIN_TAGS_WRITE';
 const ADMIN_TAGS_DELETE = 'ADMIN/ADMIN_TAGS_DELETE';
@@ -31,6 +32,7 @@ export const titleWrite = createAction(ADMIN_TITLE_WRITE);
 export const summaryWrite = createAction(ADMIN_SUMMARY_WRITE);
 export const bgColorWrite = createAction(ADMIN_BGCOLOR_WRITE);
 export const iframeUrlWrite = createAction(ADMIN_IFRAMEURL_WRITE);
+export const blogType = createAction(ADMIN_BLOG_TYPE);
 export const postCategory = createAction(ADMIN_CATEGORY_WRITE);
 export const postTags = createAction(ADMIN_TAGS_WRITE);
 export const deleteTag=createAction(ADMIN_TAGS_DELETE);
@@ -99,6 +101,7 @@ const initialState=Map({
                     data: List([]),
                 }),
                 iframeUrl:'',
+                blogType:'simulate',
                 bgColor:'',
                 category:'',
                 tags:List([])
@@ -122,6 +125,7 @@ const initialState=Map({
                     data: List([]),
                 }),
                 iframeUrl:'',
+                blogType:'simulate',
                 bgColor:'',
                 category:'',
                 tags:List([])
@@ -168,6 +172,15 @@ export default handleActions({
             return state.setIn(['createData','data','iframeUrl'],iframeUrl)
         }else{
             return state.setIn(['modifyData','data','iframeUrl'],iframeUrl)
+        }
+    },
+    [ADMIN_BLOG_TYPE]: (state, action) => {  
+        const {writeType,blogType} = action.payload;
+        console.log(blogType)
+        if(writeType==='write'){
+            return state.setIn(['createData','data','blogType'],blogType)
+        }else{
+            return state.setIn(['modifyData','data','blogType'],blogType)
         }
     },
     [ADMIN_CATEGORY_WRITE]: (state, action) => {  
