@@ -487,7 +487,7 @@ class DetailView extends Component {
                                 
                                 <iframe title="This is a detailView" key="i" src={data.iframeUrl}
                                     onLoad={this.iframeLoad} 
-                                    scrolling="auto"
+                                    allowfullscreen="true" sandbox="allow-same-origin allow-scripts allow-pointer-lock allow-popups allow-modals allow-forms" allow="geolocation; microphone; camera; midi; vr" allowtransparency="true"
                                     frameBorder="0" width={"100%"} height={frameSizeY}></iframe>
                             </div>  
                         </div>
