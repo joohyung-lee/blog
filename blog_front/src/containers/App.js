@@ -215,7 +215,7 @@ class App extends Component {
                     >  
                       <Route exact path="/"/> 
                       <Route path="/posts/:category/:postId"/>
-                      <Route exact path="/blog"component={DetailBlog}/>
+                      <Route exact path="/blog"/>
                       <Route path="/search" component={SearchRoute}/> 
                       <Route path="/admin" component={AdminRoute}/> 
                       <Route path="/mypage/collections" component={Collections}/>
@@ -226,6 +226,13 @@ class App extends Component {
                       className={`detail-page-wrap ${!mobile?'fixed':''}`}
                       path="/posts/:category/:postId"
                       component={DetailView}
+                      {...detailLayer}
+                      mapStyles={this.detailMapStyles}
+                    />
+                    <AnimatedRoute
+                      className={`detail-page-wrap ${!mobile?'fixed':''}`}
+                      path="/blog"
+                      component={DetailBlog}
                       {...detailLayer}
                       mapStyles={this.detailMapStyles}
                     />

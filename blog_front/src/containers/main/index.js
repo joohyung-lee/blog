@@ -343,7 +343,7 @@ class Main extends Component {
     }
 
     itemUp=(id,i,bgColor,category,e)=>{
-        const {motion,motionDispatch}=this.props;
+        const {motion,motionDispatch,data}=this.props;
         const {offsetX}=motion;
             motionDispatch.motionActions({
                 motions:{
@@ -354,7 +354,11 @@ class Main extends Component {
                     backUrl:true
                 }
             });
-            this.props.history.push(`/posts/${category}/${id}`);            
+            if(data[i].blogType==="blog"){
+                this.props.history.push(`/blog`);   
+            }else{
+                this.props.history.push(`/posts/${category}/${id}`);    
+            }       
     }
     handleTouchUp=(e)=>{
         this.handleUp();
