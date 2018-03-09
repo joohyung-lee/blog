@@ -14,7 +14,7 @@ import LoginModal from 'components/common/modal/loginModal';
 import {MainRoute,SearchRoute,AdminRoute} from 'components/route';
 
 //pages
-import {RedirectLogin,Collections,Header,DetailView} from 'components/pages';
+import {RedirectLogin,Collections,Header,DetailView,DetailBlog} from 'components/pages';
 
 //redux
 import * as modalActions from 'redux/modal';
@@ -215,6 +215,7 @@ class App extends Component {
                     >  
                       <Route exact path="/"/> 
                       <Route path="/posts/:category/:postId"/>
+                      <Route exact path="/blog"component={DetailBlog}/>
                       <Route path="/search" component={SearchRoute}/> 
                       <Route path="/admin" component={AdminRoute}/> 
                       <Route path="/mypage/collections" component={Collections}/>

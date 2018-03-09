@@ -2,11 +2,13 @@ import asyncRoute from 'lib/asyncRoute';
 import MobileDetect from 'mobile-detect';
 import Header from 'containers/header';
 import DetailView from 'containers/detail/detailView';
+import DetailBlog from 'containers/detail/detailBlog';
 import Search from 'containers/search';
 import MarkdownView from 'components/common/markdown';
 import NotFound from 'components/common/error/404';
 export {
     DetailView,
+    DetailBlog,
     Search,
     NotFound,
     Header,
