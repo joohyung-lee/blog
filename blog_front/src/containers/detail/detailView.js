@@ -68,7 +68,8 @@ class DetailView extends Component {
                 iframeLoad:false
             })
             this.dimentions();
-            if(this.props.loading!==loading && dataState==="success"){            
+            if(this.props.loading!==loading && dataState==="success"){    
+                console.log(data.blogType)        
                 let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);           
                 motionDispatch.motionActions({
                     motions:{
