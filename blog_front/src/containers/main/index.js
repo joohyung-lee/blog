@@ -355,10 +355,10 @@ class Main extends Component {
                 }
             });
             if(data[i].blogType==="blog"){
-                this.props.history.push(`/blog`);   
+                this.props.history.push(`/blog/${category}/${id}`);   
             }else{
                 this.props.history.push(`/posts/${category}/${id}`);    
-            }       
+            }      
     }
     handleTouchUp=(e)=>{
         this.handleUp();

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
 import { Scrollbars } from 'react-custom-scrollbars';
 import dateFormat from 'dateformat';
 import MobileDetect from 'mobile-detect';
@@ -43,8 +42,8 @@ class DetailView extends Component {
         }
     }
     componentDidMount(){   
-        this.dimentions();
-        window.addEventListener('resize',this.dimentions);
+        this.dimensions();
+        window.addEventListener('resize',this.dimensions);
         const {get}=this.props; 
         window.addEventListener('click',this.outHide);
         setTimeout(()=>{
@@ -52,7 +51,7 @@ class DetailView extends Component {
         },400);
     }
     componentWillUnmount(){
-        window.removeEventListener("resize", this.dimentions);  
+        window.removeEventListener("resize", this.dimensions);  
     }
     componentWillReceiveProps(nextProps) {
         const {get,data,motionDispatch,motion,loading,commentsLoading,dataState}=nextProps;
@@ -62,14 +61,13 @@ class DetailView extends Component {
                 get.getSinglePost('POSTS/SINGLE_GET',nextProps.match.params.category,nextProps.match.params.postId);
             },400)
         }
-        
         if(!motion.detailLoad){
             this.setState({
                 iframeLoad:false
             })
-            this.dimentions();
+            this.dimensions();
             if(this.props.loading!==loading && dataState==="success"){    
-                console.log(data.blogType)        
+                console.log(data)        
                 let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);           
                 motionDispatch.motionActions({
                     motions:{
@@ -96,7 +94,7 @@ class DetailView extends Component {
 
     }
     //window resize width
-    dimentions=()=>{
+    dimensions=()=>{
         const {motionDispatch} = this.props;
         let md = new MobileDetect(window.navigator.userAgent);
         if(md.mobile()){

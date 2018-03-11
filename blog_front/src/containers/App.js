@@ -68,13 +68,13 @@ class App extends Component {
     const nextUrl=nextProps.location.pathname.split('/');
     const thisUrl=this.props.location.pathname.split('/');
     let isBright = (this.get_brightness(nextProps.motion.bgColor) > 160);
-    if(thisUrl[1]==='posts'){
+    if(thisUrl[1]==='posts' || thisUrl[1]==='blog'){
       handleHeader.isBrightness({
         isBright:isBright
       });  
     }
     if(locationChanged){
-      if(nextUrl[1]==='posts'){
+      if(nextUrl[1]==='posts' || nextUrl[1]==='blog'){
         motionDispatch.motionActions({
           motions:{
               scale:true,
@@ -88,7 +88,7 @@ class App extends Component {
         handleHeader.isBrightness({
           isBright:true
         });  
-        if(thisUrl[1]==='posts'){
+        if(thisUrl[1]==='posts' || thisUrl[1]==='blog'){
             motionDispatch.motionActions({
               motions:{
                   scale:false,
@@ -165,18 +165,13 @@ class App extends Component {
     const pageTransitions = {
       atEnter: {
         opacity :0,
-        offsetY: 5,
-        scale:0.92
+
       },
       atLeave: {
         opacity: this.fade(0),
-        offsetY: this.move(5),
-        scale:this.move(0.92)
       },
       atActive: {
         opacity: this.fade(1),
-        offsetY: this.move(0),
-        scale:this.move(1)
       },
     };
     const detailLayer = {
@@ -215,7 +210,7 @@ class App extends Component {
                     >  
                       <Route exact path="/"/> 
                       <Route path="/posts/:category/:postId"/>
-                      <Route exact path="/blog"/>
+                      <Route path="/blog/:category/:postId"/>
                       <Route path="/search" component={SearchRoute}/> 
                       <Route path="/admin" component={AdminRoute}/> 
                       <Route path="/mypage/collections" component={Collections}/>
@@ -231,7 +226,7 @@ class App extends Component {
                     />
                     <AnimatedRoute
                       className={`detail-page-wrap ${!mobile?'fixed':''}`}
-                      path="/blog"
+                      path="/blog/:category/:postId"
                       component={DetailBlog}
                       {...detailLayer}
                       mapStyles={this.detailMapStyles}

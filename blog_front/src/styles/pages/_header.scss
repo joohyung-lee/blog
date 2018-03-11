@@ -32,6 +32,9 @@
             font-size: 1rem;
             font-weight: 700;
             height: 30px;
+            svg{
+                stroke-dasharray: 100,100;
+            }
             .logo-svg{
                 fill:none;
                 stroke:$c-black-0;

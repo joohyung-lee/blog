@@ -73,6 +73,17 @@ $brighten:#fff;
         }
     }
 }
+//blog-type
+.detail-blog-wrap{
+    background: $t-white-10;
+    .detail-blog-header{
+
+    }
+    .detail-blog{
+        padding:50px;
+    }
+}
+//simulator-type
 .detail-main{
     position: absolute;
     top:0;
