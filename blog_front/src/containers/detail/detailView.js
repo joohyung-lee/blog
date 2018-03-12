@@ -67,7 +67,6 @@ class DetailView extends Component {
             })
             this.dimensions();
             if(this.props.loading!==loading && dataState==="success"){    
-                console.log(data)        
                 let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);           
                 motionDispatch.motionActions({
                     motions:{

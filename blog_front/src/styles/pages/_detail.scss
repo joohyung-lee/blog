@@ -73,16 +73,6 @@ $brighten:#fff;
         }
     }
 }
-//blog-type
-.detail-blog-wrap{
-    background: $t-white-10;
-    .detail-blog-header{
-
-    }
-    .detail-blog{
-        padding:50px;
-    }
-}
 //simulator-type
 .detail-main{
     position: absolute;
@@ -118,44 +108,7 @@ $brighten:#fff;
             font-weight: 600;
         }
     }
-    .go-back{
-        position: absolute;
-        top:0;
-        display: flex;
-        transform:translateY(80px);
-        align-items: center;
-        transition: transform 0.3s ease,opacity 0.3s ease;
-        opacity: 0.7;
-        z-index: 100;
-        cursor: pointer;
-        &:hover{
-            opacity: 1;
-        }
-        &.preview{
-            transform:translateY(62px);
-        }
-        span{
-            font-weight: 500;
-        }
-        .icon{
-            position: relative;
-            width: 20px;
-            height:20px;
-            &:before,&:after{
-                content: "";
-                position: absolute;
-                top:6px;
-                width: 10px;
-                height: 2px;
-            }
-            &:before{
-                transform:translateY(0) rotate(-45deg);
-            }
-            &:after{
-                transform:translateY(6px) rotate(45deg);
-            }
-        }
-    }
+    
     .device-controll-wrap{
         position: relative;
         margin-top:20px;
@@ -199,17 +152,7 @@ $brighten:#fff;
                 }
             }
         }
-        .visit-site{
-            a{
-                padding:5px 15px;
-                border-radius: 30px;
-                opacity: 0.7;
-                transition: opacity 0.3s ease;
-                &:hover{
-                    opacity: 1;
-                }
-            }
-        }
+        
     } 
     .detail-simulate{
         position: relative;
@@ -475,6 +418,114 @@ $brighten:#fff;
             }
         }
     }
+}
+//visit-site
+.visit-site{
+    a{
+        padding:5px 15px;
+        border-radius: 30px;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+        &:hover{
+            opacity: 1;
+        }
+    }
+}
+//go-back
+.go-back{
+    position: absolute;
+    top:0;
+    display: flex;
+    transform:translateY(80px);
+    align-items: center;
+    transition: transform 0.3s ease,opacity 0.3s ease;
+    opacity: 0.7;
+    z-index: 100;
+    cursor: pointer;
+    &:hover{
+        opacity: 1;
+    }
+    &.preview{
+        transform:translateY(62px);
+    }
+    span{
+        font-weight: 500;
+    }
+    .icon{
+        position: relative;
+        width: 20px;
+        height:20px;
+        &:before,&:after{
+            content: "";
+            position: absolute;
+            top:6px;
+            width: 10px;
+            height: 2px;
+        }
+        &:before{
+            transform:translateY(0) rotate(-45deg);
+        }
+        &:after{
+            transform:translateY(6px) rotate(45deg);
+        }
+    }
+}
+.detail-blog-wrap{
+    &.dark{
+        .go-back{
+            span{
+                color:$brighten;
+                &:before,&:after{
+                    background:$brighten;
+                }
+            }
+        }
+        .visit-site{
+            a{
+                background:$brighten;
+            }
+        }
+    }
+    &.bright{
+        .go-back{
+            span{
+                color:$darkness;
+                &:before,&:after{
+                    background:$darkness;
+                }
+            }
+        }
+        .visit-site{
+            a{
+                background:$darkness;
+            }
+        }
+    }
+    
+}
+.detail-blog-header{
+    position: relative;
+    padding:0 25px;
+    height:50px;
+    .go-back{
+        top:15px;
+        left:25px;
+        transform: translate(0,0);
+        
+    }
+    .visit-site{
+        position: absolute;
+        top:15px;
+        right:25px;
+    }
+    
+}
+.detail-blog{
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+    padding:50px 25px;
 }
 @media screen and (max-width: $screen-1400) {
     .detail-doc{

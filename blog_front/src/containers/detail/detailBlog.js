@@ -4,6 +4,7 @@ import dateFormat from 'dateformat';
 import MobileDetect from 'mobile-detect';
 //components
 import {Documentation} from 'components/detail';
+import {MarkdownView} from 'components/pages';
 //redux
 import * as commonAction from 'redux/common';
 import * as httpRequest from 'redux/helper/httpRequest';
@@ -20,15 +21,45 @@ class DetailBlog extends Component {
     constructor(props){
         super(props);
         this.state={
-            windowHeight:document.documentElement.clientHeight
+            windowHeight:document.documentElement.clientHeight,
+            isBright:false
         }
     }
     componentDidMount(){   
+        const {get}=this.props;
         this.dimensions();
         window.addEventListener('resize',this.dimensions);
+        setTimeout(()=>{
+            get.getSinglePost('POSTS/SINGLE_GET',this.props.match.params.category,this.props.match.params.postId);
+        },400);
     }
     componentWillUnmount(){
         window.removeEventListener("resize", this.dimensions);  
+    }
+    componentWillReceiveProps(nextProps) {
+        const {get,data,motionDispatch,motion,loading,commentsLoading,dataState}=nextProps;
+        const locationChanged = nextProps.location !== this.props.location;
+        if(locationChanged){
+            setTimeout(()=>{
+                get.getSinglePost('POSTS/SINGLE_GET',nextProps.match.params.category,nextProps.match.params.postId);
+            },400)
+        }
+        if(!motion.detailLoad){
+            this.dimensions();
+            if(this.props.loading!==loading && dataState==="success"){              
+                let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);           
+                motionDispatch.motionActions({
+                    motions:{
+                        bgColor:data.bgColor,
+                        detailLoad:true
+                    }
+                });  
+                this.setState({
+                    isBright:isBright
+                })
+            }
+        }
+
     }
     dimensions=()=>{
         let windowHeight=document.documentElement.clientHeight;
@@ -36,14 +67,29 @@ class DetailBlog extends Component {
             windowHeight:windowHeight
         })
     }
-    render() {
-        let temp={
-            name:['123','123','asdga']
+    goBack=(link)=>{
+        const {data}=this.props;
+        if(link=='none'){
+            this.props.history.goBack();
+        }else{
+            this.props.history.push(`/${link}`); 
+            
         }
-        const {windowHeight}=this.state;
+        
+    }
+    get_brightness=(hexCode)=>{
+        hexCode = hexCode.replace('#', '');
+        var c_r = parseInt(hexCode.substr(0, 2),16);
+        var c_g = parseInt(hexCode.substr(2, 2),16);
+        var c_b = parseInt(hexCode.substr(4, 2),16);
+        return ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+    }
+    render() {
+        const {motion,data,common} = this.props;
+        const {windowHeight,isBright}=this.state;
         return (
             <Scrollbars
-                    className={`detail-blog-wrap`}
+                    className={`detail-blog-wrap ${isBright?'bright':'dark'}`}
                     renderView={this.renderView}
                     style={{
                         position:'absolute',
@@ -51,14 +97,27 @@ class DetailBlog extends Component {
                         right:0,
                         width:`100%`,
                         height:`${windowHeight}px`,
+                        backgroundColor:motion.bgColor
                     }}>
                 <div className="detail-blog-header">
-                    {temp.name.map((data,i)=>{
-                        return <div>{data}</div>
-                    })}
+                {motion.backUrl?
+                        <span className={`go-back`} onClick={this.goBack.bind(this,'none')}>
+                            <span className="icon"></span>
+                            <span>Back</span>
+                        </span>:
+                        <span className={`go-back`} onClick={this.goBack.bind(this,data.category)}>
+                            <span className="icon"></span>
+                            <span>{data.category}</span>
+                        </span>
+                    }
+                    <div className="right visit-site">
+                        <a href={data.iframeUrl} target="_blank">Visit Site</a>
+                    </div>
                 </div>
                 <div className="detail-blog">
-                    <p>blog 타입화면</p>
+                {motion.detailLoad?
+                    <MarkdownView source={data.body}/>
+                :null}
                 </div>
             </Scrollbars>
         );

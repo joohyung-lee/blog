@@ -56,6 +56,11 @@ app.use(express.static(path.join(__dirname, '../../../blog_front/build/')));
 app.get('*', function (req, res) { 
   res.sendFile(path.join(__dirname, '../../../blog_front/build/', 'index.html'));
 });
+app.use(function(error, req, res, next) {
+  // Not found index.js 
+  res.sendFile(path.join(__dirname, '../error/', 'index.html'));
+  //res.json({ message: error.message });
+});
 var port = process.env.PORT || 4000;
 var server= http.createServer(app).listen(port,function(){
     console.log("Express server has started on port " + port)

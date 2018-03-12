@@ -68,7 +68,7 @@ class App extends Component {
     const nextUrl=nextProps.location.pathname.split('/');
     const thisUrl=this.props.location.pathname.split('/');
     let isBright = (this.get_brightness(nextProps.motion.bgColor) > 160);
-    if(thisUrl[1]==='posts' || thisUrl[1]==='blog'){
+    if(thisUrl[1]==='posts'){
       handleHeader.isBrightness({
         isBright:isBright
       });  
@@ -81,9 +81,12 @@ class App extends Component {
               detailView:true,
           }
         });
-        handleHeader.isBrightness({
+        if(nextUrl[1]==='posts'){
+          handleHeader.isBrightness({
             isBright:isBright
-        });
+          });
+        }
+       
       }else{
         handleHeader.isBrightness({
           isBright:true
@@ -225,7 +228,7 @@ class App extends Component {
                       mapStyles={this.detailMapStyles}
                     />
                     <AnimatedRoute
-                      className={`detail-page-wrap ${!mobile?'fixed':''}`}
+                      className={`detail-page-wrap blog ${!mobile?'fixed':''}`}
                       path="/blog/:category/:postId"
                       component={DetailBlog}
                       {...detailLayer}

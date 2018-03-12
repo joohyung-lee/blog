@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Error</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.5;
+            list-style: none;
+            text-decoration: none;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-size: 15px;
+            font-weight: 500;
+            color: #434a50;
+
+        }
+
+        .error-content {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+        }
+
+        .error-content h1 {
+            font-size: 2.5rem;
+        }
+
+        .error-content a {
+            font-size: 1.5rem;
+            border-bottom: 1px solid #434a50;
+            font-weight: normal;
+        }
+
+        .error-content p {
+            color: #888;
+            margin-top: 10px;
+            font-size: 1.5rem;
+            font-weight: 300
+        }
+        .count-down{
+            margin-top:50px;
+            text-align: center;
+        }
+        .count-down h2{
+            font-size: 4rem;
+           
+        }
+        .count-down p{
+            color: #888;
+            margin-top: 10px;
+            font-weight: 300
+        }
+    </style>
+</head>
+
+<body>
+    <div class="error-content">
+        <h1></h1>
+        <p>
+            <a href="https://joomation.com/home">https://joomation.com/</a> is under construction...</p>
+    </div>
+    <div class="count-down">
+        <h2>30</h2>
+        <p>
+            Go to homepage in 30 seconds.</p>
+    </div>
+</body>
+<script>
+    var number = 30;
+    var element = document.querySelector('.count-down h2');
+    var timer = setInterval(function () {
+        if (number < 1) {
+            number = 0;
+            window.location.href = "https://joomation.com/home"
+        } else {
+            number = number - 1;
+            element.innerHTML = number
+        }
+    }, 1000);
+</script>
+
+</html>
