@@ -22,13 +22,13 @@ class DetailBlog extends Component {
         super(props);
         this.state={
             windowHeight:document.documentElement.clientHeight,
-            isBright:false
         }
     }
     componentDidMount(){   
         const {get}=this.props;
         this.dimensions();
         window.addEventListener('resize',this.dimensions);
+        
         setTimeout(()=>{
             get.getSinglePost('POSTS/SINGLE_GET',this.props.match.params.category,this.props.match.params.postId);
         },400);
@@ -45,6 +45,7 @@ class DetailBlog extends Component {
             },400)
         }
         if(!motion.detailLoad){
+            console.dir(document.documentElement.querySelector('background'))
             this.dimensions();
             if(this.props.loading!==loading && dataState==="success"){              
                 let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);           
@@ -54,12 +55,12 @@ class DetailBlog extends Component {
                         detailLoad:true
                     }
                 });  
-                this.setState({
-                    isBright:isBright
-                })
             }
         }
 
+    }
+    clickTest=()=>{
+        alert('click')
     }
     dimensions=()=>{
         let windowHeight=document.documentElement.clientHeight;
@@ -86,10 +87,10 @@ class DetailBlog extends Component {
     }
     render() {
         const {motion,data,common} = this.props;
-        const {windowHeight,isBright}=this.state;
+        const {windowHeight}=this.state;
         return (
             <Scrollbars
-                    className={`detail-blog-wrap ${isBright?'bright':'dark'}`}
+                    className={`detail-blog-wrap ${common.isBright?'bright':'dark'}`}
                     renderView={this.renderView}
                     style={{
                         position:'absolute',
@@ -100,7 +101,7 @@ class DetailBlog extends Component {
                         backgroundColor:motion.bgColor
                     }}>
                 <div className="detail-blog-header">
-                {motion.backUrl?
+                    {motion.backUrl?
                         <span className={`go-back`} onClick={this.goBack.bind(this,'none')}>
                             <span className="icon"></span>
                             <span>Back</span>

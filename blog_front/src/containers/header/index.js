@@ -143,7 +143,7 @@ class Header extends Component {
         const {searchView}=this.state;
             return (
                 <div className={`global-nav ${searchView?'search':'default'}`}>
-                    <div className={`logo ${common.isBright?'black':'white'}`}>
+                    <div className={`logo`}>
                         <a href='/home'><h1><Logo/></h1></a>
                         {/* <ul>
                             <li>About</li>
@@ -152,7 +152,7 @@ class Header extends Component {
                         
                     <div className="right-contents">
                         <SearchIcon open={searchView} 
-                        isBright={motion.frameFull?common.isBright:true}
+                        isBright={true}
                         onClick={this.searchClick}
                         onChange={this.handleChange} 
                         onKeyUp={this.onKeyUp}

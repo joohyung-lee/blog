@@ -128,9 +128,10 @@ button{
     width:100%;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
+    z-index: 8888;
 }
 .detail-page-wrap.blog{
-    z-index: 9999;
+    
 }
 .detail-page-wrap.fixed{
     position:fixed;

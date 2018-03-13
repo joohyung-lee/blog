@@ -430,8 +430,8 @@ class Search extends Component{
             return false
         }
     }
-    itemUp=(id,bgColor,category,e)=>{
-        const {motionDispatch} = this.props;
+    itemUp=(id,i,bgColor,category,e)=>{
+        const {motionDispatch,postsData} = this.props;
         motionDispatch.motionActions({
             motions:{
                 bgColor:bgColor===''?'#ffffff':bgColor,
@@ -439,7 +439,11 @@ class Search extends Component{
                 backUrl:true
             }
         });
-        this.props.history.push(`/posts/${category}/${id}`)
+        if(postsData[i].blogType==="blog"){
+            this.props.history.push(`/blog/${category}/${id}`);   
+        }else{
+            this.props.history.push(`/posts/${category}/${id}`);    
+        } 
     }
     render(){
         const {postsData,postsLoading} = this.props;
@@ -531,7 +535,7 @@ class Search extends Component{
                                             key={item._id}
                                             data={item}
                                             currentUser={item.user}
-                                            onClick={this.itemUp.bind(this,item._id,item.bgColor,item.category)}
+                                            onClick={this.itemUp.bind(this,item._id,i,item.bgColor,item.category)}
                                             />
                                     })
                                 }

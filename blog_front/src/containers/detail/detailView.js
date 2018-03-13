@@ -108,7 +108,7 @@ class DetailView extends Component {
         let windowWidth=document.documentElement.clientWidth;
         let windowHeight=document.documentElement.clientHeight;
         let sizeX;
-        let sizeY=windowHeight-180;
+        let sizeY=windowHeight-140;
         const frameWrap=windowWidth<1900?
         windowWidth<1600?
         windowWidth<1400?
@@ -187,14 +187,14 @@ class DetailView extends Component {
                 mobileMode:true,
                 deskMode:false,
                 frameSizeX:'375px',
-                frameSizeY:windowHeight>667?'667px':windowHeight-180+'px',
+                frameSizeY:windowHeight>667?'667px':windowHeight-150+'px',
             });
         }else{
             this.setState({
                 mobileMode:false,
                 deskMode:true,
                 frameSizeX:'100%',
-                frameSizeY:windowHeight-180+'px'
+                frameSizeY:windowHeight-125+'px'
             })
         }
     }
@@ -430,7 +430,7 @@ class DetailView extends Component {
                 <div className={`detail-main ${motion.detailLoad?'animate':''}`}
                     style={{
                         width:frameFull?`100%`:motion.detailLoad?`${frameWrap}px`:`${windowWidth}px`,
-                        height:doc?`100px`:`100%`,
+                        height:doc?`75px`:`100%`,
                         backgroundColor:motion.bgColor
                     }}>
                     <div className={`loading-text ${iframeLoad?'fade-out':''}`}>
@@ -469,9 +469,6 @@ class DetailView extends Component {
                                     </div>:null
                                     }
                                 </div>
-                                <div className="right visit-site">
-                                    <a href={data.iframeUrl} target="_blank">Visit Site</a>
-                                </div>
                             </div>
                             
                             <div key={data._id} className={`iframe-wrap ${iframeLoad?'animate':'default'} ${mobileDetact?'mobile':'desk'}`}
@@ -490,6 +487,9 @@ class DetailView extends Component {
                             </div>  
                         </div>
                     :null} 
+                    <div className={`right visit-site ${doc?'preview':'documentation'}`}>
+                        <a href={data.iframeUrl} target="_blank">Visit Site</a>
+                    </div>
                     {motion.detailLoad?
                     <div className={`scroll-doc ${!frameFull?'fade-out':''}`}>
                         <span className={doc?`Preview`:`Documentation`}onClick={this.scrollDown}>{doc?`Preview`:`Documentation`}</span>

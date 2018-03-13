@@ -78,7 +78,7 @@ $brighten:#fff;
     position: absolute;
     top:0;
     left:0;
-    padding:50px 50px 50px;
+    padding:15px 50px 50px;
     z-index: 10;
     overflow: hidden;
     background-color:$c-black-8;
@@ -111,7 +111,6 @@ $brighten:#fff;
     
     .device-controll-wrap{
         position: relative;
-        margin-top:20px;
         >div{
             &.center{
                 display: inline-block;
@@ -217,7 +216,7 @@ $brighten:#fff;
         width:auto;
         left:0;
         right:0;
-        bottom:5px;
+        bottom:15px;
         text-align: center;
         
         &.fade-out{
@@ -319,10 +318,10 @@ $brighten:#fff;
         transition:transform 0.5s $ease-out;
     }
     &.full{
-        transform: translate3d(0,calc(100% + 100px),0);
+        transform: translate3d(0,calc(100% + 75px),0);
         transition:transform 0.5s $ease-in-out,width 0s $ease-out 0.5s;
         &.doc{
-            transform: translate3d(0,100px,0);
+            transform: translate3d(0,75px,0);
             .detail-contents{
                 .detail-text{
                     padding:50px 50px 25px;
@@ -421,6 +420,12 @@ $brighten:#fff;
 }
 //visit-site
 .visit-site{
+    position: absolute;
+    top:0;
+    transform: translateY(25px);
+    right:50px;
+    transition: transform 0.3s ease,opacity 0.3s ease;
+    z-index: 10;
     a{
         padding:5px 15px;
         border-radius: 30px;
@@ -436,7 +441,7 @@ $brighten:#fff;
     position: absolute;
     top:0;
     display: flex;
-    transform:translateY(80px);
+    transform:translateY(25px);
     align-items: center;
     transition: transform 0.3s ease,opacity 0.3s ease;
     opacity: 0.7;
@@ -446,7 +451,6 @@ $brighten:#fff;
         opacity: 1;
     }
     &.preview{
-        transform:translateY(62px);
     }
     span{
         font-weight: 500;
@@ -483,6 +487,7 @@ $brighten:#fff;
         .visit-site{
             a{
                 background:$brighten;
+                color:$darkness;
             }
         }
     }
@@ -498,6 +503,7 @@ $brighten:#fff;
         .visit-site{
             a{
                 background:$darkness;
+                color:$brighten;
             }
         }
     }
@@ -506,16 +512,11 @@ $brighten:#fff;
 .detail-blog-header{
     position: relative;
     padding:0 25px;
-    height:50px;
+    height:70px;
     .go-back{
-        top:15px;
-        left:25px;
-        transform: translate(0,0);
         
     }
     .visit-site{
-        position: absolute;
-        top:15px;
         right:25px;
     }
     
@@ -525,7 +526,7 @@ $brighten:#fff;
     left:0;
     top:0;
     width:100%;
-    padding:50px 25px;
+    padding:70px 25px;
 }
 @media screen and (max-width: $screen-1400) {
     .detail-doc{
@@ -552,22 +553,27 @@ $brighten:#fff;
 }
 @media screen and (max-width: $screen-pad) {
     .detail-main{
-        padding:50px 25px 25px;
+        padding:15px 25px 25px;
         .device-controll-wrap{
             margin-top:0px;
-            padding-top:20px;
         }
         .iframe-wrap{
-            top:60px;
-            margin:0;
+            top:0px;
         }
         .scroll-doc{
             bottom:15px;
         }
         .go-back{
-            transform:translateY(70px);
+            transform:translateY(20px);
             &.preview{
-                transform:translateY(52px);
+                transform:translateY(25px);
+            }
+        }
+        .visit-site{
+            transform:translateY(20px);
+            right:25px;
+            &.preview{
+                transform:translateY(25px);
             }
         }
     }

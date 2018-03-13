@@ -68,7 +68,7 @@ class App extends Component {
     const nextUrl=nextProps.location.pathname.split('/');
     const thisUrl=this.props.location.pathname.split('/');
     let isBright = (this.get_brightness(nextProps.motion.bgColor) > 160);
-    if(thisUrl[1]==='posts'){
+    if(nextUrl[1]==='posts' || nextUrl[1]==='blog'){
       handleHeader.isBrightness({
         isBright:isBright
       });  
@@ -81,11 +81,9 @@ class App extends Component {
               detailView:true,
           }
         });
-        if(nextUrl[1]==='posts'){
-          handleHeader.isBrightness({
-            isBright:isBright
-          });
-        }
+        handleHeader.isBrightness({
+          isBright:isBright
+        });
        
       }else{
         handleHeader.isBrightness({

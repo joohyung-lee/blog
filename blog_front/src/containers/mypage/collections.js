@@ -37,8 +37,8 @@ class Collections extends Component {
             });
         }
     }
-    itemUp=(id,bgColor,category,e)=>{
-        const {motionDispatch}=this.props;
+    itemUp=(id,i,bgColor,category,e)=>{
+        const {motionDispatch,data}=this.props;
             motionDispatch.motionActions({
                 motions:{
                     bgColor:bgColor===''?'#ffffff':bgColor,
@@ -46,7 +46,11 @@ class Collections extends Component {
                     backUrl:true
                 }
             });
-            this.props.history.push(`/posts/${category}/${id}`);            
+            if(data[i].blogType==="blog"){
+                this.props.history.push(`/blog/${category}/${id}`);   
+            }else{
+                this.props.history.push(`/posts/${category}/${id}`);    
+            }           
     }
     render() {
         const {user,userSuccess,data} = this.props;
@@ -69,7 +73,7 @@ class Collections extends Component {
                                 key={item._id}
                                 data={item}
                                 currentUser={user}
-                                onClick={this.itemUp.bind(this,item._id,item.bgColor,item.category)}
+                                onClick={this.itemUp.bind(this,item._id,i,item.bgColor,item.category)}
                                 />
                             )
                         })
