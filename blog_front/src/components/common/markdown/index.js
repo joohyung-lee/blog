@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
 import Remarkable from 'remarkable';
 import hljs from 'highlight.js';
+
 class MarkdownView extends Component {
+    componentDidMount(){
+        let root=document.querySelector('#root');
+        let cover=root.querySelector('.cover');
+        let images=root.querySelectorAll('.back-img');
+        if(images){
+            [].forEach.call(images, function(item,i) {
+                let img = new Image();
+                img.onload = (function(i) {
+                   item.classList.add('active');
+                  })(i);
+              });
+        }
+    }
     rawMarkup=()=>{
         const { source } = this.props;
          var md = new Remarkable('full', {
@@ -37,6 +51,7 @@ class MarkdownView extends Component {
          });
          
          var rawMarkup = md.render(source);
+         
          return {
              __html: rawMarkup
          }

@@ -37,6 +37,7 @@ class DetailBlog extends Component {
         window.removeEventListener("resize", this.dimensions);  
     }
     componentWillReceiveProps(nextProps) {
+        
         const {get,data,motionDispatch,motion,loading,commentsLoading,dataState}=nextProps;
         const locationChanged = nextProps.location !== this.props.location;
         if(locationChanged){
@@ -45,9 +46,9 @@ class DetailBlog extends Component {
             },400)
         }
         if(!motion.detailLoad){
-            console.dir(document.documentElement.querySelector('background'))
             this.dimensions();
-            if(this.props.loading!==loading && dataState==="success"){              
+            
+            if(this.props.loading!==loading && dataState==="success"){         
                 let isBright = (parseInt(this.get_brightness(data.bgColor),10) > 160);           
                 motionDispatch.motionActions({
                     motions:{
@@ -58,9 +59,6 @@ class DetailBlog extends Component {
             }
         }
 
-    }
-    clickTest=()=>{
-        alert('click')
     }
     dimensions=()=>{
         let windowHeight=document.documentElement.clientHeight;
@@ -78,6 +76,18 @@ class DetailBlog extends Component {
         }
         
     }
+    handleScroll=(value)=>{
+        let root=document.querySelector('#root');
+        let parallax=root.querySelectorAll('.dic');
+        if(parallax){
+            [].forEach.call(parallax, function(item,i) {
+                if(value.scrollTop>item.offsetTop-document.documentElement.clientHeight){
+                    item.classList.add('active')
+                }
+                
+              });
+        }
+    }
     get_brightness=(hexCode)=>{
         hexCode = hexCode.replace('#', '');
         var c_r = parseInt(hexCode.substr(0, 2),16);
@@ -92,6 +102,7 @@ class DetailBlog extends Component {
             <Scrollbars
                     className={`detail-blog-wrap ${common.isBright?'bright':'dark'}`}
                     renderView={this.renderView}
+                    onScrollFrame={this.handleScroll}
                     style={{
                         position:'absolute',
                         top:0,

@@ -1,0 +1,46 @@
+//common
+.cover{
+    position: relative;
+    height:100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.dic{
+    &+.dic{
+        margin-top:10px;
+    }
+}
+.background{   
+    position: relative;
+    background-color: #f1f1f1;
+    font-size: 0;
+    .back-img{
+        width:100%;
+    }
+}
+.contents-wrap{
+    padding:25px;
+    width:100%;
+}
+.w-1600{
+    max-width: 1600px;
+    margin:auto;
+}
+//definition appear animation
+.appear{
+    opacity: 0;
+    transition: 0.5s ease;
+    transform: translate(0,20px);
+    &.active{
+        opacity: 1;
+        transform: translate(0,0px);
+        transition-delay: 0.3s;
+    }
+}
+.detail-fade{
+    transition: 0.5s ease;
+    opacity: 0;
+    &.active{
+        opacity: 1;
+    }
+}
