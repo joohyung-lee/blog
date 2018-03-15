@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
-import dateFormat from 'dateformat';
-import MobileDetect from 'mobile-detect';
 //components
-import {Documentation} from 'components/detail';
+import asyncRoute from 'lib/asyncRoute';
 import {MarkdownView} from 'components/pages';
 //redux
 import * as commonAction from 'redux/common';
@@ -79,8 +77,7 @@ class DetailBlog extends Component {
     handleScroll=(value)=>{
         let root=document.querySelector('#root');
         let parallax=root.querySelectorAll('.dic');
-        let parallaxWrap=root.querySelector('.card-wrap');
-        let parallaxPosition=root.querySelectorAll('.card');
+        
         if(parallax){
             [].forEach.call(parallax, function(item,i) {
                 if(value.scrollTop>item.offsetTop-document.documentElement.clientHeight){
@@ -89,20 +86,8 @@ class DetailBlog extends Component {
                 
               });
         }
-        if(parallaxPosition){
-            [].forEach.call(parallaxPosition, function(item,i) {
-               if(value.scrollTop < parallaxWrap.offsetTop){
-                   if(i===0){
-                        item.style.transform=`translateY(${value.scrollTop}px)`
-                   }else{
-                    item.style.transform=`translateY(-${value.scrollTop*i-1}px)`
-                   }
-                    
-               }
-                
-                
-              });
-        }
+        var blog=require('./blog');
+        blog.parallax(value);
     }
     get_brightness=(hexCode)=>{
         hexCode = hexCode.replace('#', '');
