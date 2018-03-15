@@ -95,7 +95,7 @@ class DetailBlog extends Component {
                    if(i===0){
                         item.style.transform=`translateY(${value.scrollTop}px)`
                    }else{
-                    item.style.transform=`translateY(-${value.scrollTop*i}px)`
+                    item.style.transform=`translateY(-${value.scrollTop*i-1}px)`
                    }
                     
                }
