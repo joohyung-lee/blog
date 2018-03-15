@@ -79,11 +79,22 @@ class DetailBlog extends Component {
     handleScroll=(value)=>{
         let root=document.querySelector('#root');
         let parallax=root.querySelectorAll('.dic');
+        let parallaxWrap=root.querySelector('.card-wrap');
+        let parallaxPosition=root.querySelectorAll('.card');
         if(parallax){
             [].forEach.call(parallax, function(item,i) {
                 if(value.scrollTop>item.offsetTop-document.documentElement.clientHeight){
                     item.classList.add('active')
                 }
+                
+              });
+        }
+        if(parallaxPosition){
+            [].forEach.call(parallaxPosition, function(item,i) {
+               if(value.scrollTop < parallaxWrap.offsetTop+parallaxPosition[0].clientHeight+100){
+                    item.style.transform=`translateY(${value.scrollTop/i}px)`
+               }
+                
                 
               });
         }

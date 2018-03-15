@@ -475,6 +475,7 @@ $brighten:#fff;
     }
 }
 .detail-blog-wrap{
+
     &.dark{
         .go-back{
             span{
@@ -526,6 +527,7 @@ $brighten:#fff;
     left:0;
     top:0;
     width:100%;
+    overflow-x:hidden;
 }
 @media screen and (max-width: $screen-1400) {
     .detail-doc{
