@@ -91,8 +91,13 @@ class DetailBlog extends Component {
         }
         if(parallaxPosition){
             [].forEach.call(parallaxPosition, function(item,i) {
-               if(value.scrollTop < parallaxWrap.offsetTop+parallaxPosition[0].clientHeight+100){
-                    item.style.transform=`translateY(${value.scrollTop/i}px)`
+               if(value.scrollTop < parallaxWrap.offsetTop){
+                   if(i===0){
+                        item.style.transform=`translateY(${value.scrollTop}px)`
+                   }else{
+                    item.style.transform=`translateY(-${value.scrollTop*i}px)`
+                   }
+                    
                }
                 
                 
