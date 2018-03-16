@@ -1,7 +1,7 @@
 //common
 .cover {
     position: relative;
-    height: 100vh;
+    min-height: 100vh;
     .header {
         display: flex;
         padding: 100px 50px;
@@ -11,12 +11,17 @@
                 padding: 0;
                 margin: 0;
                 font-size: 2.5rem;
+                animation:cover 0.7s ease-out;
             }
-            p {}
+            p {
+                color:$c-black-3;
+                animation:cover 1s ease-out;
+            }
         }
         .content {
             flex: 0.5;
             margin-left: 10px;
+            animation:cover 0.7s ease-out;
         }
     }
 }
@@ -76,32 +81,163 @@
     position: relative;
     font-size: 0;
     width: 100%;
-    padding: 0 40px;
+    padding: 0 35px;
     white-space: nowrap;
-    z-index: 10;
 }
 
 .card {
+    position: relative;
     display: inline-block;
-    width: 21vw;
-    height: 23vw;
-    background-color: #ccc;
-    margin: 0 10px;
-    background-repeat: no-repeat;
-    background-size:cover;
+    width: 21vw;   
+    margin: 0 20px;
+    font-size: 0;
+    animation:cover 1.2s ease-out;
+    img{
+        width:100%;
+        border-radius: 10px;
+        background-color: #ccc;
+        box-shadow: rgba(52, 73, 94, 0.25) 0px 20px 70px;
+    }
+    .gif{
+        display: none;
+        position: absolute;
+        top:0;
+        left:0;
+        width:100%;
+    }
+    .txt{
+        position: absolute;
+        width:300px;
+        top: 0;
+        right: 0;
+        padding: 0 0 0 110px;
+        white-space: normal;
+        transform: translate(100%, 10%);
+        h4{
+            margin:0 0 10px 0;
+            font-size: 2rem;
+            transform: translateX(-80px);
+            transition: all 0.5s ease-out;
+            opacity: 0;
+        }
+        p{
+            transform: translateX(-80px);
+            transition: all 0.5s ease-out;
+            opacity: 0;
+        }
+        &:before{
+            content: "";        
+            position: absolute;
+            top:20px;
+            width: 0px;
+            height:1px;
+            left:-30px;
+            mix-blend-mode: screen;
+            background-color: $c-black-0;
+            transition: all 0.3s;
+            z-index: 100
+        }
+    }
+    &.video{
+        .gif{
+            display: block;
+        }
+        .txt{ 
+            h4{
+                transform: translateX(0px);
+                opacity: 1;
+            }   
+            p{
+                transform: translateX(0px);
+                opacity: 1;
+            }        
+            &:before{
+                width: 130px;
+            }
+        }
+    }
 }
-.card:nth-child(1){
-    background-image:url('../images/card1.jpg')
+.joomation-1{
+    height: 50vh;
 }
-.card:nth-child(2){
-    background-image:url('../images/card2.jpg')
+//common animation
+@keyframes cover{
+    from{
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0px);
+    }
 }
-.card:nth-child(3){
-    background-image:url('../images/card3.jpg')
+@media screen and (max-width: $screen-pad) {
+    //common
+    .cover {
+        position: relative;
+        .header {
+            display: block;
+            padding: 80px 25px 20px;
+            .title {
+                flex: 0.4;
+                h2 {
+                    padding: 0;
+                    margin: 0;
+                    font-size: 2.5rem;
+                }
+                p {}
+            }
+            .content {
+                flex: 0.5;
+                margin-left: 0px;
+            }
+        }
+    }
+    //joomation
+    .card-wrap{
+        padding:0 15px;
+    }
+    .card{
+        width:35vw;
+        margin:0 10px;
+        .txt{
+            transform: translate(100%,10%);
+            padding:0 0 0 50px;
+            h4{
+                font-size: 1rem;
+                padding-top:12px;
+            }
+            p{
+                font-size: 0.9rem;
+            }
+            
+        }
+        &.video{
+            .txt{
+                &:before{
+                    width:70px;
+                }
+            }
+        }
+    }
 }
-.card:nth-child(4){
-    background-image:url('../images/card4.jpg')
-}
-.card:nth-child(5){
-    background-image:url('../images/card5.jpg')
+@media screen and (max-width: $screen-phone-large) {
+    .card{
+        width:52vw;
+        .txt{
+            padding:0 15px;
+            width:75%;
+
+            p{
+                font-size: 0.9rem
+            }
+        }
+        &.video{
+            .txt{
+                &:before{
+                    width:40px;
+                }
+            }
+        }
+    }
 }

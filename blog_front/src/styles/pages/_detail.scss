@@ -527,7 +527,7 @@ $brighten:#fff;
     left:0;
     top:0;
     width:100%;
-    overflow-x:hidden;
+    overflow:hidden;
 }
 @media screen and (max-width: $screen-1400) {
     .detail-doc{

@@ -77,7 +77,6 @@ class DetailBlog extends Component {
     handleScroll=(value)=>{
         let root=document.querySelector('#root');
         let parallax=root.querySelectorAll('.dic');
-        
         if(parallax){
             [].forEach.call(parallax, function(item,i) {
                 if(value.scrollTop>item.offsetTop-document.documentElement.clientHeight){
